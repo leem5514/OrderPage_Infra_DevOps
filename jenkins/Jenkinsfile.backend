@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checkout backend repository'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Run backend tests'
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                echo 'Build Docker image'
+            }
+        }
+
+        stage('Push ECR') {
+            steps {
+                echo 'Push Docker image to Amazon ECR'
+            }
+        }
+
+        stage('Deploy EKS') {
+            steps {
+                echo 'Deploy backend to Amazon EKS'
+            }
+        }
+    }
+}

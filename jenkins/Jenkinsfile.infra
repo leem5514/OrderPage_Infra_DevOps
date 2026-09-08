@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Terraform Format') {
+            steps {
+                echo 'terraform fmt -check -recursive'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                echo 'terraform plan'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                echo 'terraform apply with approval'
+            }
+        }
+    }
+}
