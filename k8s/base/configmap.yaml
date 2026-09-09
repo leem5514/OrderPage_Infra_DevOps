@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: orderpage
 data:
+  # Secret이 아닌 운영 설정값이다. 실제 RDS/Redis endpoint는 overlay에서 환경별로 덮어쓴다.
   DB_URL: jdbc:mariadb://orderpage-mariadb:3306/ordersystem
   DB_POOL_MAX_SIZE: "20"
   DB_POOL_MIN_IDLE: "5"
@@ -17,8 +18,12 @@ data:
   RABBITMQ_HOST: orderpage-rabbitmq
   RABBITMQ_PORT: "5672"
   RABBITMQ_VHOST: /
+
+  # 주문 재고 반영처럼 queue consumer가 병목이 될 수 있는 구간의 처리량 조절 값이다.
   RABBITMQ_LISTENER_CONCURRENCY: "3"
   RABBITMQ_LISTENER_MAX_CONCURRENCY: "10"
+
+  # 부하테스트 때 Tomcat thread/accept queue가 먼저 병목이 되는 것을 줄이기 위한 값이다.
   TOMCAT_THREADS_MAX: "500"
   TOMCAT_THREADS_MIN_SPARE: "20"
   TOMCAT_ACCEPT_COUNT: "500"

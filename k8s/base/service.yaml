@@ -8,6 +8,8 @@ metadata:
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: orderpage
 spec:
+  # ClusterIP는 클러스터 내부 전용 Service다.
+  # 외부 트래픽은 Ingress/ALB가 받고, 내부에서는 이 Service가 Pod로 분산한다.
   type: ClusterIP
   selector:
     app.kubernetes.io/name: orderpage-backend

@@ -8,12 +8,21 @@ metadata:
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: orderpage
 spec:
+  # HPA가 어떤 workload를 자동 확장할지 지정한다.
+  # 여기서는 orderpage-backend Deployment의 Pod 개수를 조절한다.
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: orderpage-backend
+
+  # dev 환경 기준 최소 2개 Pod로 무중단 배포 여지를 확보하고,
+  # 비용 폭주를 막기 위해 최대 5개 Pod까지만 자동 확장한다.
   minReplicas: 2
   maxReplicas: 5
+
+  # metrics는 "무엇을 기준으로 scale out/in 할지"를 정의한다.
+  # 평균 CPU 사용률 70% 또는 평균 메모리 사용률 80%를 넘으면 Pod 증가를 시도한다.
+  # 이 값들은 추후 k6 부하테스트에서 HPA 적용 전/후 비교 지표가 된다.
   metrics:
     - type: Resource
       resource:

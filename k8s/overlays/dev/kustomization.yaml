@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
 
+# dev overlay는 base manifest를 재사용하면서 개발 환경 endpoint/Ingress만 바꾼다.
 patches:
   - path: patch-configmap.yaml
   - path: patch-ingress.yaml

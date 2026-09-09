@@ -8,8 +8,12 @@ metadata:
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: orderpage
 spec:
+  # 기본 Pod 수. HPA가 켜지면 min/max 범위 안에서 이 값을 자동 조절한다.
   replicas: 2
   revisionHistoryLimit: 3
+
+  # RollingUpdate는 새 버전을 띄운 뒤 기존 Pod를 내리는 배포 방식이다.
+  # maxUnavailable 0은 배포 중 사용 가능한 Pod 수가 줄어들지 않게 하는 설정이다.
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -26,6 +30,7 @@ spec:
         app.kubernetes.io/component: api
         app.kubernetes.io/part-of: orderpage
       annotations:
+        # Prometheus가 Spring Actuator metric endpoint를 scrape하도록 힌트를 준다.
         prometheus.io/scrape: "true"
         prometheus.io/path: /actuator/prometheus
         prometheus.io/port: "8080"
@@ -33,6 +38,7 @@ spec:
       serviceAccountName: orderpage-backend
       containers:
         - name: orderpage-backend
+          # Jenkins가 ECR push 후 kubectl set image로 이 값을 실제 태그로 교체한다.
           image: 000000000000.dkr.ecr.ap-northeast-2.amazonaws.com/orderpage-backend:latest
           imagePullPolicy: IfNotPresent
           ports:
@@ -40,10 +46,15 @@ spec:
               containerPort: 8080
               protocol: TCP
           envFrom:
+            # ConfigMap은 endpoint, pool size처럼 공개되어도 되는 환경 설정을 담는다.
             - configMapRef:
                 name: orderpage-backend-config
+            # Secret은 DB password, JWT secret처럼 노출되면 안 되는 값을 담는다.
             - secretRef:
                 name: orderpage-backend-secret
+
+          # readinessProbe가 실패하면 Service 트래픽 대상에서 제외된다.
+          # 앱이 뜨는 중이거나 DB 연결 준비가 늦을 때 사용자 요청 실패를 줄인다.
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -52,6 +63,9 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 3
             failureThreshold: 3
+
+          # livenessProbe가 계속 실패하면 kubelet이 컨테이너를 재시작한다.
+          # deadlock이나 장시간 hang 상태를 자동 복구하기 위한 안전장치다.
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -60,6 +74,9 @@ spec:
             periodSeconds: 20
             timeoutSeconds: 3
             failureThreshold: 3
+
+          # requests는 스케줄링과 HPA 계산 기준, limits는 컨테이너 최대 사용량 제한이다.
+          # HPA의 CPU/memory Utilization은 requests 대비 사용률로 계산된다.
           resources:
             requests:
               cpu: 250m

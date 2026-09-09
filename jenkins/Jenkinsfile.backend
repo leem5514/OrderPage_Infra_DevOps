@@ -31,6 +31,7 @@ pipeline {
     }
 
     stages {
+        // 애플리케이션 소스와 인프라 소스를 분리해 BE/Infra 레포 변경 이력을 각각 추적한다.
         stage('백엔드 소스 체크아웃') {
             steps {
                 dir(env.BACKEND_DIR) {
@@ -39,6 +40,7 @@ pipeline {
             }
         }
 
+        // 이미지 태그는 배포 추적의 기준이다. 기본값은 Jenkins BUILD_NUMBER를 사용한다.
         stage('이미지 태그 준비') {
             steps {
                 script {
@@ -50,6 +52,7 @@ pipeline {
             }
         }
 
+        // 배포 전 단위/통합 테스트를 먼저 돌려 깨진 이미지를 ECR에 올리지 않게 한다.
         stage('백엔드 테스트') {
             steps {
                 dir(env.BACKEND_DIR) {
@@ -64,6 +67,7 @@ pipeline {
             }
         }
 
+        // Docker build 이전에 실행 가능한 Spring Boot artifact를 만든다.
         stage('JAR 빌드') {
             steps {
                 dir(env.BACKEND_DIR) {
@@ -72,6 +76,7 @@ pipeline {
             }
         }
 
+        // EKS에 배포할 컨테이너 이미지를 Jenkins agent에서 생성한다.
         stage('Docker 이미지 빌드') {
             steps {
                 dir(env.BACKEND_DIR) {
@@ -80,6 +85,7 @@ pipeline {
             }
         }
 
+        // DEPLOY_TARGET이 push/deploy일 때만 ECR에 이미지를 업로드한다.
         stage('Amazon ECR Push') {
             when {
                 anyOf {
@@ -96,6 +102,7 @@ pipeline {
             }
         }
 
+        // EKS 배포 시점에는 Infra 레포의 최신 Kustomize manifest를 가져온다.
         stage('인프라 소스 체크아웃') {
             when {
                 expression { params.DEPLOY_TARGET == 'eks-deploy' }
@@ -107,6 +114,7 @@ pipeline {
             }
         }
 
+        // manifest를 먼저 apply한 뒤, 이번 빌드에서 만든 ECR image로 Deployment를 롤링 업데이트한다.
         stage('EKS 배포') {
             when {
                 expression { params.DEPLOY_TARGET == 'eks-deploy' }
