@@ -48,8 +48,8 @@ docs/
 ## First Milestones
 
 1. Terraform backend and provider setup
-2. VPC module
-3. ECR module
+2. ECR module
+3. VPC module
 4. Backend Docker image push pipeline
 5. EKS cluster
 6. Backend Kubernetes deployment

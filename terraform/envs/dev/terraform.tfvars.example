@@ -1,0 +1,4 @@
+aws_region                  = "ap-northeast-2"
+project_name                = "orderpage"
+environment                 = "dev"
+backend_ecr_repository_name = "orderpage-backend"

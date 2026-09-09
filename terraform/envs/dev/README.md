@@ -9,3 +9,17 @@
 3. ECR module 연결
 4. EKS module 연결
 5. RDS/ElastiCache module 연결
+
+현재 포함된 리소스:
+
+- Backend ECR repository
+
+사용 예시:
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+변수 예시는 `terraform.tfvars.example`을 참고합니다.
