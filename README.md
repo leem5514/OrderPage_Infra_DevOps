@@ -50,8 +50,8 @@ docs/
 1. Terraform backend and provider setup
 2. ECR module
 3. VPC module
-4. Backend Docker image push pipeline
-5. EKS cluster
+4. EKS cluster
+5. Backend Docker image push pipeline
 6. Backend Kubernetes deployment
 7. Prometheus/Grafana dashboard
 8. k6 performance test report

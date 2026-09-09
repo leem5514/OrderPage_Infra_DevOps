@@ -51,11 +51,14 @@
 - ECR scan on push 설정 추가
 - VPC module 추가
 - public/private subnet, internet gateway, NAT gateway, route table 구성 추가
+- EKS module 추가
+- EKS cluster, managed node group, add-on, IAM role 구성 추가
 
 다음 작업:
 
 - AWS credential 준비 후 `terraform init`, `terraform plan` 실행
-- EKS/RDS/ElastiCache module 순차 확장
+- RDS/ElastiCache module 순차 확장
+- Kubernetes backend deployment manifest 추가
 
 ## Phase 4. Kubernetes
 

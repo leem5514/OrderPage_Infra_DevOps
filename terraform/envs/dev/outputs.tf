@@ -22,3 +22,18 @@ output "backend_ecr_repository_url" {
   description = "Backend ECR repository URL for Jenkins."
   value       = module.backend_ecr.repository_url
 }
+
+output "eks_cluster_name" {
+  description = "Dev EKS cluster name."
+  value       = module.eks.cluster_name
+}
+
+output "eks_cluster_endpoint" {
+  description = "Dev EKS cluster API endpoint."
+  value       = module.eks.cluster_endpoint
+}
+
+output "eks_node_group_name" {
+  description = "Dev EKS managed node group name."
+  value       = module.eks.node_group_name
+}

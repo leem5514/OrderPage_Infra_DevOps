@@ -19,6 +19,9 @@
 - NAT Gateway
 - Route table
 - Backend ECR repository
+- EKS cluster
+- EKS managed node group
+- EKS managed add-ons
 
 사용 예시:
 
@@ -29,3 +32,10 @@ terraform apply
 ```
 
 변수 예시는 `terraform.tfvars.example`을 참고합니다.
+
+EKS kubeconfig 연결 예시:
+
+```bash
+aws eks update-kubeconfig --region ap-northeast-2 --name orderpage-dev
+kubectl get nodes
+```
