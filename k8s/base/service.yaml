@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderpage-backend
+  namespace: orderpage
+  labels:
+    app.kubernetes.io/name: orderpage-backend
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: orderpage
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: orderpage-backend
+    app.kubernetes.io/component: api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP

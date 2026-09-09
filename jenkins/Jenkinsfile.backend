@@ -10,6 +10,12 @@ pipeline {
     parameters {
         string(name: 'BACKEND_REPOSITORY_URL', defaultValue: 'https://github.com/leem5514/OrderPage_BE_DevOps.git', description: '백엔드 GitHub repository URL')
         string(name: 'BACKEND_BRANCH', defaultValue: 'main', description: '빌드할 백엔드 브랜치')
+        string(name: 'INFRA_REPOSITORY_URL', defaultValue: 'https://github.com/leem5514/OrderPage_Infra_DevOps.git', description: 'Kubernetes manifest가 있는 Infra repository URL')
+        string(name: 'INFRA_BRANCH', defaultValue: 'main', description: '배포 manifest 브랜치')
+        string(name: 'K8S_OVERLAY_PATH', defaultValue: 'k8s/overlays/dev', description: 'kubectl apply -k 대상 overlay 경로')
+        string(name: 'EKS_NAMESPACE', defaultValue: 'orderpage', description: '배포 namespace')
+        string(name: 'EKS_DEPLOYMENT_NAME', defaultValue: 'orderpage-backend', description: 'Kubernetes Deployment 이름')
+        string(name: 'EKS_CONTAINER_NAME', defaultValue: 'orderpage-backend', description: '이미지를 교체할 컨테이너 이름')
         string(name: 'AWS_REGION', defaultValue: 'ap-northeast-2', description: 'AWS region')
         string(name: 'AWS_ACCOUNT_ID', defaultValue: '000000000000', description: 'AWS account ID. 실제 Jenkins에서는 값 또는 credential로 교체')
         string(name: 'ECR_REPOSITORY_NAME', defaultValue: 'orderpage-backend', description: 'Amazon ECR repository name')
@@ -19,6 +25,7 @@ pipeline {
 
     environment {
         BACKEND_DIR = 'backend'
+        INFRA_DIR = 'infra'
         IMAGE_NAME = 'orderpage-backend'
         AWS_DEFAULT_REGION = "${params.AWS_REGION}"
     }
@@ -89,13 +96,27 @@ pipeline {
             }
         }
 
+        stage('인프라 소스 체크아웃') {
+            when {
+                expression { params.DEPLOY_TARGET == 'eks-deploy' }
+            }
+            steps {
+                dir(env.INFRA_DIR) {
+                    git branch: params.INFRA_BRANCH, url: params.INFRA_REPOSITORY_URL
+                }
+            }
+        }
+
         stage('EKS 배포') {
             when {
                 expression { params.DEPLOY_TARGET == 'eks-deploy' }
             }
             steps {
-                sh 'kubectl set image deployment/orderpage-backend orderpage-backend=${ECR_IMAGE} -n orderpage'
-                sh 'kubectl rollout status deployment/orderpage-backend -n orderpage --timeout=180s'
+                dir(env.INFRA_DIR) {
+                    sh 'kubectl apply -k "${K8S_OVERLAY_PATH}"'
+                }
+                sh 'kubectl set image deployment/"${EKS_DEPLOYMENT_NAME}" "${EKS_CONTAINER_NAME}"="${ECR_IMAGE}" -n "${EKS_NAMESPACE}"'
+                sh 'kubectl rollout status deployment/"${EKS_DEPLOYMENT_NAME}" -n "${EKS_NAMESPACE}" --timeout=180s'
             }
         }
     }

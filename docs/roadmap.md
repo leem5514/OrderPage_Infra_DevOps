@@ -58,7 +58,7 @@
 
 - AWS credential 준비 후 `terraform init`, `terraform plan` 실행
 - RDS/ElastiCache module 순차 확장
-- Kubernetes backend deployment manifest 추가
+- Kubernetes manifest 실제 EKS 적용 검증
 
 ## Phase 4. Kubernetes
 
@@ -70,6 +70,19 @@
 - Secret
 - HPA
 - Readiness/Liveness probe
+
+현재 완료:
+
+- 백엔드 base manifest 추가
+- dev Kustomize overlay 추가
+- ALB Ingress, HPA, Actuator probe, Prometheus scrape annotation 추가
+- Jenkins `eks-deploy` 단계와 `kubectl apply -k` 배포 흐름 연결
+
+다음 작업:
+
+- AWS Load Balancer Controller 설치
+- 실제 RDS/Redis/RabbitMQ endpoint와 Secret 교체
+- `kubectl apply -k k8s/overlays/dev` 실제 EKS 적용 검증
 
 ## Phase 5. Observability
 

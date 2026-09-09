@@ -23,6 +23,8 @@ Jenkins pipeline 정의와 운영 문서를 관리합니다.
   -> ./gradlew bootJar
   -> docker build
   -> Amazon ECR push
+  -> 인프라 소스 체크아웃
+  -> kubectl apply -k
   -> EKS rollout
 ```
 
@@ -32,7 +34,7 @@ Jenkins pipeline 정의와 운영 문서를 관리합니다.
 |---|---|
 | `build-only` | 테스트, JAR 빌드, Docker 이미지 빌드까지만 수행 |
 | `ecr-push` | Docker 이미지 빌드 후 Amazon ECR에 push |
-| `eks-deploy` | ECR push 후 EKS deployment image 업데이트 |
+| `eks-deploy` | Infra repository checkout, Kubernetes manifest apply, EKS deployment image 업데이트 |
 
 초기 로컬 Jenkins에서는 `build-only`로 먼저 검증하고, AWS credential과 EKS 접근 설정이 준비되면 `ecr-push`, `eks-deploy`로 확장합니다.
 
@@ -43,6 +45,7 @@ Jenkins agent 요구 사항:
 - Docker CLI 및 Docker daemon 접근 권한
 - AWS CLI
 - kubectl
+- kubectl 내장 Kustomize 지원 버전
 
 추후 Jenkins credential로 분리할 값:
 
@@ -51,3 +54,4 @@ Jenkins agent 요구 사항:
 - AWS account ID
 - ECR repository name
 - kubeconfig 또는 EKS 접근 권한
+- Infra repository 접근 권한

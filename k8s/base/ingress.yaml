@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: orderpage-backend
+  namespace: orderpage
+  labels:
+    app.kubernetes.io/name: orderpage-backend
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: orderpage
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+spec:
+  rules:
+    - host: api.dev.orderpage.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: orderpage-backend
+                port:
+                  name: http

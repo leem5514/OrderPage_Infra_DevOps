@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: orderpage-backend
+  namespace: orderpage
+  annotations:
+    alb.ingress.kubernetes.io/group.name: orderpage-dev
+spec:
+  rules:
+    - host: api.dev.orderpage.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: orderpage-backend
+                port:
+                  name: http
