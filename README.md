@@ -53,5 +53,6 @@ docs/
 4. EKS cluster
 5. Backend Docker image push pipeline
 6. Backend Kubernetes deployment
-7. Prometheus/Grafana dashboard
-8. k6 performance test report
+7. RDS MariaDB
+8. Prometheus/Grafana dashboard
+9. k6 performance test report

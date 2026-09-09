@@ -22,6 +22,10 @@
 - EKS cluster
 - EKS managed node group
 - EKS managed add-ons
+- RDS MariaDB instance
+- RDS DB subnet group
+- RDS security group
+- RDS CloudWatch log export
 
 사용 예시:
 
@@ -32,6 +36,12 @@ terraform apply
 ```
 
 변수 예시는 `terraform.tfvars.example`을 참고합니다.
+
+RDS password는 실제 값으로 커밋하지 않습니다. PowerShell에서는 아래처럼 환경변수로 주입할 수 있습니다.
+
+```bash
+$env:TF_VAR_rds_master_password = 'change-me-strong-password'
+```
 
 EKS kubeconfig 연결 예시:
 

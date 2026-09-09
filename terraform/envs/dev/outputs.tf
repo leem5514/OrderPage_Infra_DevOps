@@ -37,3 +37,23 @@ output "eks_node_group_name" {
   description = "Dev EKS managed node group name."
   value       = module.eks.node_group_name
 }
+
+output "rds_mariadb_endpoint" {
+  description = "Dev RDS MariaDB endpoint."
+  value       = module.mariadb.endpoint
+}
+
+output "rds_mariadb_address" {
+  description = "Dev RDS MariaDB address for backend DB_URL."
+  value       = module.mariadb.address
+}
+
+output "rds_mariadb_port" {
+  description = "Dev RDS MariaDB port."
+  value       = module.mariadb.port
+}
+
+output "rds_mariadb_database_name" {
+  description = "Dev RDS MariaDB database name."
+  value       = module.mariadb.database_name
+}

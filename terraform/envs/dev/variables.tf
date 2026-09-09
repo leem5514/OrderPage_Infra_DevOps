@@ -104,3 +104,87 @@ variable "eks_node_max_size" {
   type        = number
   default     = 3
 }
+
+variable "rds_database_name" {
+  description = "Initial MariaDB database name for the backend."
+  type        = string
+  default     = "ordersystem"
+}
+
+variable "rds_master_username" {
+  description = "RDS master username."
+  type        = string
+  default     = "orderadmin"
+}
+
+variable "rds_master_password" {
+  description = "RDS master password. Provide with terraform.tfvars or TF_VAR_rds_master_password."
+  type        = string
+  sensitive   = true
+}
+
+variable "rds_engine_version" {
+  description = "RDS MariaDB engine version."
+  type        = string
+  default     = "10.11"
+}
+
+variable "rds_parameter_group_family" {
+  description = "RDS MariaDB parameter group family."
+  type        = string
+  default     = "mariadb10.11"
+}
+
+variable "rds_instance_class" {
+  description = "RDS instance class for the dev database."
+  type        = string
+  default     = "db.t4g.micro"
+}
+
+variable "rds_allocated_storage" {
+  description = "Initial RDS allocated storage in GiB."
+  type        = number
+  default     = 20
+}
+
+variable "rds_max_allocated_storage" {
+  description = "Maximum RDS storage autoscaling size in GiB."
+  type        = number
+  default     = 100
+}
+
+variable "rds_multi_az" {
+  description = "Enable Multi-AZ for the dev RDS instance."
+  type        = bool
+  default     = false
+}
+
+variable "rds_backup_retention_period" {
+  description = "RDS automated backup retention days."
+  type        = number
+  default     = 7
+}
+
+variable "rds_enabled_cloudwatch_logs_exports" {
+  description = "RDS MariaDB logs exported to CloudWatch Logs."
+  type        = list(string)
+  default     = ["error", "slowquery"]
+}
+
+variable "rds_performance_insights_enabled" {
+  description = "Enable RDS Performance Insights."
+  type        = bool
+  default     = false
+}
+
+variable "rds_deletion_protection" {
+  description = "Enable deletion protection for the dev RDS instance."
+  type        = bool
+  default     = false
+}
+
+variable "rds_skip_final_snapshot" {
+  description = "Skip final snapshot when destroying the dev RDS instance."
+  type        = bool
+  default     = true
+}

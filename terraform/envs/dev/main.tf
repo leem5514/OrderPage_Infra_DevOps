@@ -53,3 +53,29 @@ module "eks" {
 
   tags = local.common_tags
 }
+
+module "mariadb" {
+  source = "../../modules/rds"
+
+  identifier          = "${var.project_name}-${var.environment}-mariadb"
+  vpc_id              = module.vpc.vpc_id
+  subnet_ids          = module.vpc.private_subnet_ids
+  allowed_cidr_blocks = [module.vpc.vpc_cidr_block]
+
+  database_name                   = var.rds_database_name
+  master_username                 = var.rds_master_username
+  master_password                 = var.rds_master_password
+  engine_version                  = var.rds_engine_version
+  parameter_group_family          = var.rds_parameter_group_family
+  instance_class                  = var.rds_instance_class
+  allocated_storage               = var.rds_allocated_storage
+  max_allocated_storage           = var.rds_max_allocated_storage
+  multi_az                        = var.rds_multi_az
+  backup_retention_period         = var.rds_backup_retention_period
+  enabled_cloudwatch_logs_exports = var.rds_enabled_cloudwatch_logs_exports
+  performance_insights_enabled    = var.rds_performance_insights_enabled
+  deletion_protection             = var.rds_deletion_protection
+  skip_final_snapshot             = var.rds_skip_final_snapshot
+
+  tags = local.common_tags
+}
