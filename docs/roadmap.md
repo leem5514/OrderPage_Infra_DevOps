@@ -49,11 +49,12 @@
 - 백엔드 이미지 저장용 ECR module 추가
 - ECR lifecycle policy 추가
 - ECR scan on push 설정 추가
+- VPC module 추가
+- public/private subnet, internet gateway, NAT gateway, route table 구성 추가
 
 다음 작업:
 
 - AWS credential 준비 후 `terraform init`, `terraform plan` 실행
-- VPC module 추가
 - EKS/RDS/ElastiCache module 순차 확장
 
 ## Phase 4. Kubernetes

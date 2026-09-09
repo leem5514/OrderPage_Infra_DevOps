@@ -12,6 +12,12 @@
 
 현재 포함된 리소스:
 
+- VPC
+- Public subnet
+- Private subnet
+- Internet Gateway
+- NAT Gateway
+- Route table
 - Backend ECR repository
 
 사용 예시:
