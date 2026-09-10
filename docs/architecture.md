@@ -1,41 +1,29 @@
 # Deployment Architecture
 
-```mermaid
-flowchart LR
-    Dev[Developer] --> GitHub[GitHub Repositories]
-    GitHub --> Vercel[Vercel Frontend Deployment]
-    GitHub --> Jenkins[Jenkins Backend Pipeline]
+![OrderPage DevOps Architecture](./orderpage-devops-architecture.svg)
 
-    Jenkins --> Test[Backend Test]
-    Jenkins --> DockerBuild[Docker Image Build]
-    DockerBuild --> ECR[Amazon ECR]
+위 아키텍처는 현재 Infra 레포에 구성된 Terraform, Kubernetes, Jenkins, Monitoring 계획을 기준으로 작성했습니다.
 
-    Jenkins --> Deploy[EKS Deployment]
-    Terraform[Terraform] --> VPC[AWS VPC]
-    Terraform --> ECR
-    Terraform --> EKS[Amazon EKS]
-    Terraform --> RDS[Amazon RDS MariaDB]
-    Terraform --> Redis[Amazon ElastiCache Redis]
-    Terraform --> IAM[IAM Roles]
+핵심 흐름:
 
-    ECR --> EKS
-    EKS --> LBC[AWS Load Balancer Controller]
-    LBC --> ALB
-    EKS --> ALB[Application Load Balancer]
-    ALB --> API[Spring Boot Pods]
+```text
+User
+  -> Vercel Frontend
+  -> Route 53 / ALB
+  -> EKS Ingress / Service / Spring Boot Pods
+  -> RDS MariaDB / ElastiCache Redis / Amazon MQ RabbitMQ / S3
 
-    API --> RDS
-    API --> Redis
-    API --> MQ[Amazon MQ for RabbitMQ]
-    API --> S3[S3 Product Image Bucket]
+Developer
+  -> GitHub
+  -> Jenkins
+  -> Gradle test / bootJar
+  -> Docker build
+  -> ECR push
+  -> kubectl apply / rollout
 
-    User[User Browser] --> Vercel
-    User --> ALB
-
-    API --> Prom[Prometheus]
-    EKS --> Prom
-    Prom --> Grafana[Grafana]
-    EKS --> CloudWatch[CloudWatch Logs]
+Terraform
+  -> S3 remote state
+  -> VPC / ECR / EKS / RDS / Redis / Amazon MQ / IRSA
 ```
 
 ## Frontend Decision
