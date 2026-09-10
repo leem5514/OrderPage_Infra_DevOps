@@ -1,6 +1,6 @@
 # Deployment Architecture
 
-![OrderPage DevOps Architecture](./orderpage-devops-architecture.svg)
+![OrderPage DevOps Architecture](./orderpage-devops-architecture.png)
 
 위 아키텍처는 현재 Infra 레포에 구성된 Terraform, Kubernetes, Jenkins, Monitoring 계획을 기준으로 작성했습니다.
 
