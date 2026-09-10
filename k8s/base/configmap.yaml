@@ -16,8 +16,9 @@ data:
   REDIS_HOST: orderpage-redis
   REDIS_PORT: "6379"
   RABBITMQ_HOST: orderpage-rabbitmq
-  RABBITMQ_PORT: "5672"
+  RABBITMQ_PORT: "5671"
   RABBITMQ_VHOST: /
+  RABBITMQ_SSL_ENABLED: "true"
 
   # 주문 재고 반영처럼 queue consumer가 병목이 될 수 있는 구간의 처리량 조절 값이다.
   RABBITMQ_LISTENER_CONCURRENCY: "3"

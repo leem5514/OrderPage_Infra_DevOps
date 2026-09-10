@@ -8,6 +8,7 @@
 
 - `patch-configmap.yaml`의 RDS endpoint
 - `patch-configmap.yaml`의 Redis endpoint
+- `patch-configmap.yaml`의 Amazon MQ RabbitMQ endpoint
 - `patch-configmap.yaml`의 Vercel frontend origin
 - `patch-ingress.yaml`의 API host
 - `base/secret.yaml`의 placeholder secret 값

@@ -72,3 +72,23 @@ output "redis_port" {
   description = "Dev Redis port."
   value       = module.redis.port
 }
+
+output "rabbitmq_amqps_endpoint" {
+  description = "Dev Amazon MQ RabbitMQ AMQPS endpoint."
+  value       = module.rabbitmq.amqps_endpoint
+}
+
+output "rabbitmq_host" {
+  description = "Dev RabbitMQ hostname for backend RABBITMQ_HOST."
+  value       = module.rabbitmq.rabbitmq_host
+}
+
+output "rabbitmq_port" {
+  description = "Dev RabbitMQ AMQPS port."
+  value       = module.rabbitmq.rabbitmq_port
+}
+
+output "rabbitmq_console_url" {
+  description = "Dev RabbitMQ management console URL."
+  value       = module.rabbitmq.console_url
+}

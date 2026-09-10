@@ -249,3 +249,51 @@ variable "redis_log_retention_in_days" {
   type        = number
   default     = 14
 }
+
+variable "rabbitmq_engine_version" {
+  description = "Amazon MQ RabbitMQ engine version."
+  type        = string
+  default     = "4.2"
+}
+
+variable "rabbitmq_host_instance_type" {
+  description = "Amazon MQ RabbitMQ broker instance type for dev."
+  type        = string
+  default     = "mq.t3.micro"
+}
+
+variable "rabbitmq_deployment_mode" {
+  description = "Amazon MQ RabbitMQ deployment mode."
+  type        = string
+  default     = "SINGLE_INSTANCE"
+}
+
+variable "rabbitmq_admin_username" {
+  description = "Amazon MQ RabbitMQ admin username."
+  type        = string
+  default     = "orderadmin"
+}
+
+variable "rabbitmq_admin_password" {
+  description = "Amazon MQ RabbitMQ admin password. Stored in Terraform state."
+  type        = string
+  sensitive   = true
+}
+
+variable "rabbitmq_consumer_timeout_ms" {
+  description = "RabbitMQ consumer acknowledgement timeout in milliseconds."
+  type        = number
+  default     = 1800000
+}
+
+variable "rabbitmq_general_log_enabled" {
+  description = "Enable Amazon MQ RabbitMQ general logs."
+  type        = bool
+  default     = true
+}
+
+variable "rabbitmq_auto_minor_version_upgrade" {
+  description = "Enable automatic minor version upgrades for Amazon MQ RabbitMQ."
+  type        = bool
+  default     = true
+}

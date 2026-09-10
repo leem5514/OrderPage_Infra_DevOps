@@ -17,6 +17,7 @@ terraform/
     eks/
     rds/
     elasticache/
+    amazonmq/
     iam/
 k8s/
   base/
@@ -39,7 +40,7 @@ docs/
 - Container Registry: Amazon ECR
 - Database: Amazon RDS MariaDB
 - Cache: Amazon ElastiCache Redis
-- Message Queue: RabbitMQ on EKS or Amazon MQ
+- Message Queue: Amazon MQ for RabbitMQ
 - Load Balancer: AWS Load Balancer Controller + ALB
 - Observability: Prometheus + Grafana + CloudWatch Logs
 - IaC: Terraform
@@ -55,5 +56,6 @@ docs/
 6. Backend Kubernetes deployment
 7. RDS MariaDB
 8. ElastiCache Redis
-9. Prometheus/Grafana dashboard
-10. k6 performance test report
+9. Amazon MQ for RabbitMQ
+10. Prometheus/Grafana dashboard
+11. k6 performance test report

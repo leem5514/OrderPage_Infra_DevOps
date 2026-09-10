@@ -102,3 +102,23 @@ module "redis" {
 
   tags = local.common_tags
 }
+
+module "rabbitmq" {
+  source = "../../modules/amazonmq"
+
+  broker_name         = "${var.project_name}-${var.environment}-rabbitmq"
+  vpc_id              = module.vpc.vpc_id
+  subnet_ids          = module.vpc.private_subnet_ids
+  allowed_cidr_blocks = [module.vpc.vpc_cidr_block]
+
+  engine_version             = var.rabbitmq_engine_version
+  host_instance_type         = var.rabbitmq_host_instance_type
+  deployment_mode            = var.rabbitmq_deployment_mode
+  admin_username             = var.rabbitmq_admin_username
+  admin_password             = var.rabbitmq_admin_password
+  consumer_timeout_ms        = var.rabbitmq_consumer_timeout_ms
+  general_log_enabled        = var.rabbitmq_general_log_enabled
+  auto_minor_version_upgrade = var.rabbitmq_auto_minor_version_upgrade
+
+  tags = local.common_tags
+}

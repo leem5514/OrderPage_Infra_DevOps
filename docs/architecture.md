@@ -24,7 +24,7 @@ flowchart LR
 
     API --> RDS
     API --> Redis
-    API --> MQ[RabbitMQ]
+    API --> MQ[Amazon MQ for RabbitMQ]
     API --> S3[S3 Product Image Bucket]
 
     User[User Browser] --> Vercel
@@ -76,3 +76,13 @@ Redis는 Amazon ElastiCache Redis를 사용한다.
 - 백엔드가 refresh token 저장, 재고 차감, SSE pub/sub에 Redis를 사용하고 있어 관리형 전환 효과를 직접 측정할 수 있다.
 - private subnet, security group, snapshot, slow-log/engine-log export를 Terraform으로 설명할 수 있다.
 - 로컬 Redis 대비 API latency, DB 부하 감소, 캐시 장애 시 영향 범위를 부하테스트 지표로 비교하기 좋다.
+
+## Message Queue Decision
+
+RabbitMQ는 EKS 내부 직접 운영 대신 Amazon MQ for RabbitMQ를 사용한다.
+
+이유:
+
+- broker 패치, 장애 복구, 로그 수집 같은 운영 책임을 관리형 서비스로 넘길 수 있다.
+- EKS Pod는 AMQPS endpoint로 접근하고, broker는 private subnet과 security group으로 보호한다.
+- 직접 운영형 RabbitMQ 대비 운영 시간, 장애 대응 범위, queue backlog, consumer 처리 지연을 비교 지표로 만들기 좋다.

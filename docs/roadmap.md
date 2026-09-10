@@ -41,6 +41,7 @@
 - EKS
 - RDS
 - ElastiCache
+- Amazon MQ
 - IAM
 
 현재 완료:
@@ -57,11 +58,13 @@
 - private subnet DB subnet group, security group, backup, encryption, slow query log 구성 추가
 - ElastiCache Redis module 추가
 - private subnet Redis subnet group, security group, snapshot, slow-log/engine-log 구성 추가
+- Amazon MQ for RabbitMQ module 추가
+- private subnet broker, AMQPS security group, RabbitMQ configuration, general log 구성 추가
 
 다음 작업:
 
 - AWS credential 준비 후 `terraform init`, `terraform plan` 실행
-- RabbitMQ 배포 방식 결정
+- AWS Load Balancer Controller 설치 흐름 추가
 - Kubernetes manifest 실제 EKS 적용 검증
 
 ## Phase 4. Kubernetes
@@ -85,7 +88,7 @@
 다음 작업:
 
 - AWS Load Balancer Controller 설치
-- 실제 RDS/Redis/RabbitMQ endpoint와 Secret 교체
+- 실제 RDS/Redis/Amazon MQ endpoint와 Secret 교체
 - `kubectl apply -k k8s/overlays/dev` 실제 EKS 적용 검증
 
 ## Phase 5. Observability

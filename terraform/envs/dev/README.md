@@ -28,6 +28,9 @@
 - RDS CloudWatch log export
 - ElastiCache Redis replication group
 - ElastiCache Redis CloudWatch log export
+- Amazon MQ RabbitMQ broker
+- Amazon MQ RabbitMQ security group
+- Amazon MQ RabbitMQ general log export
 
 사용 예시:
 
@@ -43,9 +46,12 @@ RDS password는 실제 값으로 커밋하지 않습니다. PowerShell에서는 
 
 ```bash
 $env:TF_VAR_rds_master_password = 'change-me-strong-password'
+$env:TF_VAR_rabbitmq_admin_password = 'change-me-strong-password'
 ```
 
 Redis TLS/auth는 백엔드 Redis SSL 설정과 함께 켜야 합니다. 현재 dev 기본값은 private subnet과 security group으로 접근을 제한하는 방식입니다.
+
+Amazon MQ RabbitMQ는 AMQPS endpoint를 사용합니다. K8S manifest에서는 `RABBITMQ_SSL_ENABLED=true`와 `RABBITMQ_PORT=5671`로 연결합니다.
 
 EKS kubeconfig 연결 예시:
 

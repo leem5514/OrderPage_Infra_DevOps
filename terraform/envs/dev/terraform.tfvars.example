@@ -43,3 +43,12 @@ redis_transit_encryption_enabled     = false
 redis_auth_token                     = null
 redis_snapshot_retention_limit       = 3
 redis_log_retention_in_days          = 14
+
+rabbitmq_engine_version             = "4.2"
+rabbitmq_host_instance_type         = "mq.t3.micro"
+rabbitmq_deployment_mode            = "SINGLE_INSTANCE"
+rabbitmq_admin_username             = "orderadmin"
+rabbitmq_admin_password             = "change-me-strong-password"
+rabbitmq_consumer_timeout_ms        = 1800000
+rabbitmq_general_log_enabled        = true
+rabbitmq_auto_minor_version_upgrade = true

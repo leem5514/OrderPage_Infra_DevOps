@@ -27,6 +27,6 @@ kubectl set image deployment/orderpage-backend orderpage-backend=<ecr-image-uri>
 
 ## Notes
 
-- `k8s/base/secret.yaml`은 포트폴리오 실습용 placeholder입니다. 실제 배포 전에는 RDS, Redis, RabbitMQ, JWT 값을 Jenkins credential 또는 External Secrets 방식으로 교체해야 합니다.
+- `k8s/base/secret.yaml`은 포트폴리오 실습용 placeholder입니다. 실제 배포 전에는 RDS, Redis, Amazon MQ, JWT 값을 Jenkins credential 또는 External Secrets 방식으로 교체해야 합니다.
 - Ingress는 AWS Load Balancer Controller가 설치된 EKS를 전제로 합니다.
 - HPA는 CPU 70%, memory 80% 기준으로 2~5개 Pod 사이에서 scale out 되도록 설정했습니다.
