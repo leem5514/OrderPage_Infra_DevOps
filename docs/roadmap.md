@@ -55,11 +55,13 @@
 - EKS cluster, managed node group, add-on, IAM role 구성 추가
 - RDS MariaDB module 추가
 - private subnet DB subnet group, security group, backup, encryption, slow query log 구성 추가
+- ElastiCache Redis module 추가
+- private subnet Redis subnet group, security group, snapshot, slow-log/engine-log 구성 추가
 
 다음 작업:
 
 - AWS credential 준비 후 `terraform init`, `terraform plan` 실행
-- ElastiCache module 확장
+- RabbitMQ 배포 방식 결정
 - Kubernetes manifest 실제 EKS 적용 검증
 
 ## Phase 4. Kubernetes

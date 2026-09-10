@@ -57,3 +57,18 @@ output "rds_mariadb_database_name" {
   description = "Dev RDS MariaDB database name."
   value       = module.mariadb.database_name
 }
+
+output "redis_primary_endpoint_address" {
+  description = "Dev Redis primary endpoint address for backend REDIS_HOST."
+  value       = module.redis.primary_endpoint_address
+}
+
+output "redis_reader_endpoint_address" {
+  description = "Dev Redis reader endpoint address."
+  value       = module.redis.reader_endpoint_address
+}
+
+output "redis_port" {
+  description = "Dev Redis port."
+  value       = module.redis.port
+}

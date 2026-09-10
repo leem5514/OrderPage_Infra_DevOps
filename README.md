@@ -54,5 +54,6 @@ docs/
 5. Backend Docker image push pipeline
 6. Backend Kubernetes deployment
 7. RDS MariaDB
-8. Prometheus/Grafana dashboard
-9. k6 performance test report
+8. ElastiCache Redis
+9. Prometheus/Grafana dashboard
+10. k6 performance test report

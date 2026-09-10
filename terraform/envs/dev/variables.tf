@@ -188,3 +188,64 @@ variable "rds_skip_final_snapshot" {
   type        = bool
   default     = true
 }
+
+variable "redis_engine_version" {
+  description = "ElastiCache Redis OSS engine version."
+  type        = string
+  default     = "7.1"
+}
+
+variable "redis_parameter_group_family" {
+  description = "ElastiCache Redis parameter group family."
+  type        = string
+  default     = "redis7"
+}
+
+variable "redis_node_type" {
+  description = "ElastiCache Redis node type for dev."
+  type        = string
+  default     = "cache.t4g.micro"
+}
+
+variable "redis_num_cache_clusters" {
+  description = "Number of Redis cache nodes in dev."
+  type        = number
+  default     = 1
+}
+
+variable "redis_automatic_failover_enabled" {
+  description = "Enable Redis automatic failover. Requires at least 2 cache nodes."
+  type        = bool
+  default     = false
+}
+
+variable "redis_multi_az_enabled" {
+  description = "Enable Redis Multi-AZ. Requires automatic failover."
+  type        = bool
+  default     = false
+}
+
+variable "redis_transit_encryption_enabled" {
+  description = "Enable Redis in-transit encryption. Requires application Redis SSL settings."
+  type        = bool
+  default     = false
+}
+
+variable "redis_auth_token" {
+  description = "Redis auth token. Used only when transit encryption is enabled."
+  type        = string
+  default     = null
+  sensitive   = true
+}
+
+variable "redis_snapshot_retention_limit" {
+  description = "Number of days to retain Redis snapshots."
+  type        = number
+  default     = 3
+}
+
+variable "redis_log_retention_in_days" {
+  description = "CloudWatch log retention days for Redis logs."
+  type        = number
+  default     = 14
+}

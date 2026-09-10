@@ -26,6 +26,8 @@
 - RDS DB subnet group
 - RDS security group
 - RDS CloudWatch log export
+- ElastiCache Redis replication group
+- ElastiCache Redis CloudWatch log export
 
 사용 예시:
 
@@ -42,6 +44,8 @@ RDS password는 실제 값으로 커밋하지 않습니다. PowerShell에서는 
 ```bash
 $env:TF_VAR_rds_master_password = 'change-me-strong-password'
 ```
+
+Redis TLS/auth는 백엔드 Redis SSL 설정과 함께 켜야 합니다. 현재 dev 기본값은 private subnet과 security group으로 접근을 제한하는 방식입니다.
 
 EKS kubeconfig 연결 예시:
 

@@ -66,3 +66,13 @@ flowchart LR
 - 기존 백엔드가 MariaDB dialect와 JDBC URL을 사용하므로 애플리케이션 변경 폭이 작다.
 - private subnet, backup retention, storage encryption, slow query log export를 Terraform으로 설명할 수 있다.
 - 로컬 DB 대비 운영 자동화, 장애 대응, 성능 병목 분석 지표를 포트폴리오 수치로 만들기 좋다.
+
+## Cache Decision
+
+Redis는 Amazon ElastiCache Redis를 사용한다.
+
+이유:
+
+- 백엔드가 refresh token 저장, 재고 차감, SSE pub/sub에 Redis를 사용하고 있어 관리형 전환 효과를 직접 측정할 수 있다.
+- private subnet, security group, snapshot, slow-log/engine-log export를 Terraform으로 설명할 수 있다.
+- 로컬 Redis 대비 API latency, DB 부하 감소, 캐시 장애 시 영향 범위를 부하테스트 지표로 비교하기 좋다.

@@ -79,3 +79,26 @@ module "mariadb" {
 
   tags = local.common_tags
 }
+
+module "redis" {
+  source = "../../modules/elasticache"
+
+  replication_group_id = "${var.project_name}-${var.environment}-redis"
+  description          = "OrderPage dev Redis for cache, token, stock, and SSE workloads"
+  vpc_id               = module.vpc.vpc_id
+  subnet_ids           = module.vpc.private_subnet_ids
+  allowed_cidr_blocks  = [module.vpc.vpc_cidr_block]
+
+  engine_version             = var.redis_engine_version
+  parameter_group_family     = var.redis_parameter_group_family
+  node_type                  = var.redis_node_type
+  num_cache_clusters         = var.redis_num_cache_clusters
+  automatic_failover_enabled = var.redis_automatic_failover_enabled
+  multi_az_enabled           = var.redis_multi_az_enabled
+  transit_encryption_enabled = var.redis_transit_encryption_enabled
+  auth_token                 = var.redis_auth_token
+  snapshot_retention_limit   = var.redis_snapshot_retention_limit
+  log_retention_in_days      = var.redis_log_retention_in_days
+
+  tags = local.common_tags
+}
