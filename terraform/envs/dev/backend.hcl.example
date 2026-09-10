@@ -1,0 +1,5 @@
+bucket       = "orderpage-devops-tfstate-<account-id>-ap-northeast-2"
+key          = "orderpage/dev/terraform.tfstate"
+region       = "ap-northeast-2"
+encrypt      = true
+use_lockfile = true

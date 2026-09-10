@@ -55,3 +55,31 @@ Jenkins agent 요구 사항:
 - ECR repository name
 - kubeconfig 또는 EKS 접근 권한
 - Infra repository 접근 권한
+
+## Infra Pipeline
+
+`Jenkinsfile.infra`는 Terraform으로 AWS 인프라 변경을 검증하고, 필요할 때 승인 후 적용하는 흐름을 정의합니다.
+
+기본 흐름:
+
+```text
+terraform fmt -check -recursive
+  -> terraform init -backend-config=backend.hcl
+  -> terraform validate
+  -> terraform plan -out=tfplan
+  -> 수동 승인
+  -> terraform apply tfplan
+```
+
+`RUN_APPLY=false`가 기본값이므로 일반 실행은 plan까지만 수행합니다. 실제 리소스 변경은 Jenkins 화면에서 `RUN_APPLY=true`로 실행하고, `Terraform Apply` 단계의 수동 승인까지 통과해야 진행됩니다.
+
+Jenkins agent 요구 사항:
+
+- Terraform CLI
+- AWS CLI
+- AWS credential
+- `terraform/envs/dev/backend.hcl`
+- `TF_VAR_rds_master_password`
+- `TF_VAR_rabbitmq_admin_password`
+
+`backend.hcl`과 `TF_VAR_*` 값은 민감 정보 또는 계정별 설정이므로 Git에 커밋하지 않습니다. Jenkins credential 또는 Secret file credential로 주입합니다.

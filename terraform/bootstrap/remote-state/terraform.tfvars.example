@@ -1,0 +1,4 @@
+aws_region        = "ap-northeast-2"
+project_name      = "orderpage"
+environment       = "shared"
+state_bucket_name = "orderpage-devops-tfstate-<account-id>-ap-northeast-2"

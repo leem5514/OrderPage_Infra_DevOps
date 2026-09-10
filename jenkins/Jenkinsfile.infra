@@ -1,23 +1,78 @@
 pipeline {
     agent any
 
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    }
+
+    parameters {
+        string(name: 'AWS_REGION', defaultValue: 'ap-northeast-2', description: 'AWS region')
+        string(name: 'TERRAFORM_DIR', defaultValue: 'terraform/envs/dev', description: 'Terraform root module path')
+        string(name: 'BACKEND_CONFIG_FILE', defaultValue: 'backend.hcl', description: 'Terraform backend config file inside TERRAFORM_DIR')
+        booleanParam(name: 'RUN_APPLY', defaultValue: false, description: '승인 후 terraform apply까지 실행')
+    }
+
+    environment {
+        AWS_DEFAULT_REGION = "${params.AWS_REGION}"
+        TF_IN_AUTOMATION = 'true'
+    }
+
     stages {
         stage('Terraform Format') {
             steps {
-                echo 'terraform fmt -check -recursive'
+                // fmt는 코드 스타일 게이트다. 실패하면 plan/apply로 넘어가지 않는다.
+                sh 'terraform fmt -check -recursive'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                dir(params.TERRAFORM_DIR) {
+                    sh 'terraform init -backend-config="${BACKEND_CONFIG_FILE}"'
+                }
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                dir(params.TERRAFORM_DIR) {
+                    sh 'terraform validate'
+                }
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                echo 'terraform plan'
+                dir(params.TERRAFORM_DIR) {
+                    sh 'terraform plan -input=false -out=tfplan'
+                }
             }
         }
 
         stage('Terraform Apply') {
-            steps {
-                echo 'terraform apply with approval'
+            when {
+                expression { return params.RUN_APPLY }
             }
+            steps {
+                input message: 'Terraform apply를 실행할까요?', ok: 'Apply'
+                dir(params.TERRAFORM_DIR) {
+                    sh 'terraform apply -input=false tfplan'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '인프라 파이프라인 성공'
+        }
+        failure {
+            echo '인프라 파이프라인 실패'
+        }
+        always {
+            archiveArtifacts allowEmptyArchive: true, artifacts: "${params.TERRAFORM_DIR}/tfplan"
         }
     }
 }

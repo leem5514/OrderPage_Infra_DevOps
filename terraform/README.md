@@ -7,6 +7,7 @@ AWS 인프라를 코드로 관리한다.
 ```text
 envs/dev
 envs/prod
+bootstrap/remote-state
 modules/vpc
 modules/ecr
 modules/eks
@@ -21,7 +22,7 @@ modules/iam
 
 ```bash
 terraform fmt -recursive
-terraform init
+terraform init -backend-config=backend.hcl
 terraform plan
 terraform apply
 ```
@@ -31,7 +32,11 @@ terraform apply
 현재 dev 환경에는 VPC 네트워크, 백엔드 Docker 이미지를 저장할 ECR repository, EKS cluster와 managed node group, RDS MariaDB, ElastiCache Redis, Amazon MQ RabbitMQ, AWS Load Balancer Controller IRSA 구성이 포함되어 있습니다.
 
 ```bash
-cd terraform/envs/dev
+cd terraform/bootstrap/remote-state
 terraform init
+terraform apply
+
+cd terraform/envs/dev
+terraform init -backend-config=backend.hcl
 terraform plan
 ```

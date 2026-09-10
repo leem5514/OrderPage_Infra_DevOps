@@ -2,6 +2,7 @@
 *.tfstate
 *.tfstate.*
 *.tfvars
+backend.hcl
 !.terraform.lock.hcl
 .DS_Store
 .idea/

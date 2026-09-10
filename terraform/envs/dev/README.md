@@ -36,12 +36,21 @@
 사용 예시:
 
 ```bash
-terraform init
+terraform init -backend-config=backend.hcl
 terraform plan
 terraform apply
 ```
 
 변수 예시는 `terraform.tfvars.example`을 참고합니다.
+
+Remote state는 `terraform/bootstrap/remote-state`에서 S3 bucket을 먼저 만든 뒤 활성화합니다.
+
+```bash
+cp backend.hcl.example backend.hcl
+terraform init -backend-config=backend.hcl
+```
+
+`backend.hcl`에는 실제 S3 bucket 이름이 들어가므로 커밋하지 않습니다. 예시 파일만 Git에 남깁니다.
 
 RDS password는 실제 값으로 커밋하지 않습니다. PowerShell에서는 아래처럼 환경변수로 주입할 수 있습니다.
 

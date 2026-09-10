@@ -62,10 +62,14 @@
 - private subnet broker, AMQPS security group, RabbitMQ configuration, general log 구성 추가
 - AWS Load Balancer Controller IRSA module 추가
 - AWS Load Balancer Controller Helm values, ServiceAccount, 설치 스크립트 추가
+- Terraform remote state bootstrap 추가
+- dev S3 backend partial configuration 추가
 
 다음 작업:
 
-- AWS credential 준비 후 `terraform init`, `terraform plan` 실행
+- AWS credential 갱신 후 remote state bootstrap `terraform plan/apply` 실행
+- `terraform/envs/dev/backend.hcl` 생성 후 `terraform init -backend-config=backend.hcl` 실행
+- AWS credential 준비 후 `terraform plan` 실행
 - AWS Load Balancer Controller 실제 설치 검증
 - Kubernetes manifest 실제 EKS 적용 검증
 

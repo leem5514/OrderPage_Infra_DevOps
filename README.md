@@ -8,6 +8,8 @@ OrderPage 서비스의 DevOps 인프라 레포지토리입니다.
 
 ```text
 terraform/
+  bootstrap/
+    remote-state/
   envs/
     dev/
     prod/
