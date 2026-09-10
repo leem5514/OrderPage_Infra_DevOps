@@ -54,6 +54,20 @@ module "eks" {
   tags = local.common_tags
 }
 
+module "aws_load_balancer_controller_irsa" {
+  count  = var.enable_aws_load_balancer_controller_irsa ? 1 : 0
+  source = "../../modules/load-balancer-controller-irsa"
+
+  role_name            = "${var.project_name}-${var.environment}-aws-load-balancer-controller"
+  oidc_provider_arn    = var.eks_oidc_provider_arn
+  oidc_provider_url    = module.eks.cluster_oidc_issuer_url
+  policy_arn           = var.aws_load_balancer_controller_policy_arn
+  namespace            = var.aws_load_balancer_controller_namespace
+  service_account_name = var.aws_load_balancer_controller_service_account_name
+
+  tags = local.common_tags
+}
+
 module "mariadb" {
   source = "../../modules/rds"
 

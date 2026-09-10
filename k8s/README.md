@@ -6,6 +6,8 @@ EKS 배포용 Kubernetes manifest를 관리합니다.
 
 ```text
 base/
+controllers/
+  aws-load-balancer-controller/
 overlays/dev/
 overlays/prod/
 ```

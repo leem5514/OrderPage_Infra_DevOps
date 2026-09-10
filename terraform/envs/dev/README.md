@@ -31,6 +31,7 @@
 - Amazon MQ RabbitMQ broker
 - Amazon MQ RabbitMQ security group
 - Amazon MQ RabbitMQ general log export
+- AWS Load Balancer Controller IRSA role
 
 사용 예시:
 
@@ -52,6 +53,14 @@ $env:TF_VAR_rabbitmq_admin_password = 'change-me-strong-password'
 Redis TLS/auth는 백엔드 Redis SSL 설정과 함께 켜야 합니다. 현재 dev 기본값은 private subnet과 security group으로 접근을 제한하는 방식입니다.
 
 Amazon MQ RabbitMQ는 AMQPS endpoint를 사용합니다. K8S manifest에서는 `RABBITMQ_SSL_ENABLED=true`와 `RABBITMQ_PORT=5671`로 연결합니다.
+
+AWS Load Balancer Controller IRSA는 EKS OIDC provider와 Controller IAM policy ARN이 준비된 뒤 활성화합니다.
+
+```hcl
+enable_aws_load_balancer_controller_irsa = true
+eks_oidc_provider_arn                   = "arn:aws:iam::<account-id>:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/<oidc-id>"
+aws_load_balancer_controller_policy_arn = "arn:aws:iam::<account-id>:policy/AWSLoadBalancerControllerIAMPolicy"
+```
 
 EKS kubeconfig 연결 예시:
 

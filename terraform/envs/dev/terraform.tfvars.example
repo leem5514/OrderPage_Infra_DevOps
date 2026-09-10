@@ -18,6 +18,12 @@ eks_node_desired_size         = 2
 eks_node_min_size             = 1
 eks_node_max_size             = 3
 
+enable_aws_load_balancer_controller_irsa = false
+eks_oidc_provider_arn                    = null
+aws_load_balancer_controller_policy_arn  = null
+aws_load_balancer_controller_namespace   = "kube-system"
+aws_load_balancer_controller_service_account_name = "aws-load-balancer-controller"
+
 rds_database_name                    = "ordersystem"
 rds_master_username                  = "orderadmin"
 rds_master_password                  = "change-me-strong-password"

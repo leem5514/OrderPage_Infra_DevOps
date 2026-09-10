@@ -21,6 +21,8 @@ terraform/
     iam/
 k8s/
   base/
+  controllers/
+    aws-load-balancer-controller/
   overlays/
     dev/
     prod/
@@ -57,5 +59,6 @@ docs/
 7. RDS MariaDB
 8. ElastiCache Redis
 9. Amazon MQ for RabbitMQ
-10. Prometheus/Grafana dashboard
-11. k6 performance test report
+10. AWS Load Balancer Controller
+11. Prometheus/Grafana dashboard
+12. k6 performance test report

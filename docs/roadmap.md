@@ -60,11 +60,13 @@
 - private subnet Redis subnet group, security group, snapshot, slow-log/engine-log 구성 추가
 - Amazon MQ for RabbitMQ module 추가
 - private subnet broker, AMQPS security group, RabbitMQ configuration, general log 구성 추가
+- AWS Load Balancer Controller IRSA module 추가
+- AWS Load Balancer Controller Helm values, ServiceAccount, 설치 스크립트 추가
 
 다음 작업:
 
 - AWS credential 준비 후 `terraform init`, `terraform plan` 실행
-- AWS Load Balancer Controller 설치 흐름 추가
+- AWS Load Balancer Controller 실제 설치 검증
 - Kubernetes manifest 실제 EKS 적용 검증
 
 ## Phase 4. Kubernetes
@@ -84,10 +86,11 @@
 - dev Kustomize overlay 추가
 - ALB Ingress, HPA, Actuator probe, Prometheus scrape annotation 추가
 - Jenkins `eks-deploy` 단계와 `kubectl apply -k` 배포 흐름 연결
+- AWS Load Balancer Controller 설치용 ServiceAccount/Helm values 추가
 
 다음 작업:
 
-- AWS Load Balancer Controller 설치
+- AWS Load Balancer Controller 실제 설치
 - 실제 RDS/Redis/Amazon MQ endpoint와 Secret 교체
 - `kubectl apply -k k8s/overlays/dev` 실제 EKS 적용 검증
 

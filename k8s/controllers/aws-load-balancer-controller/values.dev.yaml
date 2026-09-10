@@ -1,0 +1,21 @@
+# AWS Load Balancer Controller Helm values for the dev EKS cluster.
+# 이 Controller가 k8s/base/ingress.yaml을 보고 AWS ALB를 생성한다.
+clusterName: orderpage-dev
+region: ap-northeast-2
+
+# Terraform output vpc_id 값으로 교체한다.
+vpcId: vpc-xxxxxxxxxxxxxxxxx
+
+serviceAccount:
+  # ServiceAccount는 IRSA annotation이 필요해서 별도 manifest로 먼저 생성한다.
+  create: false
+  name: aws-load-balancer-controller
+
+replicaCount: 2
+
+# IngressClass alb를 기본 관리 대상으로 사용한다.
+ingressClass: alb
+
+# dev에서는 Service type LoadBalancer를 자동 NLB로 바꾸는 webhook을 끈다.
+# 이번 프로젝트는 Ingress -> ALB 흐름을 명확히 보여주는 것이 목적이다.
+enableServiceMutatorWebhook: false

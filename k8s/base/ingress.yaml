@@ -9,8 +9,6 @@ metadata:
     app.kubernetes.io/part-of: orderpage
   annotations:
     # AWS Load Balancer Controller가 이 Ingress를 보고 ALB를 생성한다.
-    kubernetes.io/ingress.class: alb
-    # internet-facing은 외부 사용자가 접근 가능한 ALB를 만든다.
     alb.ingress.kubernetes.io/scheme: internet-facing
     # target-type ip는 ALB가 Service NodePort가 아니라 Pod IP로 직접 라우팅하게 한다.
     alb.ingress.kubernetes.io/target-type: ip
@@ -18,6 +16,8 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
 spec:
+  # AWS Load Balancer Controller가 제공하는 IngressClass다.
+  ingressClassName: alb
   rules:
     - host: api.dev.orderpage.example.com
       http:

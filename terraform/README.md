@@ -13,6 +13,7 @@ modules/eks
 modules/rds
 modules/elasticache
 modules/amazonmq
+modules/load-balancer-controller-irsa
 modules/iam
 ```
 
@@ -27,7 +28,7 @@ terraform apply
 
 ## Current Scope
 
-현재 dev 환경에는 VPC 네트워크, 백엔드 Docker 이미지를 저장할 ECR repository, EKS cluster와 managed node group, RDS MariaDB, ElastiCache Redis, Amazon MQ RabbitMQ 구성이 포함되어 있습니다.
+현재 dev 환경에는 VPC 네트워크, 백엔드 Docker 이미지를 저장할 ECR repository, EKS cluster와 managed node group, RDS MariaDB, ElastiCache Redis, Amazon MQ RabbitMQ, AWS Load Balancer Controller IRSA 구성이 포함되어 있습니다.
 
 ```bash
 cd terraform/envs/dev

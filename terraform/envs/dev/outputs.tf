@@ -38,6 +38,16 @@ output "eks_node_group_name" {
   value       = module.eks.node_group_name
 }
 
+output "eks_oidc_issuer_url" {
+  description = "Dev EKS OIDC issuer URL for IRSA."
+  value       = module.eks.cluster_oidc_issuer_url
+}
+
+output "aws_load_balancer_controller_role_arn" {
+  description = "AWS Load Balancer Controller IRSA role ARN."
+  value       = try(module.aws_load_balancer_controller_irsa[0].role_arn, null)
+}
+
 output "rds_mariadb_endpoint" {
   description = "Dev RDS MariaDB endpoint."
   value       = module.mariadb.endpoint

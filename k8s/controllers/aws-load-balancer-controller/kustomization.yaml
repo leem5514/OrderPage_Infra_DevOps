@@ -1,0 +1,6 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Helm 설치 전에 IRSA annotation이 붙은 ServiceAccount를 먼저 적용한다.
+resources:
+  - serviceaccount.yaml

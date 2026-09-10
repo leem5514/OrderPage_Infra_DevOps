@@ -105,6 +105,36 @@ variable "eks_node_max_size" {
   default     = 3
 }
 
+variable "enable_aws_load_balancer_controller_irsa" {
+  description = "Create AWS Load Balancer Controller IRSA role after OIDC provider and IAM policy are ready."
+  type        = bool
+  default     = false
+}
+
+variable "eks_oidc_provider_arn" {
+  description = "EKS OIDC provider ARN. Required when enable_aws_load_balancer_controller_irsa is true."
+  type        = string
+  default     = null
+}
+
+variable "aws_load_balancer_controller_policy_arn" {
+  description = "AWS Load Balancer Controller IAM policy ARN. Required when enable_aws_load_balancer_controller_irsa is true."
+  type        = string
+  default     = null
+}
+
+variable "aws_load_balancer_controller_namespace" {
+  description = "Namespace where AWS Load Balancer Controller runs."
+  type        = string
+  default     = "kube-system"
+}
+
+variable "aws_load_balancer_controller_service_account_name" {
+  description = "ServiceAccount used by AWS Load Balancer Controller."
+  type        = string
+  default     = "aws-load-balancer-controller"
+}
+
 variable "rds_database_name" {
   description = "Initial MariaDB database name for the backend."
   type        = string

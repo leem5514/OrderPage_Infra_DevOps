@@ -19,6 +19,8 @@ flowchart LR
     Terraform --> IAM[IAM Roles]
 
     ECR --> EKS
+    EKS --> LBC[AWS Load Balancer Controller]
+    LBC --> ALB
     EKS --> ALB[Application Load Balancer]
     ALB --> API[Spring Boot Pods]
 
@@ -56,6 +58,16 @@ flowchart LR
 - Kubernetes Deployment, Service, Ingress, HPA, ConfigMap, Secret을 포트폴리오에 포함할 수 있다.
 - Jenkins, ECR, Terraform과 연결되는 실전형 CI/CD 흐름을 만들 수 있다.
 - Prometheus/Grafana로 API latency, JVM, Pod, queue, Redis 지표를 수집할 수 있다.
+
+## Load Balancer Decision
+
+외부 API 트래픽은 AWS Load Balancer Controller가 생성하는 ALB로 받는다.
+
+이유:
+
+- Kubernetes Ingress 변경이 AWS ALB/TargetGroup/HealthCheck 생성으로 이어지는 흐름을 보여줄 수 있다.
+- public subnet tag, private Pod target-type ip, Actuator health check를 하나의 배포 아키텍처로 설명할 수 있다.
+- 수동 ALB 생성 대비 배포 반복 시간과 설정 누락 위험을 줄였다는 자동화 지표를 만들기 좋다.
 
 ## Database Decision
 
