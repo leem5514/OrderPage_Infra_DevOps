@@ -4,6 +4,8 @@
 
 위 아키텍처는 현재 Infra 레포에 구성된 Terraform, Kubernetes, Jenkins, Monitoring 계획을 기준으로 작성했습니다.
 
+Kubernetes 리소스 아이콘은 `kubernetes/community`의 Kubernetes Icons Set을 사용했습니다. 이 아이콘 세트는 Kubernetes 아키텍처 다이어그램을 표준화하기 위한 용도로 제공됩니다.
+
 핵심 흐름:
 
 ```text
@@ -86,3 +88,8 @@ RabbitMQ는 EKS 내부 직접 운영 대신 Amazon MQ for RabbitMQ를 사용한�
 - broker 패치, 장애 복구, 로그 수집 같은 운영 책임을 관리형 서비스로 넘길 수 있다.
 - EKS Pod는 AMQPS endpoint로 접근하고, broker는 private subnet과 security group으로 보호한다.
 - 직접 운영형 RabbitMQ 대비 운영 시간, 장애 대응 범위, queue backlog, consumer 처리 지연을 비교 지표로 만들기 좋다.
+
+## Icon Sources
+
+- Kubernetes Icons Set: https://github.com/kubernetes/community/tree/main/icons
+- Kubernetes icon license: Apache-2.0 or CC-BY-4.0
