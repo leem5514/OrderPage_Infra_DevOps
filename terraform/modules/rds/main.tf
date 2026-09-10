@@ -70,7 +70,7 @@ resource "aws_db_instance" "this" {
   engine_version = var.engine_version
   instance_class = var.instance_class
 
-  allocated_storage     = var.allocated_storage
+  allocated_storage = var.allocated_storage
   # 스토리지 자동 확장으로 트래픽 증가 시 디스크 부족 위험을 줄인다.
   max_allocated_storage = var.max_allocated_storage
   storage_type          = var.storage_type
@@ -85,15 +85,15 @@ resource "aws_db_instance" "this" {
   vpc_security_group_ids = [aws_security_group.this.id]
   parameter_group_name   = aws_db_parameter_group.this.name
   # false로 두면 public IP를 받지 않는다. 접근은 EKS/VPC 내부에서만 한다.
-  publicly_accessible    = false
-  multi_az               = var.multi_az
+  publicly_accessible = false
+  multi_az            = var.multi_az
 
   # 자동 백업은 장애 복구 시점과 운영 안정성 설명에 쓰는 핵심 설정이다.
-  backup_retention_period   = var.backup_retention_period
-  backup_window             = var.backup_window
-  maintenance_window        = var.maintenance_window
+  backup_retention_period    = var.backup_retention_period
+  backup_window              = var.backup_window
+  maintenance_window         = var.maintenance_window
   auto_minor_version_upgrade = true
-  copy_tags_to_snapshot     = true
+  copy_tags_to_snapshot      = true
 
   # error/slowquery 로그를 CloudWatch로 보내 DB 병목을 관측한다.
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports

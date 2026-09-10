@@ -1,5 +1,5 @@
 resource "aws_vpc" "this" {
-  cidr_block           = var.vpc_cidr
+  cidr_block = var.vpc_cidr
   # EKS, RDS 같은 관리형 서비스가 VPC 내부 DNS 이름으로 서로 찾을 수 있게 한다.
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -27,8 +27,8 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = merge(var.tags, {
-    Name                     = "${var.name}-public-${count.index + 1}"
-    Tier                     = "public"
+    Name = "${var.name}-public-${count.index + 1}"
+    Tier = "public"
     # AWS Load Balancer Controller가 internet-facing ALB용 subnet으로 인식하는 태그다.
     "kubernetes.io/role/elb" = "1"
   })
@@ -43,8 +43,8 @@ resource "aws_subnet" "private" {
   availability_zone = var.availability_zones[count.index]
 
   tags = merge(var.tags, {
-    Name                              = "${var.name}-private-${count.index + 1}"
-    Tier                              = "private"
+    Name = "${var.name}-private-${count.index + 1}"
+    Tier = "private"
     # 내부용 LoadBalancer가 필요할 때 Kubernetes가 이 subnet을 선택할 수 있게 한다.
     "kubernetes.io/role/internal-elb" = "1"
   })

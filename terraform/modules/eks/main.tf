@@ -3,7 +3,7 @@ data "aws_iam_policy_document" "cluster_assume_role" {
     effect = "Allow"
 
     principals {
-      type        = "Service"
+      type = "Service"
       # EKS control plane이 이 IAM role을 assume해서 AWS 리소스를 제어한다.
       identifiers = ["eks.amazonaws.com"]
     }
@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "node_assume_role" {
     effect = "Allow"
 
     principals {
-      type        = "Service"
+      type = "Service"
       # Managed node group의 EC2 instance가 이 IAM role을 사용한다.
       identifiers = ["ec2.amazonaws.com"]
     }
@@ -94,7 +94,7 @@ resource "aws_eks_node_group" "default" {
   node_group_name = "${var.cluster_name}-default"
   node_role_arn   = aws_iam_role.node.arn
   # worker node는 private subnet에 배치해 외부 직접 노출을 줄인다.
-  subnet_ids      = var.node_subnet_ids
+  subnet_ids = var.node_subnet_ids
 
   ami_type       = var.node_ami_type
   capacity_type  = var.node_capacity_type

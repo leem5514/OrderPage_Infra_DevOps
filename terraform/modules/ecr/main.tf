@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "this" {
-  name                 = var.repository_name
+  name = var.repository_name
   # IMMUTABLE로 바꾸면 같은 태그 재사용을 막아 배포 추적성이 좋아진다.
   # dev에서는 latest/BUILD_NUMBER 실험 여지를 두기 위해 변수로 열어둔다.
   image_tag_mutability = var.image_tag_mutability
