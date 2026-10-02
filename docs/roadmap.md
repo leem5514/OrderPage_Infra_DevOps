@@ -113,3 +113,18 @@
 - HPA comparison
 - Redis/RabbitMQ scenario comparison
 - Final performance report
+
+현재 완료:
+
+- Terraform, Jenkins, HPA, CloudWatch, ALB, Redis/RabbitMQ, 관리형 서비스의 Before/After 비교 시나리오 정의
+- 공통 실험 조건, 개선율 계산식, 증거 보관 규칙 정의
+- AWS 배포 전 P0/P1/P2 우선순위와 배포 시작 조건 정의
+
+다음 작업:
+
+- 기존 Git commit/tag로 baseline 보존
+- HPA OFF/ON Kustomize overlay 분리
+- 백엔드 RDB_SYNC/REDIS_ASYNC 비교 모드 추가
+- k6 시나리오와 테스트 데이터 seed 추가
+- Metrics Server와 CloudWatch Dashboard/Alarm 구성
+- Before 측정 후 AWS After 환경 배포 및 재측정
