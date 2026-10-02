@@ -10,6 +10,9 @@ benchmarks/
   hpa/
     fixed-replicas/
     hpa-enabled/
+  stock-processing/
+    rdb-sync/
+    redis-async/
 controllers/
   aws-load-balancer-controller/
 overlays/dev/
@@ -37,4 +40,5 @@ kubectl set image deployment/orderpage-backend orderpage-backend=<ecr-image-uri>
 - Ingress는 AWS Load Balancer Controller가 설치된 EKS를 전제로 합니다.
 - HPA는 CPU 70%, memory 80% 기준으로 2~5개 Pod 사이에서 scale out 되도록 설정했습니다.
 - HPA Before/After 실행 절차는 `benchmarks/hpa/README.md`를 참고합니다.
+- RDB/Redis 재고 처리 비교 절차는 `benchmarks/stock-processing/README.md`를 참고합니다.
 - HPA가 CPU/Memory 값을 받으려면 Terraform이 설치하는 Metrics Server EKS Add-on이 필요합니다.

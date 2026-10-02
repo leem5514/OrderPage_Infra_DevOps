@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderpage-backend
+  namespace: orderpage
+spec:
+  template:
+    spec:
+      containers:
+        - name: orderpage-backend
+          env:
+            # Before: 요청 트랜잭션에서 RDB 행 잠금과 재고 차감을 완료한다.
+            - name: ORDER_STOCK_PROCESSING_MODE
+              value: RDB_SYNC

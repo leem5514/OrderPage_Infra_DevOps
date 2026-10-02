@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 재고 처리 방식 외의 변수를 통제하기 위해 HPA 없이 Pod 2개를 사용하는 구성을 재사용한다.
+resources:
+  - ../../hpa/fixed-replicas
+
+patches:
+  - path: patch-stock-processing-mode.yaml

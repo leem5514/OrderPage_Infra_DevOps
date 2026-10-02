@@ -122,10 +122,10 @@
 - 저장소별 보존 태그와 시나리오별 실제 Baseline 기준 등록
 - HPA OFF/ON Kustomize 비교 Overlay와 Metrics Server EKS Add-on 구성
 - HPA 비교용 k6 100/300/500 VU 부하 프로필과 결과 메타데이터 저장 구성
+- 백엔드 RDB_SYNC/REDIS_ASYNC 비교 모드와 Kubernetes 고정 Pod Variant 구성
 
 다음 작업:
 
-- 백엔드 RDB_SYNC/REDIS_ASYNC 비교 모드 추가
 - 주문 부하용 k6 시나리오와 테스트 데이터 seed 추가
 - CloudWatch Dashboard/Alarm 구성
 - Before 측정 후 AWS After 환경 배포 및 재측정

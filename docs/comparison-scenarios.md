@@ -321,7 +321,7 @@ S3/CloudFront를 실제로 배포하지 않으면 Vercel과의 직접 성능 비
 | ALB IP Target | Manifest 완료 | Instance overlay 선택 | 없음 |
 | CloudWatch | 로그 Export 일부 완료 | Dashboard/Alarm 필요 | 없음 |
 | Prometheus | Actuator endpoint 완료 | Server/Grafana 필요 | 없음 |
-| Redis/RabbitMQ | After 로직 존재 | Baseline 실행 모드 필요 | 없음 |
+| Redis/RabbitMQ | RDB_SYNC/REDIS_ASYNC 모드와 고정 Pod Variant 완료 | 주문 부하/데이터 Seed 필요 | 실제 실측 없음 |
 | RDS/ElastiCache/Amazon MQ | Terraform 완료 | 직접 운영 비교 필요 | 없음 |
 | Secret 관리 | Placeholder만 존재 | Secrets Manager 미구현 | 없음 |
 | Vercel | 기본 설정 완료 | 수동 배포 기록 필요 | 없음 |

@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderpage-backend
+  namespace: orderpage
+spec:
+  template:
+    spec:
+      containers:
+        - name: orderpage-backend
+          env:
+            # After: Redis Lua로 차감하고 RabbitMQ를 통해 RDB에 비동기 반영한다.
+            - name: ORDER_STOCK_PROCESSING_MODE
+              value: REDIS_ASYNC
