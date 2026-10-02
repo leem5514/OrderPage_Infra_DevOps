@@ -22,6 +22,7 @@
 - EKS cluster
 - EKS managed node group
 - EKS managed add-ons
+- Metrics Server EKS community add-on for HPA CPU/Memory metrics
 - RDS MariaDB instance
 - RDS DB subnet group
 - RDS security group
@@ -77,3 +78,13 @@ EKS kubeconfig 연결 예시:
 aws eks update-kubeconfig --region ap-northeast-2 --name orderpage-dev
 kubectl get nodes
 ```
+
+Metrics Server 확인:
+
+```bash
+kubectl get apiservice v1beta1.metrics.k8s.io
+kubectl top nodes
+kubectl top pods -n orderpage
+```
+
+Metrics Server는 HPA 계산용 현재 CPU/Memory 값을 제공하며 장기 모니터링 저장소는 아닙니다.

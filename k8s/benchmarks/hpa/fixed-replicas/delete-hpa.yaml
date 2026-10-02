@@ -1,0 +1,6 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: orderpage-backend
+  namespace: orderpage
+$patch: delete

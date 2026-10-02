@@ -75,6 +75,12 @@ variable "eks_enabled_cluster_log_types" {
   default     = ["api", "audit", "authenticator"]
 }
 
+variable "eks_cluster_addons" {
+  description = "EKS managed and community add-ons. Metrics Server supplies CPU and memory metrics to HPA."
+  type        = list(string)
+  default     = ["vpc-cni", "coredns", "kube-proxy", "metrics-server"]
+}
+
 variable "eks_node_instance_types" {
   description = "EKS managed node instance types."
   type        = list(string)

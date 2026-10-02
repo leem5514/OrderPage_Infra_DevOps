@@ -1,0 +1,6 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# After 비교군은 dev와 동일한 리소스에 base의 HPA만 그대로 활성화한다.
+resources:
+  - ../../../overlays/dev

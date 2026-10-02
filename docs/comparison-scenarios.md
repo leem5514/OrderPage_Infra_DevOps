@@ -316,7 +316,7 @@ S3/CloudFront를 실제로 배포하지 않으면 Vercel과의 직접 성능 비
 | Remote State | 완료 | Local State 실험 필요 | 없음 |
 | Jenkins | Jenkinsfile 완료 | 수동 배포 기록 필요 | 없음 |
 | ECR | 완료 | 로컬 이미지 기록 필요 | 없음 |
-| HPA | Manifest 완료 | Fixed overlay 필요 | 없음 |
+| HPA | Manifest와 Metrics Server 구성 완료 | Fixed/HPA overlay 완료 | 실제 EKS 실측 없음 |
 | Rolling Update/Probe | Manifest 완료 | OFF overlay 필요 | 없음 |
 | ALB IP Target | Manifest 완료 | Instance overlay 선택 | 없음 |
 | CloudWatch | 로그 Export 일부 완료 | Dashboard/Alarm 필요 | 없음 |

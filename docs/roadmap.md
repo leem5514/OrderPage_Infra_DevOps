@@ -120,11 +120,11 @@
 - 공통 실험 조건, 개선율 계산식, 증거 보관 규칙 정의
 - AWS 배포 전 P0/P1/P2 우선순위와 배포 시작 조건 정의
 - 저장소별 보존 태그와 시나리오별 실제 Baseline 기준 등록
+- HPA OFF/ON Kustomize 비교 Overlay와 Metrics Server EKS Add-on 구성
 
 다음 작업:
 
-- HPA OFF/ON Kustomize overlay 분리
 - 백엔드 RDB_SYNC/REDIS_ASYNC 비교 모드 추가
 - k6 시나리오와 테스트 데이터 seed 추가
-- Metrics Server와 CloudWatch Dashboard/Alarm 구성
+- CloudWatch Dashboard/Alarm 구성
 - Before 측정 후 AWS After 환경 배포 및 재측정

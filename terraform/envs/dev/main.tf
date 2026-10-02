@@ -50,6 +50,7 @@ module "eks" {
   node_max_size             = var.eks_node_max_size
   node_max_unavailable      = 1
   enabled_cluster_log_types = var.eks_enabled_cluster_log_types
+  cluster_addons            = var.eks_cluster_addons
 
   tags = local.common_tags
 }

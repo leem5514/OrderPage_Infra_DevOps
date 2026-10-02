@@ -1,0 +1,8 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderpage-backend
+  namespace: orderpage
+spec:
+  # HPA OFF 실험 동안 부하가 증가해도 Pod 수를 2개로 유지한다.
+  replicas: 2

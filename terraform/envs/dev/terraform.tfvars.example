@@ -12,6 +12,7 @@ enable_nat_gateway   = true
 kubernetes_version            = null
 eks_public_access_cidrs       = ["0.0.0.0/0"]
 eks_enabled_cluster_log_types = ["api", "audit", "authenticator"]
+eks_cluster_addons            = ["vpc-cni", "coredns", "kube-proxy", "metrics-server"]
 eks_node_instance_types       = ["t3.medium"]
 eks_node_capacity_type        = "ON_DEMAND"
 eks_node_desired_size         = 2

@@ -18,7 +18,7 @@ Git의 오래된 commit을 무조건 Before로 사용하지 않고, 비교하려
 | Terraform | AWS Console 수동 VPC/ECR 생성 기록 | 현재 Terraform module | 수동 실행 기록표 |
 | Jenkins | 현재 Backend commit을 수동 명령으로 배포 | 같은 commit을 Jenkins로 배포 | Jenkins 실제 실행환경 |
 | ECR | 로컬 image와 수동 tag | 같은 Dockerfile의 ECR Git SHA/Build Number tag | ECR 실제 Push |
-| HPA | 같은 image, Pod 2개 고정 | 같은 image, HPA 2~5개 | HPA OFF/ON overlay, Metrics Server |
+| HPA | 같은 image, Pod 2개 고정 | 같은 image, HPA 2~5개 | OFF/ON overlay와 Metrics Server 구성 완료, 실제 EKS 검증 필요 |
 | Rolling Update | 같은 image, Recreate 또는 Replica 1개 | 같은 image, RollingUpdate와 Replica 2개 | 비교 overlay |
 | Probe | 같은 image, Probe 제거 | 같은 image, readiness/liveness 활성 | 비교 overlay |
 | ALB | Instance Target overlay | IP Target overlay | 비교 overlay |
@@ -65,9 +65,7 @@ Raw 결과는 수정하지 않고, 요약값은 `docs/performance-report.md`에 
 
 ## 5. 다음 Baseline 구현 순서
 
-1. HPA OFF/ON Kustomize overlay를 만든다.
-2. Metrics Server 설치 구성을 만든다.
-3. k6 공통 부하 프로필과 결과 디렉터리를 만든다.
-4. Backend에 `RDB_SYNC`와 `REDIS_ASYNC` 실행 모드를 추가한다.
-5. CloudWatch Dashboard/Alarm과 장애 주입 시나리오를 만든다.
-6. AWS Apply 전에 수동 Terraform/Jenkins Before 실행 절차를 확정한다.
+1. k6 공통 부하 프로필과 결과 디렉터리를 만든다.
+2. Backend에 `RDB_SYNC`와 `REDIS_ASYNC` 실행 모드를 추가한다.
+3. CloudWatch Dashboard/Alarm과 장애 주입 시나리오를 만든다.
+4. AWS Apply 전에 수동 Terraform/Jenkins Before 실행 절차를 확정한다.
