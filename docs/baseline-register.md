@@ -65,7 +65,6 @@ Raw 결과는 수정하지 않고, 요약값은 `docs/performance-report.md`에 
 
 ## 5. 다음 Baseline 구현 순서
 
-1. k6 공통 부하 프로필과 결과 디렉터리를 만든다.
-2. Backend에 `RDB_SYNC`와 `REDIS_ASYNC` 실행 모드를 추가한다.
-3. CloudWatch Dashboard/Alarm과 장애 주입 시나리오를 만든다.
-4. AWS Apply 전에 수동 Terraform/Jenkins Before 실행 절차를 확정한다.
+1. Backend에 `RDB_SYNC`와 `REDIS_ASYNC` 실행 모드를 추가한다.
+2. CloudWatch Dashboard/Alarm과 장애 주입 시나리오를 만든다.
+3. AWS Apply 전에 수동 Terraform/Jenkins Before 실행 절차를 확정한다.

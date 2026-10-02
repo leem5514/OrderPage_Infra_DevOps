@@ -30,6 +30,9 @@
 - RabbitMQ consumer count comparison
 - Redis stock check scenario
 
+HPA 실험은 `benchmarks/k6/scenarios/hpa-product-list.js`와 `benchmarks/k6/run-hpa.ps1`을 사용한다.
+Raw 결과 위치는 `benchmarks/results/S05/<date>/<variant>/users-<n>/run-<n>/`이다.
+
 ## Evidence
 
 | Scenario ID | Git Commit | Test Time | Raw Result | Dashboard/Log | Notes |

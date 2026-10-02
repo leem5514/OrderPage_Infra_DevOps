@@ -351,3 +351,5 @@ S3/CloudFront를 실제로 배포하지 않으면 Vercel과의 직접 성능 비
 - [Amazon MQ RabbitMQ Metrics](https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/rabbitmq-logging-monitoring.html)
 - [Vercel Git Deployment](https://vercel.com/docs/git)
 - [Vercel Rollback](https://vercel.com/docs/instant-rollback)
+- [Grafana k6 Scenarios](https://grafana.com/docs/k6/latest/using-k6/scenarios/)
+- [Grafana k6 Metrics](https://grafana.com/docs/k6/latest/using-k6/metrics/)
