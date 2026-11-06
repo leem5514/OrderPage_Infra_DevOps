@@ -42,3 +42,26 @@ variable "eks_addon_versions" {
   description = "서울/EKS 버전 호환 확인 후 고정할 vpc-cni, coredns, kube-proxy 버전."
   type        = map(string)
 }
+
+variable "rds_engine_version" {
+  description = "서울에서 지원하는 MariaDB 10.11.x 정확한 patch 버전."
+  type        = string
+}
+variable "rds_master_password" {
+  description = "DB 초기 관리자 비밀번호. TF_VAR 또는 보호된 tfvars로 주입."
+  type        = string
+  sensitive   = true
+  nullable    = false
+}
+variable "redis_auth_token" {
+  description = "Redis TLS/AUTH 토큰. TF_VAR 또는 보호된 tfvars로 주입."
+  type        = string
+  sensitive   = true
+  nullable    = false
+}
+variable "rabbitmq_admin_password" {
+  description = "RabbitMQ 최초 관리자 비밀번호. 생성 후 사용자 관리는 별도 절차."
+  type        = string
+  sensitive   = true
+  nullable    = false
+}

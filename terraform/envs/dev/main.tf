@@ -1,5 +1,5 @@
-# 이번 단계의 실행 범위는 네트워크, 이미지 저장소, Kubernetes 기반뿐이다.
-# DB/Redis/MQ와 컨트롤러는 후속 단계에서 검증 후 이 root에 연결한다.
+# 네트워크/EKS 기반과 관리형 데이터 서비스를 연결한다.
+# 아직 실제 apply하지 않으며, 앱/컨트롤러/관측 설정은 후속 단계다.
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -35,4 +35,35 @@ module "eks" {
 
   # Subnet ID만 준비된 시점에 Node가 시작하지 않도록 NAT/route/endpoint 완료도 기다린다.
   depends_on = [module.vpc]
+}
+
+# 기본 VPC CNI에서 Pod의 서비스 접속 트래픽은 Node ENI/SG를 따른다.
+# 클러스터 SG 제한은 namespace/Pod별 격리를 보장하지 않는다.
+module "mariadb" {
+  source                    = "../../modules/rds"
+  identifier                = "${var.project_name}-${var.environment}-mariadb"
+  vpc_id                    = module.vpc.vpc_id
+  subnet_ids                = module.vpc.private_subnet_ids
+  allowed_security_group_id = module.eks.cluster_security_group_id
+  engine_version            = var.rds_engine_version
+  master_password           = var.rds_master_password
+  tags                      = local.common_tags
+}
+module "redis" {
+  source                    = "../../modules/elasticache"
+  replication_group_id      = "${var.project_name}-${var.environment}-redis"
+  vpc_id                    = module.vpc.vpc_id
+  subnet_ids                = module.vpc.private_subnet_ids
+  allowed_security_group_id = module.eks.cluster_security_group_id
+  auth_token                = var.redis_auth_token
+  tags                      = local.common_tags
+}
+module "rabbitmq" {
+  source                    = "../../modules/amazonmq"
+  broker_name               = "${var.project_name}-${var.environment}-rabbitmq"
+  vpc_id                    = module.vpc.vpc_id
+  subnet_ids                = module.vpc.private_subnet_ids
+  allowed_security_group_id = module.eks.cluster_security_group_id
+  admin_password            = var.rabbitmq_admin_password
+  tags                      = local.common_tags
 }

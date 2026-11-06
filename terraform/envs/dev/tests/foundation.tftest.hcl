@@ -73,6 +73,10 @@ run "eks_security_and_cost_controls" {
     error_message = "AL2023와 IMDSv2를 사용해야 합니다."
   }
   assert {
+    condition     = aws_iam_openid_connect_provider.cluster.client_id_list == toset(["sts.amazonaws.com"])
+    error_message = "IRSA OIDC audience는 STS로 제한해야 합니다."
+  }
+  assert {
     condition     = alltrue([for b in aws_launch_template.node.block_device_mappings : b.ebs[0].encrypted && b.ebs[0].volume_type == "gp3" && b.ebs[0].volume_size == 20])
     error_message = "Node 디스크는 암호화된 20GiB gp3여야 합니다."
   }
@@ -124,9 +128,18 @@ run "root_module_wiring" {
     eks_public_access_cidrs = ["203.0.113.10/32"]
     eks_admin_principal_arn = "arn:aws:iam::123456789012:role/Operator"
     eks_addon_versions      = { vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1" }
+    # mock 전용 문자열. 실제 AWS 계정에서 사용하는 인증값이 아니다.
+    rds_engine_version      = "10.11.13"
+    rds_master_password     = "MockOnlyRdsPassword1234567890123456"
+    redis_auth_token        = "MockOnlyRedisToken1234567890123456"
+    rabbitmq_admin_password = "MockOnlyMqPassword1234567890123456"
   }
   assert {
     condition     = output.eks_cluster_name == "orderpage-dev" && output.backend_ecr_repository_name == "orderpage-backend"
     error_message = "Root의 기반 모듈 연결 결과가 예상한 실습 이름과 다릅니다."
+  }
+  assert {
+    condition     = output.data_endpoints.db_port == 3306 && output.data_endpoints.redis_port == 6379 && output.data_endpoints.rabbitmq_port == 5671
+    error_message = "Root 데이터 서비스 접속 계약이 예상 포트와 다릅니다."
   }
 }

@@ -1,39 +1,10 @@
-# Amazon MQ Module
+# Amazon MQ for RabbitMQ (실습용)
 
-Amazon MQ for RabbitMQ broker를 private subnet에 생성하는 모듈입니다.
+RabbitMQ 4.2 / mq.m7g.medium / SINGLE_INSTANCE / private subnet 1개.
+EKS SG에서 AMQPS 5671만 허용한다. 평문 5672와 관리 UI 포트는 열지 않는다.
+관리형 기본 설정을 사용하며 불필요한 consumer_timeout 커스텀 configuration은 제거했다.
 
-## Features
-
-- Amazon MQ managed RabbitMQ broker
-- VPC security group
-- Private subnet only
-- RabbitMQ broker configuration
-- General log export
-- Maintenance window
-- AWS owned key encryption
-
-## Usage
-
-```hcl
-module "rabbitmq" {
-  source = "../../modules/amazonmq"
-
-  broker_name         = "orderpage-dev-rabbitmq"
-  vpc_id              = module.vpc.vpc_id
-  subnet_ids          = module.vpc.private_subnet_ids
-  allowed_cidr_blocks = [module.vpc.vpc_cidr_block]
-
-  admin_username = "orderadmin"
-  admin_password = var.rabbitmq_admin_password
-
-  tags = {
-    Project     = "orderpage"
-    Environment = "dev"
-    ManagedBy   = "terraform"
-  }
-}
-```
-
-## Portfolio Point
-
-RabbitMQ를 EKS 내부에서 직접 운영하지 않고 Amazon MQ로 분리하면 broker 패치, 장애 복구, 로그 수집 같은 운영 부담을 관리형 서비스로 넘긴 결정을 설명할 수 있습니다. 이후 주문 API에서 synchronous DB 반영과 asynchronous queue 반영의 응답 시간 차이를 비교하는 근거가 됩니다.
+싱글 인스턴스의 기본 200GB 스토리지 비용을 포함해야 한다.
+Terraform user.password는 최초 관리자 생성용이며 RabbitMQ 사용자 수정/비밀번호 드리프트를 관리하지 못한다.
+일반 로그는 서비스 연결 역할로 전송한다. 생성 후 scripts/set-mq-log-retention.ps1로 실제 로그 그룹의 보관 3일을 설정해야 한다.
+[접속·로그 수명·검증·제약](../../../docs/restart/managed-data-services.md)

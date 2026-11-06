@@ -1,9 +1,9 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
 기준일: 2026-11-06 (KST)
-현재 단계: 요구사항/비용 계획, BE·FE 코드 점검, Docker 통합·종료·헬스체크 검증 및 Terraform VPC/EKS/ECR 기반 검증 완료.
-AWS 리소스는 아직 생성하지 않았다. 다음은 관리형 데이터/권한, Kubernetes/CI/CD/관측 설정이다.
-현재 dev root는 기반 세 모듈만 연결하며 전체 서비스가 아직 배포 가능한 상태는 아니다.
+현재 단계: 요구사항/비용 계획, BE·FE 로컬 검증, Terraform 기반 + 관리형 데이터/OIDC 코드 검증 완료.
+AWS 리소스는 아직 생성하지 않았다. 다음은 서비스별 권한, Kubernetes/CI/CD/관측 설정이다.
+현재 dev root는 VPC/ECR/EKS 및 RDS/Redis/MQ를 연결하지만 전체 앱 배포 준비는 아직 끝나지 않았다.
 
 ## 1. 확정한 요구사항
 
@@ -239,3 +239,14 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 현재 사용하지 않는 root 입력·출력, AL2, 개방 기본값, autoscaler 전제 desired_size 무시 설정 제거.
 - Terraform validate 및 mock plan 6개 통과. 실제 AWS plan/apply는 아직 실행하지 않음.
 - [파일별 역할·삭제 근거·한계·다음 입력](terraform-foundation.md)
+
+## 14. 5단계 — 관리형 데이터 서비스와 접근 경계 연결
+
+- PR #2의 기반 커밋에서 codex/managed-data-services로 분리해 작성. PR #2 미병합 상태에서 후속 PR은 기반 브랜치를 대상으로 작성한다.
+- RDS MariaDB 10.11.x/db.t4g.micro, Redis 7.1/cache.t4g.micro, MQ RabbitMQ 4.2/mq.m7g.medium을 private subnet에 연결.
+- VPC 전체 CIDR 허용을 없애고 EKS SG에서 각 서비스 포트만 허용. RDS TLS, Redis TLS/AUTH, MQ AMQPS.
+- 실제 patch/인증값 필수 입력, 로그 3일/짧은 백업/실습 종료 정책, OIDC 공급자 추가.
+- 사용하지 않는 HA/TLS OFF/성능 튜닝 configuration과 Redis reader endpoint 등 제거.
+- Terraform validate 및 mock 12개, AWS 없이 MQ 로그 후처리 스크립트 테스트 7개 통과.
+- 현재는 코드 검증이다. 관리형 서비스 실제 생성/TLS 접속/SNS 알림은 아직 수행하지 않았다.
+- [상세 절차·변수·실제 검증 체크·다음 사전 결정](managed-data-services.md)

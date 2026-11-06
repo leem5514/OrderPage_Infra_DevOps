@@ -1,92 +1,51 @@
 resource "aws_security_group" "this" {
   name        = "${var.broker_name}-sg"
-  description = "Allow RabbitMQ access to ${var.broker_name}"
+  description = "RabbitMQ AMQPS from EKS nodes only"
   vpc_id      = var.vpc_id
-
-  # Amazon MQ for RabbitMQ는 TLS 기반 AMQPS endpoint를 제공한다.
-  # 백엔드는 VPC 내부에서만 5671로 접근하도록 제한한다.
+  # VPC 전체 CIDR 대신 지정한 EKS SG를 가진 ENI에서 해당 포트로 오는 연결만 받는다.
   ingress {
-    description = "AMQPS access from allowed CIDR blocks"
-    from_port   = var.amqp_port
-    to_port     = var.amqp_port
-    protocol    = "tcp"
-    cidr_blocks = var.allowed_cidr_blocks
+    description     = "RabbitMQ AMQPS from EKS"
+    from_port       = 5671
+    to_port         = 5671
+    protocol        = "tcp"
+    security_groups = [var.allowed_security_group_id]
   }
-
   egress {
-    description = "Allow outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = merge(var.tags, {
-    Name = "${var.broker_name}-sg"
-  })
+  tags = var.tags
 }
-
-resource "aws_mq_configuration" "this" {
-  # RabbitMQ configuration은 Cuttlefish 형식으로 작성한다.
-  # consumer_timeout은 메시지를 가져간 consumer가 ack를 너무 오래 안 할 때 끊는 보호장치다.
-  name           = "${var.broker_name}-configuration"
-  description    = "RabbitMQ configuration for ${var.broker_name}"
-  engine_type    = "RabbitMQ"
-  engine_version = var.engine_version
-
-  data = <<-CONFIG
-    consumer_timeout = ${var.consumer_timeout_ms}
-  CONFIG
-
-  tags = merge(var.tags, {
-    Name = "${var.broker_name}-configuration"
-  })
-}
-
 resource "aws_mq_broker" "this" {
-  broker_name = var.broker_name
-
-  # 애플리케이션은 RabbitMQ protocol을 사용하고, 운영은 Amazon MQ가 담당한다.
-  engine_type        = "RabbitMQ"
-  engine_version     = var.engine_version
-  host_instance_type = var.host_instance_type
-  deployment_mode    = var.deployment_mode
-
-  # SINGLE_INSTANCE는 subnet 1개만 필요하다. CLUSTER_MULTI_AZ 전환 시 여러 subnet을 사용한다.
-  subnet_ids          = var.deployment_mode == "SINGLE_INSTANCE" ? [var.subnet_ids[0]] : var.subnet_ids
+  broker_name    = var.broker_name
+  engine_type    = "RabbitMQ"
+  engine_version = "4.2"
+  # mq.t3.micro는 신규 생성 불가. 평가용 단일 m7g.medium을 사용한다.
+  host_instance_type  = "mq.m7g.medium"
+  deployment_mode     = "SINGLE_INSTANCE"
+  subnet_ids          = [var.subnet_ids[0]]
   security_groups     = [aws_security_group.this.id]
   publicly_accessible = false
-
-  configuration {
-    id       = aws_mq_configuration.this.id
-    revision = aws_mq_configuration.this.latest_revision
-  }
-
   encryption_options {
-    use_aws_owned_key = var.kms_key_id == null
-    kms_key_id        = var.kms_key_id
+    use_aws_owned_key = true
   }
-
+  # RabbitMQ는 서비스 연결 역할로 로그를 보낸다. Broker ID가 정해진 뒤 보관 정책을 설정한다.
   logs {
-    general = var.general_log_enabled
+    general = true
   }
-
   maintenance_window_start_time {
-    day_of_week = var.maintenance_day_of_week
-    time_of_day = var.maintenance_time_of_day
-    time_zone   = var.maintenance_time_zone
+    day_of_week = "SUNDAY"
+    time_of_day = "19:00"
+    time_zone   = "UTC"
   }
-
-  # RabbitMQ user 정보는 Terraform state에 평문으로 저장되므로 실제 운영에서는 state 보안이 중요하다.
+  # Terraform provider는 RabbitMQ 사용자 변경/드리프트를 관리하지 못한다.
   user {
-    username = var.admin_username
+    username = "orderadmin"
     password = var.admin_password
   }
-
-  auto_minor_version_upgrade = var.auto_minor_version_upgrade
-  apply_immediately          = var.apply_immediately
-
-  tags = merge(var.tags, {
-    Name = var.broker_name
-  })
+  auto_minor_version_upgrade = true
+  apply_immediately          = false
+  tags                       = var.tags
 }

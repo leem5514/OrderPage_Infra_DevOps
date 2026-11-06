@@ -1,111 +1,88 @@
-resource "aws_db_subnet_group" "this" {
-  # RDS가 어느 subnet에 생성될 수 있는지 묶는다. 여기서는 private subnet만 전달한다.
-  name        = "${var.identifier}-subnet-group"
-  description = "Private subnet group for ${var.identifier}"
-  subnet_ids  = var.subnet_ids
-
-  tags = merge(var.tags, {
-    Name = "${var.identifier}-subnet-group"
-  })
-}
-
 resource "aws_security_group" "this" {
   name        = "${var.identifier}-sg"
-  description = "Allow MariaDB access to ${var.identifier}"
+  description = "MariaDB TLS from EKS nodes only"
   vpc_id      = var.vpc_id
-
-  # DB는 외부 인터넷에 열지 않고 VPC 내부 CIDR에서만 3306 접근을 허용한다.
+  # VPC 전체 CIDR 대신 지정한 EKS SG를 가진 ENI에서 해당 포트로 오는 연결만 받는다.
   ingress {
-    description = "MariaDB access from allowed CIDR blocks"
-    from_port   = var.port
-    to_port     = var.port
-    protocol    = "tcp"
-    cidr_blocks = var.allowed_cidr_blocks
+    description     = "MariaDB TLS from EKS"
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [var.allowed_security_group_id]
   }
-
   egress {
-    description = "Allow outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = merge(var.tags, {
-    Name = "${var.identifier}-sg"
-  })
+  tags = var.tags
 }
-
+resource "aws_db_subnet_group" "this" {
+  name       = "${var.identifier}-subnet-group"
+  subnet_ids = var.subnet_ids
+  tags       = var.tags
+}
 resource "aws_db_parameter_group" "this" {
-  name        = "${var.identifier}-parameter-group"
-  family      = var.parameter_group_family
-  description = "MariaDB parameters for ${var.identifier}"
-
-  # slow query를 켜서 DB 병목을 CloudWatch 로그와 성능 리포트의 근거로 남긴다.
+  name   = "${var.identifier}-parameter-group"
+  family = "mariadb10.11"
+  # 서버에서 평문 접속을 거부한다. 클라이언트도 CA/호스트명 검증을 켜야 한다.
+  parameter {
+    name  = "require_secure_transport"
+    value = "1" # RDS parameter API의 boolean ON 표현.
+  }
   parameter {
     name  = "slow_query_log"
     value = "1"
   }
-
   parameter {
     name  = "long_query_time"
-    value = var.slow_query_time
+    value = "1"
   }
-
   parameter {
     name  = "log_output"
     value = "FILE"
   }
-
-  tags = merge(var.tags, {
-    Name = "${var.identifier}-parameter-group"
-  })
+  tags = var.tags
 }
-
+# RDS 자동 생성보다 먼저 로그 그룹과 보관 정책을 만든다.
+resource "aws_cloudwatch_log_group" "database" {
+  for_each          = toset(["error", "slowquery"])
+  name              = "/aws/rds/instance/${var.identifier}/${each.key}"
+  retention_in_days = 3
+  tags              = var.tags
+}
 resource "aws_db_instance" "this" {
-  identifier = var.identifier
-
-  # 백엔드가 이미 MariaDB dialect/JDBC URL을 사용하므로 앱 변경 없이 관리형 DB로 전환한다.
-  engine         = "mariadb"
-  engine_version = var.engine_version
-  instance_class = var.instance_class
-
-  allocated_storage = var.allocated_storage
-  # 스토리지 자동 확장으로 트래픽 증가 시 디스크 부족 위험을 줄인다.
-  max_allocated_storage = var.max_allocated_storage
-  storage_type          = var.storage_type
-  storage_encrypted     = true
-
-  db_name  = var.database_name
-  username = var.master_username
-  password = var.master_password
-  port     = var.port
-
-  db_subnet_group_name   = aws_db_subnet_group.this.name
-  vpc_security_group_ids = [aws_security_group.this.id]
-  parameter_group_name   = aws_db_parameter_group.this.name
-  # false로 두면 public IP를 받지 않는다. 접근은 EKS/VPC 내부에서만 한다.
-  publicly_accessible = false
-  multi_az            = var.multi_az
-
-  # 자동 백업은 장애 복구 시점과 운영 안정성 설명에 쓰는 핵심 설정이다.
-  backup_retention_period    = var.backup_retention_period
-  backup_window              = var.backup_window
-  maintenance_window         = var.maintenance_window
-  auto_minor_version_upgrade = true
-  copy_tags_to_snapshot      = true
-
-  # error/slowquery 로그를 CloudWatch로 보내 DB 병목을 관측한다.
-  enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
-  performance_insights_enabled    = var.performance_insights_enabled
-
-  deletion_protection       = var.deletion_protection
-  skip_final_snapshot       = var.skip_final_snapshot
-  final_snapshot_identifier = var.skip_final_snapshot ? null : "${var.identifier}-final"
-
-  apply_immediately = var.apply_immediately
-
-  tags = merge(var.tags, {
-    Name = var.identifier
-  })
+  identifier        = var.identifier
+  engine            = "mariadb"
+  engine_version    = var.engine_version
+  instance_class    = "db.t4g.micro"
+  allocated_storage = 20
+  # 72시간 이하 실습에서는 예기치 않은 스토리지 자동 확장을 하지 않는다.
+  max_allocated_storage           = 0
+  storage_type                    = "gp3"
+  storage_encrypted               = true
+  db_name                         = "ordersystem"
+  username                        = "orderadmin"
+  password                        = var.master_password
+  port                            = 3306
+  db_subnet_group_name            = aws_db_subnet_group.this.name
+  vpc_security_group_ids          = [aws_security_group.this.id]
+  parameter_group_name            = aws_db_parameter_group.this.name
+  publicly_accessible             = false
+  multi_az                        = false
+  backup_retention_period         = 1
+  backup_window                   = "18:00-18:30"
+  maintenance_window              = "sun:19:00-sun:19:30"
+  auto_minor_version_upgrade      = true
+  copy_tags_to_snapshot           = true
+  enabled_cloudwatch_logs_exports = ["error", "slowquery"]
+  performance_insights_enabled    = false
+  # 테스트 데이터 전용. 실제 운영 데이터가 있으면 이 삭제 정책을 그대로 쓰면 안 된다.
+  deletion_protection      = false
+  skip_final_snapshot      = true
+  delete_automated_backups = true
+  apply_immediately        = false
+  tags                     = var.tags
+  depends_on               = [aws_cloudwatch_log_group.database]
 }

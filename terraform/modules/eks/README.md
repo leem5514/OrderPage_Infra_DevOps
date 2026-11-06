@@ -10,6 +10,7 @@ CNI는 기반 기동 단계에서 Node role 권한을 사용한다. 앱 S3/Contr
 
 Node 수는 고정하지만 Node group 업데이트 때 AWS가 일시적으로 추가 Node를 만들 수 있다.
 두 AZ를 사용해도 Node가 각 AZ에 정확히 한 대씩 배치됐다는 보장은 없으므로 실제 가동 때 확인한다.
-HPA/metrics-server/IRSA/CSI/Argo CD는 이 모듈의 현재 범위에 없다.
+IRSA의 기반인 IAM OIDC provider를 포함한다. 서비스별 IAM Role/ServiceAccount 연결은 아직 후속 단계다.
+HPA/metrics-server/CSI/Argo CD는 이 모듈의 현재 범위에 없다.
 
 [전체 입력/검증/한계](../../../docs/restart/terraform-foundation.md)
