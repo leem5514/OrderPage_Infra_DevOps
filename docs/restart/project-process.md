@@ -1,8 +1,8 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
 기준일: 2026-11-06 (KST)
-현재 단계: 요구사항 확정 및 서울 리전 최소 실습 구성/예산 산정.
-이번 변경은 문서와 공개 단가 증거만 포함한다. 기존 Terraform/Jenkins/Kubernetes 코드는 아직 새 설계로 전환되지 않았다.
+현재 단계: 요구사항/비용 계획과 BE·FE 코드 점검 완료. 다음은 새 Terraform/Kubernetes/CI 구성 작성.
+기존 Terraform/Jenkins/Kubernetes 코드는 아직 새 설계로 전환되지 않았다.
 이 브랜치의 기존 Terraform을 그대로 apply하면 아래 제안과 다른 리소스가 만들어질 수 있다.
 
 ## 1. 확정한 요구사항
@@ -198,3 +198,14 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - CloudWatch 사용량 과금: https://aws.amazon.com/cloudwatch/pricing/
 - Cost Explorer 갱신: https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html
 - Vercel 리전: https://vercel.com/docs/regions
+
+## 11. 2단계 — 애플리케이션 배포 준비 점검
+
+2026-11-06: GitHub main 기준의 깨끗한 BE/FE checkout에서 점검했다. 기존 로컬 미커밋 변경은 보존했다.
+
+- BE 기준: 15de89623b441bd97921e42a80f6028572407f1b. 기존 14개 테스트/빌드 통과 후 보안 결함 재현 및 최소 수정, 최종 20개 테스트/bootJar 통과.
+- FE 기준: a1218dcbe0f58e07b5c4f5bc87ac8a85052a17a4. 빌드/lint 통과, 인증 갱신 반복 오류 수정 후 회귀 테스트 5개 추가 통과.
+- BE/FE 작업 브랜치: codex/deployment-readiness. 본 Infra 문서 브랜치: codex/restart-cost-plan.
+- 상세 내용: [배포 가능성 점검과 다음 작업](application-readiness.md).
+- Docker 엔진이 실행 중이 아니어서 컨테이너 통합 검증은 미실행이다. AWS 생성/DNS 변경/Vercel 배포는 하지 않았다.
+- 다음 단계: 아래 점검서의 조건을 반영한 IaC·배포 설정을 작성하고 정적 검증한다. 비용 발생 전 Terraform plan과 생성 대상을 확인한다.
