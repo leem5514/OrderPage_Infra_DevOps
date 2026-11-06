@@ -1,121 +1,35 @@
 variable "replication_group_id" {
-  description = "ElastiCache Redis replication group ID."
+  description = "실습 리소스 이름."
   type        = string
 }
-
-variable "description" {
-  description = "Description for the Redis replication group."
-  type        = string
-  default     = "OrderPage Redis replication group"
-}
-
 variable "vpc_id" {
-  description = "VPC ID where the Redis security group is created."
+  description = "보안 그룹을 생성할 VPC."
   type        = string
 }
-
 variable "subnet_ids" {
-  description = "Private subnet IDs for the ElastiCache subnet group."
+  description = "private subnet ID 목록."
   type        = list(string)
 }
-
-variable "allowed_cidr_blocks" {
-  description = "CIDR blocks allowed to connect to Redis."
-  type        = list(string)
-}
-
-variable "engine_version" {
-  description = "Redis OSS engine version."
+variable "allowed_security_group_id" {
+  description = "접속을 허용할 EKS Node 보안 그룹. CIDR 허용은 지원하지 않는다."
   type        = string
-  default     = "7.1"
-}
-
-variable "parameter_group_family" {
-  description = "Redis parameter group family matching the engine major version."
-  type        = string
-  default     = "redis7"
-}
-
-variable "node_type" {
-  description = "ElastiCache node type."
-  type        = string
-  default     = "cache.t4g.micro"
-}
-
-variable "port" {
-  description = "Redis port."
-  type        = number
-  default     = 6379
-}
-
-variable "num_cache_clusters" {
-  description = "Number of cache nodes in the replication group."
-  type        = number
-  default     = 1
-
   validation {
-    condition     = var.num_cache_clusters >= 1
-    error_message = "num_cache_clusters must be at least 1."
+    condition     = can(regex("^sg-[0-9a-f]+$", var.allowed_security_group_id))
+    error_message = "허용 출발지는 유효한 보안 그룹 ID여야 합니다."
   }
 }
-
-variable "automatic_failover_enabled" {
-  description = "Enable automatic failover. Requires at least 2 cache clusters."
-  type        = bool
-  default     = false
-}
-
-variable "multi_az_enabled" {
-  description = "Enable Multi-AZ. Requires automatic failover."
-  type        = bool
-  default     = false
-}
-
-variable "transit_encryption_enabled" {
-  description = "Enable in-transit encryption. Requires Redis client SSL configuration."
-  type        = bool
-  default     = false
-}
-
-variable "auth_token" {
-  description = "Redis auth token. Used only when transit encryption is enabled."
-  type        = string
-  default     = null
-  sensitive   = true
-}
-
-variable "snapshot_retention_limit" {
-  description = "Number of days to retain Redis snapshots."
-  type        = number
-  default     = 3
-}
-
-variable "snapshot_window" {
-  description = "Daily time range in UTC during which snapshots are created."
-  type        = string
-  default     = "17:00-18:00"
-}
-
-variable "maintenance_window" {
-  description = "Weekly time range in UTC for maintenance."
-  type        = string
-  default     = "sun:18:00-sun:19:00"
-}
-
-variable "log_retention_in_days" {
-  description = "CloudWatch log retention days for Redis logs."
-  type        = number
-  default     = 14
-}
-
-variable "apply_immediately" {
-  description = "Apply modifications immediately instead of during maintenance window."
-  type        = bool
-  default     = false
-}
-
 variable "tags" {
-  description = "Common resource tags."
+  description = "공통 태그."
   type        = map(string)
   default     = {}
+}
+variable "auth_token" {
+  description = "Redis AUTH 토큰. TLS와 함께 필수이며 state에 저장된다."
+  type        = string
+  sensitive   = true
+  nullable    = false
+  validation {
+    condition     = can(regex("^[A-Za-z0-9]{32,64}$", var.auth_token)) && try(length(distinct(split("", var.auth_token))) >= 4, false)
+    error_message = "실습 인증값은 서로 다른 문자 4개 이상을 포함한 영문/숫자 32~64자로 외부에서 주입해야 합니다."
+  }
 }

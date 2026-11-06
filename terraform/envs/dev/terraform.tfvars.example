@@ -12,3 +12,12 @@ eks_addon_versions = {
   coredns    = "REPLACE_WITH_COMPATIBLE_VERSION"
   kube-proxy = "REPLACE_WITH_COMPATIBLE_VERSION"
 }
+
+# 서울 RDS API에서 확인한 10.11.x patch로 교체한다.
+rds_engine_version = "REPLACE_WITH_SUPPORTED_10.11_PATCH"
+
+# 실제 비밀번호는 예시에 넣지 않는다. 각각 다른 난수 영문/숫자 32~64자로 주입한다.
+# TF_VAR_rds_master_password
+# TF_VAR_redis_auth_token
+# TF_VAR_rabbitmq_admin_password
+# sensitive는 출력 마스킹이며 state 저장을 막지 않는다.

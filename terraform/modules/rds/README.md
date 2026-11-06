@@ -1,42 +1,10 @@
-# RDS Module
+# RDS MariaDB (실습용)
 
-MariaDB RDS instance를 private subnet에 생성하는 모듈입니다.
+dev root에서 사용하는 Single-AZ db.t4g.micro / gp3 20GiB 모듈이다.
+MariaDB 10.11의 정확한 patch 버전을 필수 입력한다. 서버 TLS 필수, EKS SG에서 3306만 허용한다.
+스토리지 암호화, 1일 백업, error/slowquery 로그 3일 보관을 설정했다. 스토리지 자동 확장은 끈다.
 
-## Features
-
-- RDS MariaDB instance
-- DB subnet group
-- VPC security group
-- Private subnet only
-- Storage encryption
-- Storage autoscaling
-- Automated backup
-- CloudWatch error/slowquery log export
-- Slow query parameter group
-
-## Usage
-
-```hcl
-module "mariadb" {
-  source = "../../modules/rds"
-
-  identifier          = "orderpage-dev-mariadb"
-  vpc_id              = module.vpc.vpc_id
-  subnet_ids          = module.vpc.private_subnet_ids
-  allowed_cidr_blocks = [module.vpc.vpc_cidr_block]
-
-  database_name   = "ordersystem"
-  master_username = "orderadmin"
-  master_password = var.rds_master_password
-
-  tags = {
-    Project     = "orderpage"
-    Environment = "dev"
-    ManagedBy   = "terraform"
-  }
-}
-```
-
-## Portfolio Point
-
-로컬 MariaDB에서 RDS로 전환하면 백업, 암호화, 장애 복구, CloudWatch 로그 수집을 코드로 설명할 수 있습니다. 이후 k6 테스트에서 DB connection pool, slow query, p95 latency를 함께 비교하는 근거가 됩니다.
+테스트 데이터 전용: destroy 시 최종 snapshot을 생략하고 자동 백업도 삭제한다.
+실제 AWS 생성/접속은 아직 검증하지 않았다.
+관리자 계정은 초기 스키마/앱 계정 생성용이다. 앱에 계속 관리자 비밀번호를 넣지 않는다.
+[접속 계약·검증·종료 절차](../../../docs/restart/managed-data-services.md)

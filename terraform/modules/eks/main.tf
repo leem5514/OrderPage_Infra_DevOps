@@ -83,6 +83,14 @@ resource "aws_eks_access_entry" "operator" {
   type          = "STANDARD"
   tags          = var.tags
 }
+
+# 서비스별 IRSA Role을 만들기 위한 OIDC 신뢰 공급자.
+# 새 공급자는 IAM이 인증서 지문을 검색한다. 만료되는 지문을 코드에 하드코딩하지 않는다.
+resource "aws_iam_openid_connect_provider" "cluster" {
+  url            = aws_eks_cluster.this.identity[0].oidc[0].issuer
+  client_id_list = ["sts.amazonaws.com"]
+  tags           = var.tags
+}
 resource "aws_eks_access_policy_association" "operator" {
   cluster_name  = aws_eks_cluster.this.name
   principal_arn = aws_eks_access_entry.operator.principal_arn
