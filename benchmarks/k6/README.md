@@ -5,7 +5,7 @@ DevOps Before/After 실험에서 동일한 부하를 반복하기 위한 k6 스�
 ## S05 HPA 시나리오
 
 HPA 실험은 인증이나 재고 소모가 없는 `GET /product/list?page=0&size=20`을 사용한다.
-주문 API 부하는 Redis/RabbitMQ 비교 모드가 준비된 뒤 별도 시나리오로 추가한다.
+재고 알고리즘 비교는 새 범위에서 제외한다. 이 스크립트는 향후 HPA 실험에 재사용할 초안이며 부하/자원 예산을 확인한 뒤 실행한다.
 
 기본 부하 단계:
 
@@ -76,7 +76,7 @@ benchmarks/results/S05/<yyyy-mm-dd>/<before-fixed|after-hpa>/users-<n>/run-<n>/
 ```
 
 Raw 결과는 Git에 커밋하지 않는다. 검토가 끝난 대표값과 Grafana 화면 링크만
-`docs/performance-report.md`에 기록한다.
+새 진행서의 실험 기준에 따라 `docs/restart` 아래에 실제 측정 보고서를 작성한다.
 
 ## 주의사항
 

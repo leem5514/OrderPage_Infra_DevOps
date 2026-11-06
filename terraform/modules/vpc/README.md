@@ -1,28 +1,9 @@
-# VPC Module
+# VPC 기반 모듈
 
-VPC, public/private subnet, route table, internet gateway, NAT gateway를 관리합니다.
+두 AZ의 public/private subnet, IGW, zonal NAT 1개, route table, S3 gateway endpoint를 구성한다.
+Node에 public IP를 자동 할당하지 않는다. Public subnet도 자동 IP 할당을 끄며 ALB/NAT가 필요한 주소를 직접 관리한다.
+같은 리전의 S3 트래픽은 gateway endpoint를 통해 NAT를 우회한다.
 
-## Features
-
-- VPC DNS hostnames/support 활성화
-- Public subnet과 Internet Gateway 구성
-- Private subnet과 NAT Gateway 구성
-- EKS/ALB 연동을 위한 subnet tag 추가
-- 비용 절감을 위한 단일 NAT Gateway 기본 구성
-
-## Usage
-
-```hcl
-module "vpc" {
-  source = "../../modules/vpc"
-
-  name               = "orderpage-dev"
-  vpc_cidr           = "10.20.0.0/16"
-  availability_zones = ["ap-northeast-2a", "ap-northeast-2c"]
-
-  public_subnet_cidrs  = ["10.20.1.0/24", "10.20.2.0/24"]
-  private_subnet_cidrs = ["10.20.101.0/24", "10.20.102.0/24"]
-
-  enable_nat_gateway = true
-}
-```
+NAT 1개는 실습 비용을 위한 선택이다. 다른 AZ의 Node는 교차 AZ 경로를 사용하고 NAT AZ 장애 시 egress 영향을 받는다.
+인터넷 전체로 나가는 0.0.0.0/0 route는 인바운드 허용 규칙과 다르다.
+[현재 root 입력](../../envs/dev/README.md)

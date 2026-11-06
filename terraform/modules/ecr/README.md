@@ -17,7 +17,7 @@ module "backend_ecr" {
   source = "../../modules/ecr"
 
   repository_name = "orderpage-backend"
-  force_delete    = true
+  force_delete    = false
   max_image_count = 30
 
   tags = {
@@ -27,3 +27,6 @@ module "backend_ecr" {
   }
 }
 ```
+
+현재 dev root도 force_delete=false를 사용한다. 종료 시 필요한 이미지/digest를 보존하고,
+실습 이미지 삭제 여부를 확인해 저장소를 비운 뒤 destroy한다. 이미지가 남아 있으면 ECR 삭제는 실패한다.

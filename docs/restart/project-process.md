@@ -1,9 +1,9 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
 기준일: 2026-11-06 (KST)
-현재 단계: 요구사항/비용 계획, BE·FE 코드 점검, Docker 통합·종료·헬스체크 검증 완료. 다음은 새 Terraform/Kubernetes/CI 구성 작성.
-기존 Terraform/Jenkins/Kubernetes 코드는 아직 새 설계로 전환되지 않았다.
-이 브랜치의 기존 Terraform을 그대로 apply하면 아래 제안과 다른 리소스가 만들어질 수 있다.
+현재 단계: 요구사항/비용 계획, BE·FE 코드 점검, Docker 통합·종료·헬스체크 검증 및 Terraform VPC/EKS/ECR 기반 검증 완료.
+AWS 리소스는 아직 생성하지 않았다. 다음은 관리형 데이터/권한, Kubernetes/CI/CD/관측 설정이다.
+현재 dev root는 기반 세 모듈만 연결하며 전체 서비스가 아직 배포 가능한 상태는 아니다.
 
 ## 1. 확정한 요구사항
 
@@ -229,3 +229,13 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - startup/readiness/liveness 경로, Pod 종료 60초와 preStop 5초, ALB readiness 경로를 manifest에 반영.
 - 이 결과는 로컬 검증이며 AWS/EKS 롤링 배포 완료나 개선율 산정은 아니다.
 - [상세 변경과 다음 조건](lifecycle-readiness.md)
+
+## 13. 4단계 — 기반 Terraform 검증 및 폐기 코드 정리
+
+- BE/FE/Infra PR #1 병합 후 main에서 codex/terraform-foundation 작업.
+- dev root를 VPC/ECR/EKS로 한정하고 데이터/Controller는 후속 검토 대상으로 분리.
+- 서울 2 AZ/private Node, NAT 1개/S3 Gateway, EKS 1.35 STANDARD, AL2023 m6i.large 2대, /32 API 접근, 명시적 운영자 Role, 암호화 gp3/IMDSv2/3일 로그 반영.
+- 폐기한 재고 비교/직접 kubectl Jenkins 배포/빈 prod·IAM 템플릿/중복 옛 문서 등 13개 파일 삭제.
+- 현재 사용하지 않는 root 입력·출력, AL2, 개방 기본값, autoscaler 전제 desired_size 무시 설정 제거.
+- Terraform validate 및 mock plan 6개 통과. 실제 AWS plan/apply는 아직 실행하지 않음.
+- [파일별 역할·삭제 근거·한계·다음 입력](terraform-foundation.md)

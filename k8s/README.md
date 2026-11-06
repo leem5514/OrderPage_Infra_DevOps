@@ -1,44 +1,16 @@
-# Kubernetes Manifests
+# Kubernetes 배포 초안
 
-EKS 배포용 Kubernetes manifest를 관리합니다.
+현재 폴더는 다음 단계에서 새 설계로 전환할 초안이다. AWS에 적용하지 않았다.
+[진행서](../docs/restart/project-process.md)와 [Probe 검증](../docs/restart/lifecycle-readiness.md)이 현재 기준이다.
 
-## Structure
+- base: Namespace, Deployment, Service, Ingress, ConfigMap, Secret/ServiceAccount 초안. 종료/Probe 수정 반영.
+- overlays/dev: 기존 환경별 patch. 이미지/Secret/도메인 실제 값 주입이 필요.
+- benchmarks/hpa: 읽기 부하의 고정/HPA 비교 초안. 현재 max 5 등은 새 계획의 자원 예산 검토 후 전환.
+- controllers/aws-load-balancer-controller: IRSA/Helm 설치 초안. 버전/region/vpcId/실제 권한 확인 필요.
 
-```text
-base/
-benchmarks/
-  hpa/
-    fixed-replicas/
-    hpa-enabled/
-  stock-processing/
-    rdb-sync/
-    redis-async/
-controllers/
-  aws-load-balancer-controller/
-overlays/dev/
-overlays/prod/
-```
+기존 base에는 HPA가 포함돼 있다. 후속 작업에서 기본 고정 Replica와 실험용 HPA를 분리한다.
+새 Terraform 기반에는 metrics-server가 없으므로 HPA 실행 전 별도 설치/검증이 필요하다.
+앱 CD는 Argo CD로 구성할 예정이며 Jenkins가 직접 kubectl set image를 실행하는 방식은 제거했다.
+리셋에서 제외한 재고 알고리즘 비교 overlay는 삭제했다.
 
-## Apply
-
-개발 환경 배포:
-
-```bash
-kubectl apply -k k8s/overlays/dev
-kubectl rollout status deployment/orderpage-backend -n orderpage --timeout=180s
-```
-
-이미지는 Jenkins 파이프라인에서 ECR push 이후 다음 명령으로 교체합니다.
-
-```bash
-kubectl set image deployment/orderpage-backend orderpage-backend=<ecr-image-uri> -n orderpage
-```
-
-## Notes
-
-- `k8s/base/secret.yaml`은 포트폴리오 실습용 placeholder입니다. 실제 배포 전에는 RDS, Redis, Amazon MQ, JWT 값을 Jenkins credential 또는 External Secrets 방식으로 교체해야 합니다.
-- Ingress는 AWS Load Balancer Controller가 설치된 EKS를 전제로 합니다.
-- HPA는 CPU 70%, memory 80% 기준으로 2~5개 Pod 사이에서 scale out 되도록 설정했습니다.
-- HPA Before/After 실행 절차는 `benchmarks/hpa/README.md`를 참고합니다.
-- RDB/Redis 재고 처리 비교 절차는 `benchmarks/stock-processing/README.md`를 참고합니다.
-- HPA가 CPU/Memory 값을 받으려면 Terraform이 설치하는 Metrics Server EKS Add-on이 필요합니다.
+현재는 `kubectl kustomize k8s/overlays/dev`로 렌더 검증까지만 한다.
