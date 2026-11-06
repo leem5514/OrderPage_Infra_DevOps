@@ -2,6 +2,8 @@
 
 기준일: 2026-11-06. 상태: 코드 점검/최소 수정/로컬 테스트 완료, AWS 실행 검증 전.
 
+후속 3단계에서 종료 처리와 Probe 분리를 완료하고 실제 DB 중지/복구·SSE 종료를 검증했다. [최신 결과](lifecycle-readiness.md). 아래 점검 표는 최초 단계의 판단도 포함한다.
+
 추가 결과: 사용자가 Docker를 켠 후 Java 11/Linux 이미지 빌드·기동 및 실제 로컬 API/DB/Redis/RabbitMQ 통합 확인 13개를 완료했다. 아래 표의 최초 Docker 미실행 상태는 해소됐다. AWS 관리형 연결과 TLS는 여전히 미검증이다. [Docker 검증 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/codex/deployment-readiness/docs/container-verification.md)
 
 ## 1. 이번 단계의 목적과 기준

@@ -1,7 +1,7 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
 기준일: 2026-11-06 (KST)
-현재 단계: 요구사항/비용 계획과 BE·FE 코드 점검 완료. 다음은 새 Terraform/Kubernetes/CI 구성 작성.
+현재 단계: 요구사항/비용 계획, BE·FE 코드 점검, Docker 통합·종료·헬스체크 검증 완료. 다음은 새 Terraform/Kubernetes/CI 구성 작성.
 기존 Terraform/Jenkins/Kubernetes 코드는 아직 새 설계로 전환되지 않았다.
 이 브랜치의 기존 Terraform을 그대로 apply하면 아래 제안과 다른 리소스가 만들어질 수 있다.
 
@@ -218,3 +218,14 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 검증 후 새 컨테이너는 중지하고 기존 order-be-deploy 네 컨테이너를 다시 실행했다.
 - 기능 smoke는 통과했지만 compose stop에서 SIGTERM 뒤 SIGKILL/137이 발생했다(OOMKilled=false). 종료 유예시간과 SSE/Spring 종료 처리는 롤링 배포 전에 재검증한다.
 - [빌드 환경·13개 결과·재현 명령·한계](https://github.com/leem5514/OrderPage_BE_DevOps/blob/codex/deployment-readiness/docs/container-verification.md)
+
+## 12. 3단계 — 종료 처리와 Probe 분리 완료
+
+이전 강제 종료 관측 후 graceful shutdown/SSE 정리/종료 예산을 수정하고 실제 검증했다.
+
+- DB 중지: liveness 200 / readiness 503. 복구 후 readiness 200, 앱 재시작 없음.
+- SSE 활성/유휴 종료: 각각 1.502초 / 1.171초, SIGKILL 없이 SIGTERM 종료(143).
+- BE 테스트 22개, 기존 기능 smoke 13개, Java 11 Docker 빌드, Kustomize dev 렌더 성공.
+- startup/readiness/liveness 경로, Pod 종료 60초와 preStop 5초, ALB readiness 경로를 manifest에 반영.
+- 이 결과는 로컬 검증이며 AWS/EKS 롤링 배포 완료나 개선율 산정은 아니다.
+- [상세 변경과 다음 조건](lifecycle-readiness.md)

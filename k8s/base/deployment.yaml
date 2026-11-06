@@ -36,9 +36,11 @@ spec:
         prometheus.io/port: "8080"
     spec:
       serviceAccountName: orderpage-backend
+      # preStop 5s도 이 60s에 포함된다. Spring 단계별 20s와 자원 정리에 여유를 둔다.
+      terminationGracePeriodSeconds: 60
       containers:
         - name: orderpage-backend
-          # Jenkins가 ECR push 후 kubectl set image로 이 값을 실제 태그로 교체한다.
+          # 현재는 placeholder. CI/CD 연결 단계에서 실제 ECR digest를 Infra Git에 기록하고 Argo CD로 동기화한다.
           image: 000000000000.dkr.ecr.ap-northeast-2.amazonaws.com/orderpage-backend:latest
           imagePullPolicy: IfNotPresent
           ports:
@@ -53,24 +55,36 @@ spec:
             - secretRef:
                 name: orderpage-backend-secret
 
-          # readinessProbe가 실패하면 Service 트래픽 대상에서 제외된다.
-          # 앱이 뜨는 중이거나 DB 연결 준비가 늦을 때 사용자 요청 실패를 줄인다.
+          lifecycle:
+            preStop:
+              exec:
+                # 라우팅 대상 제외가 전파될 짧은 여유. 실제 ALB 전파시간은 배포 후 측정한다.
+                command: ["/bin/sh", "-c", "sleep 5"]
+
+          # 최초 기동에 최대 약 120s를 준다. 성공 전에는 readiness/liveness를 실행하지 않는다.
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 24
+
+          # 준비 상태 + DB 연결. 실패하면 Service 트래픽 대상에서 제외한다.
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /actuator/health/readiness
               port: http
-            initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 3
             failureThreshold: 3
 
-          # livenessProbe가 계속 실패하면 kubelet이 컨테이너를 재시작한다.
-          # deadlock이나 장시간 hang 상태를 자동 복구하기 위한 안전장치다.
+          # 앱 자체 상태만 확인한다. DB 장애만으로 전체 Pod를 재시작하지 않는다.
+          # 이 상태 지표가 모든 종류의 deadlock을 자동 감지하는 것은 아니다.
           livenessProbe:
             httpGet:
-              path: /actuator/health
+              path: /actuator/health/liveness
               port: http
-            initialDelaySeconds: 60
             periodSeconds: 20
             timeoutSeconds: 3
             failureThreshold: 3

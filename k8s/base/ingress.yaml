@@ -13,7 +13,7 @@ metadata:
     # target-type ip는 ALB가 Service NodePort가 아니라 Pod IP로 직접 라우팅하게 한다.
     alb.ingress.kubernetes.io/target-type: ip
     # ALB target health check 경로. Spring Actuator health endpoint와 맞춘다.
-    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health/readiness
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
 spec:
   # AWS Load Balancer Controller가 제공하는 IngressClass다.
