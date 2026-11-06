@@ -1,61 +1,14 @@
-aws_region                  = "ap-northeast-2"
-project_name                = "orderpage"
-environment                 = "dev"
-backend_ecr_repository_name = "orderpage-backend"
+# 복사해 terraform.tfvars로 사용한다. 실제 값은 Git에 올리지 않는다.
+aws_region         = "ap-northeast-2"
+kubernetes_version = "1.35"
 
-az_count             = 2
-vpc_cidr             = "10.20.0.0/16"
-public_subnet_cidrs  = ["10.20.1.0/24", "10.20.2.0/24"]
-private_subnet_cidrs = ["10.20.101.0/24", "10.20.102.0/24"]
-enable_nat_gateway   = true
+# 문서용 IP/계정이다. 실제 운영자의 공인 IP와 IAM Role ARN으로 교체한다.
+eks_public_access_cidrs = ["203.0.113.10/32"]
+eks_admin_principal_arn = "arn:aws:iam::123456789012:role/OrderPageTerraformOperator"
 
-kubernetes_version            = null
-eks_public_access_cidrs       = ["0.0.0.0/0"]
-eks_enabled_cluster_log_types = ["api", "audit", "authenticator"]
-eks_cluster_addons            = ["vpc-cni", "coredns", "kube-proxy", "metrics-server"]
-eks_node_instance_types       = ["t3.medium"]
-eks_node_capacity_type        = "ON_DEMAND"
-eks_node_desired_size         = 2
-eks_node_min_size             = 1
-eks_node_max_size             = 3
-
-enable_aws_load_balancer_controller_irsa = false
-eks_oidc_provider_arn                    = null
-aws_load_balancer_controller_policy_arn  = null
-aws_load_balancer_controller_namespace   = "kube-system"
-aws_load_balancer_controller_service_account_name = "aws-load-balancer-controller"
-
-rds_database_name                    = "ordersystem"
-rds_master_username                  = "orderadmin"
-rds_master_password                  = "change-me-strong-password"
-rds_engine_version                   = "10.11"
-rds_parameter_group_family           = "mariadb10.11"
-rds_instance_class                   = "db.t4g.micro"
-rds_allocated_storage                = 20
-rds_max_allocated_storage            = 100
-rds_multi_az                         = false
-rds_backup_retention_period          = 7
-rds_enabled_cloudwatch_logs_exports = ["error", "slowquery"]
-rds_performance_insights_enabled    = false
-rds_deletion_protection             = false
-rds_skip_final_snapshot             = true
-
-redis_engine_version                 = "7.1"
-redis_parameter_group_family         = "redis7"
-redis_node_type                      = "cache.t4g.micro"
-redis_num_cache_clusters             = 1
-redis_automatic_failover_enabled     = false
-redis_multi_az_enabled               = false
-redis_transit_encryption_enabled     = false
-redis_auth_token                     = null
-redis_snapshot_retention_limit       = 3
-redis_log_retention_in_days          = 14
-
-rabbitmq_engine_version             = "4.2"
-rabbitmq_host_instance_type         = "mq.t3.micro"
-rabbitmq_deployment_mode            = "SINGLE_INSTANCE"
-rabbitmq_admin_username             = "orderadmin"
-rabbitmq_admin_password             = "change-me-strong-password"
-rabbitmq_consumer_timeout_ms        = 1800000
-rabbitmq_general_log_enabled        = true
-rabbitmq_auto_minor_version_upgrade = true
+# 의도적으로 유효하지 않은 예시: describe-addon-versions로 확인 후 채워야 plan이 통과한다.
+eks_addon_versions = {
+  vpc-cni    = "REPLACE_WITH_COMPATIBLE_VERSION"
+  coredns    = "REPLACE_WITH_COMPATIBLE_VERSION"
+  kube-proxy = "REPLACE_WITH_COMPATIBLE_VERSION"
+}

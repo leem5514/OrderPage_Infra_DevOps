@@ -13,4 +13,4 @@
 - HorizontalPodAutoscaler
 - ALB Ingress
 
-기본 컨테이너 이름과 Deployment 이름은 Jenkins 배포 단계와 맞춰 `orderpage-backend`로 고정합니다.
+기본 컨테이너와 Deployment 이름은 `orderpage-backend`입니다. 현재 초안은 [전환 상태](../README.md)를 확인하고 사용하며, 앱 CD는 Argo CD로 구성할 예정입니다.

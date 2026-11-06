@@ -1,90 +1,43 @@
-# Terraform Dev Environment
+# Dev 기반 구성
 
-개발 환경용 Terraform root module입니다.
+현재 root는 **VPC + ECR + EKS**만 연결한다. 아직 AWS에 적용하지 않았다.
+DB/Redis/MQ, ALB/ACM, 앱, Jenkins 서버, Argo CD, Prometheus/Grafana, SNS/Budget은 다음 단계다.
 
-초기 구성 순서:
+## 자격증명 없이 검사
 
-1. provider/backend 설정
-2. VPC module 연결
-3. ECR module 연결
-4. EKS module 연결
-5. RDS/ElastiCache module 연결
+저장소 루트에서 Terraform >= 1.11을 사용한다. 최초 init은 provider 다운로드에 네트워크가 필요하다.
 
-현재 포함된 리소스:
-
-- VPC
-- Public subnet
-- Private subnet
-- Internet Gateway
-- NAT Gateway
-- Route table
-- Backend ECR repository
-- EKS cluster
-- EKS managed node group
-- EKS managed add-ons
-- Metrics Server EKS community add-on for HPA CPU/Memory metrics
-- RDS MariaDB instance
-- RDS DB subnet group
-- RDS security group
-- RDS CloudWatch log export
-- ElastiCache Redis replication group
-- ElastiCache Redis CloudWatch log export
-- Amazon MQ RabbitMQ broker
-- Amazon MQ RabbitMQ security group
-- Amazon MQ RabbitMQ general log export
-- AWS Load Balancer Controller IRSA role
-
-사용 예시:
-
-```bash
-terraform init -backend-config=backend.hcl
-terraform plan
-terraform apply
+```powershell
+terraform fmt -check -recursive terraform
+terraform -chdir=terraform/envs/dev init -backend=false -input=false -lockfile=readonly
+terraform -chdir=terraform/envs/dev validate
+terraform -chdir=terraform/envs/dev test
 ```
 
-변수 예시는 `terraform.tfvars.example`을 참고합니다.
+test는 mock provider와 plan으로만 실행하며 AWS API를 호출하지 않는다.
+이 결과가 실제 AWS 호환성/권한/Node 기동 성공을 의미하지는 않는다.
 
-Remote state는 `terraform/bootstrap/remote-state`에서 S3 bucket을 먼저 만든 뒤 활성화합니다.
+## 실제 AWS plan 전 준비
 
-```bash
-cp backend.hcl.example backend.hcl
-terraform init -backend-config=backend.hcl
+1. 전용 실습 AWS 계정/프로필, 배포 권한 및 assume 가능한 운영자 Role을 확인한다.
+2. `terraform.tfvars.example`을 복사하고 /32 공인 IP와 Role ARN을 채운다.
+3. 서울 EKS 1.35의 지원 상태와 기본 add-on 호환 버전을 조회해 고정한다.
+4. 별도 S3 bootstrap을 검토·생성하고 `backend.hcl.example`의 실제 bucket을 채운다.
+5. `terraform init -reconfigure -backend-config=backend.hcl`로 원격 state를 연결한다.
+6. `terraform plan -input=false -out=foundation.tfplan` 결과, 비용/종료 시각과 생성 범위를 확인한 후 적용한다.
+
+읽기 전용 조회 예시:
+
+```powershell
+aws sts get-caller-identity
+aws eks describe-cluster-versions --region ap-northeast-2 --cluster-versions 1.35
+aws eks describe-addon-versions --region ap-northeast-2 --kubernetes-version 1.35 --addon-name vpc-cni
+aws eks describe-addon-versions --region ap-northeast-2 --kubernetes-version 1.35 --addon-name coredns
+aws eks describe-addon-versions --region ap-northeast-2 --kubernetes-version 1.35 --addon-name kube-proxy
 ```
 
-`backend.hcl`에는 실제 S3 bucket 이름이 들어가므로 커밋하지 않습니다. 예시 파일만 Git에 남깁니다.
+예시의 IP/계정은 문서용이며 add-on 값은 의도적인 미완성 표시다. 복사만으로 배포가 준비되지 않는다.
+state/plan/tfvars에는 계정 정보와 민감 값이 포함될 수 있으므로 Git에 올리지 않는다.
 
-RDS password는 실제 값으로 커밋하지 않습니다. PowerShell에서는 아래처럼 환경변수로 주입할 수 있습니다.
-
-```bash
-$env:TF_VAR_rds_master_password = 'change-me-strong-password'
-$env:TF_VAR_rabbitmq_admin_password = 'change-me-strong-password'
-```
-
-Redis TLS/auth는 백엔드 Redis SSL 설정과 함께 켜야 합니다. 현재 dev 기본값은 private subnet과 security group으로 접근을 제한하는 방식입니다.
-
-Amazon MQ RabbitMQ는 AMQPS endpoint를 사용합니다. K8S manifest에서는 `RABBITMQ_SSL_ENABLED=true`와 `RABBITMQ_PORT=5671`로 연결합니다.
-
-AWS Load Balancer Controller IRSA는 EKS OIDC provider와 Controller IAM policy ARN이 준비된 뒤 활성화합니다.
-
-```hcl
-enable_aws_load_balancer_controller_irsa = true
-eks_oidc_provider_arn                   = "arn:aws:iam::<account-id>:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/<oidc-id>"
-aws_load_balancer_controller_policy_arn = "arn:aws:iam::<account-id>:policy/AWSLoadBalancerControllerIAMPolicy"
-```
-
-EKS kubeconfig 연결 예시:
-
-```bash
-aws eks update-kubeconfig --region ap-northeast-2 --name orderpage-dev
-kubectl get nodes
-```
-
-Metrics Server 확인:
-
-```bash
-kubectl get apiservice v1beta1.metrics.k8s.io
-kubectl top nodes
-kubectl top pods -n orderpage
-```
-
-Metrics Server는 HPA 계산용 현재 CPU/Memory 값을 제공하며 장기 모니터링 저장소는 아닙니다.
+기존에 적용한 state에 이 코드를 바로 연결하지 않는다. 데이터 모듈 호출 제거와 NAT 주소 변경이 있으므로 기존 자원이 있다면 삭제/교체 계획을 먼저 검토해야 한다.
+[구조·정리 근거·검증 한계·다음 단계](../../../docs/restart/terraform-foundation.md)

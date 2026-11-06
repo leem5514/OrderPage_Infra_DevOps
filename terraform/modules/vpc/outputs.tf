@@ -25,10 +25,10 @@ output "public_route_table_id" {
 
 output "private_route_table_id" {
   description = "Private route table ID."
-  value       = try(aws_route_table.private[0].id, null)
+  value       = aws_route_table.private.id
 }
 
 output "nat_gateway_id" {
   description = "NAT Gateway ID."
-  value       = try(aws_nat_gateway.this[0].id, null)
+  value       = aws_nat_gateway.this.id
 }

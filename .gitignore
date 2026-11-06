@@ -2,6 +2,9 @@
 *.tfstate
 *.tfstate.*
 *.tfvars
+*.tfvars.json
+*.tfplan
+tfplan
 backend.hcl
 !.terraform.lock.hcl
 .DS_Store
