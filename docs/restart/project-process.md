@@ -207,5 +207,14 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - FE 기준: a1218dcbe0f58e07b5c4f5bc87ac8a85052a17a4. 빌드/lint 통과, 인증 갱신 반복 오류 수정 후 회귀 테스트 5개 추가 통과.
 - BE/FE 작업 브랜치: codex/deployment-readiness. 본 Infra 문서 브랜치: codex/restart-cost-plan.
 - 상세 내용: [배포 가능성 점검과 다음 작업](application-readiness.md).
-- Docker 엔진이 실행 중이 아니어서 컨테이너 통합 검증은 미실행이다. AWS 생성/DNS 변경/Vercel 배포는 하지 않았다.
+- 최초에는 Docker 엔진이 꺼져 있었지만, 사용자 기동 후 Java 11/Linux Docker 빌드와 로컬 통합 확인 13개까지 완료했다. AWS 생성/DNS 변경/Vercel 배포는 하지 않았다.
 - 다음 단계: 아래 점검서의 조건을 반영한 IaC·배포 설정을 작성하고 정적 검증한다. 비용 발생 전 Terraform plan과 생성 대상을 확인한다.
+
+### Docker 추가 검증
+
+- 앱 코드 39bd52c 기준으로 새 이미지를 빌드했다. 기존 바탕화면 이미지는 2026-07-30 생성된 별도 이미지였다.
+- 검증용 orderpage-readiness 프로젝트/DB 볼륨과 loopback 18080을 사용했다. 기존 데이터는 보존했다.
+- 헬스체크, 가입/로그인, 권한 차단, refresh, CORS, SSE 최초 연결, 주문 Redis→RabbitMQ→MariaDB 반영을 확인했다.
+- 검증 후 새 컨테이너는 중지하고 기존 order-be-deploy 네 컨테이너를 다시 실행했다.
+- 기능 smoke는 통과했지만 compose stop에서 SIGTERM 뒤 SIGKILL/137이 발생했다(OOMKilled=false). 종료 유예시간과 SSE/Spring 종료 처리는 롤링 배포 전에 재검증한다.
+- [빌드 환경·13개 결과·재현 명령·한계](https://github.com/leem5514/OrderPage_BE_DevOps/blob/codex/deployment-readiness/docs/container-verification.md)

@@ -2,6 +2,8 @@
 
 기준일: 2026-11-06. 상태: 코드 점검/최소 수정/로컬 테스트 완료, AWS 실행 검증 전.
 
+추가 결과: 사용자가 Docker를 켠 후 Java 11/Linux 이미지 빌드·기동 및 실제 로컬 API/DB/Redis/RabbitMQ 통합 확인 13개를 완료했다. 아래 표의 최초 Docker 미실행 상태는 해소됐다. AWS 관리형 연결과 TLS는 여전히 미검증이다. [Docker 검증 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/codex/deployment-readiness/docs/container-verification.md)
+
 ## 1. 이번 단계의 목적과 기준
 
 Terraform이 서버를 만들어도 앱의 인증·의존성·수집 설정이 맞지 않으면 배포에 실패하거나 지표가 왜곡된다. 비용이 발생하기 전에 현재 앱을 빌드하고, 운영을 막는 결함을 수정하며, IaC가 주입할 설정을 확정하는 단계다.
