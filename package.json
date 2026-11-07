@@ -1,0 +1,6 @@
+{
+  "name": "orderpage-infra-validation",
+  "private": true,
+  "scripts": { "test": "node --test scripts/tests/deployment.test.mjs" },
+  "devDependencies": { "yaml": "2.9.1" }
+}

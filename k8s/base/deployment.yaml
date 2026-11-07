@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: orderpage
 spec:
-  # 기본 Pod 수. HPA가 켜지면 min/max 범위 안에서 이 값을 자동 조절한다.
+  # 기본은 2개 고정이다. HPA는 별도 비교 overlay에서만 사용한다.
   replicas: 2
   revisionHistoryLimit: 3
 
@@ -29,20 +29,25 @@ spec:
         app.kubernetes.io/name: orderpage-backend
         app.kubernetes.io/component: api
         app.kubernetes.io/part-of: orderpage
-      annotations:
-        # Prometheus가 Spring Actuator metric endpoint를 scrape하도록 힌트를 준다.
-        prometheus.io/scrape: "true"
-        prometheus.io/path: /actuator/prometheus
-        prometheus.io/port: "8080"
     spec:
       serviceAccountName: orderpage-backend
+      # 앱은 Kubernetes API 토큰이 필요 없다. IRSA 토큰은 EKS webhook이 별도로 주입한다.
+      automountServiceAccountToken: false
+      volumes:
+        - name: rds-ca
+          configMap:
+            name: orderpage-rds-ca
       # preStop 5s도 이 60s에 포함된다. Spring 단계별 20s와 자원 정리에 여유를 둔다.
       terminationGracePeriodSeconds: 60
       containers:
         - name: orderpage-backend
           # 현재는 placeholder. CI/CD 연결 단계에서 실제 ECR digest를 Infra Git에 기록하고 Argo CD로 동기화한다.
-          image: 000000000000.dkr.ecr.ap-northeast-2.amazonaws.com/orderpage-backend:latest
+          image: REPLACE_REQUIRED_IMAGE
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: rds-ca
+              mountPath: /etc/rds-ca
+              readOnly: true
           ports:
             - name: http
               containerPort: 8080

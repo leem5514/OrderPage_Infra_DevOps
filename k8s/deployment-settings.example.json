@@ -1,0 +1,5 @@
+{
+  "imageDigest": "REPLACE_REQUIRED_SHA256_DIGEST",
+  "frontendOrigin": "https://devops.auctionbid.shop",
+  "adminEmail": "REPLACE_REQUIRED_ADMIN_EMAIL"
+}

@@ -1,14 +1,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# base는 모든 환경(dev/prod)이 공유하는 공통 Kubernetes 리소스 묶음이다.
-# 환경별 차이는 overlays/* 에서 patch로 덮어쓴다.
+# Secret은 포함하지 않는다. 실제 자격증명은 별도 운영 경로에서 먼저 주입한다.
 resources:
   - namespace.yaml
   - serviceaccount.yaml
-  - configmap.yaml
-  - secret.yaml
   - deployment.yaml
   - service.yaml
-  - hpa.yaml
   - ingress.yaml
+
+# 설정/CA 내용이 달라지면 이름 hash가 달라져 Deployment도 업데이트된다.
+configMapGenerator:
+  - name: orderpage-backend-config
+    namespace: orderpage
+    envs:
+      - config.env
+  - name: orderpage-rds-ca
+    namespace: orderpage
+    files:
+      - ap-northeast-2-bundle.pem=certs/ap-northeast-2-bundle.pem
