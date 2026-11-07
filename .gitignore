@@ -15,5 +15,6 @@ dist/
 reports/
 *.log
 iam_policy.json
+.local/
 benchmarks/results/*
 !benchmarks/results/README.md

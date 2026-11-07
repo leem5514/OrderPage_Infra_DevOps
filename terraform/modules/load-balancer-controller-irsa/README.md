@@ -1,19 +1,8 @@
-# AWS Load Balancer Controller IRSA Module
+# ALB Controller 전용 IRSA
 
-AWS Load Balancer Controller가 AWS API를 호출할 수 있도록 IAM Role for Service Account를 생성합니다.
+공식 v3.6.2 IAM 정책을 vendor에 보관하고 Terraform이 policy/role/attachment를 만든다.
+kube-system/aws-load-balancer-controller와 audience sts.amazonaws.com만 assume할 수 있다.
+OIDC 공급자는 EKS 모듈에서 받으며 eksctl이나 별도 수동 IAM 생성 스크립트를 사용하지 않는다.
+Helm chart 3.6.2가 ServiceAccount를 생성하고 해당 Role ARN을 annotation으로 넣는다.
 
-## Features
-
-- IRSA trust policy
-- ServiceAccount subject 제한
-- AWS Load Balancer Controller IAM policy attachment
-
-## Required Inputs
-
-- EKS OIDC provider ARN
-- EKS OIDC issuer URL
-- AWS Load Balancer Controller IAM policy ARN
-
-## Portfolio Point
-
-Ingress manifest만 작성하면 ALB가 생기는 것이 아니라, Controller가 Kubernetes API와 AWS API 사이에서 조정자 역할을 합니다. IRSA는 Pod에 장기 AWS access key를 넣지 않고 필요한 권한만 부여하는 방식이라 보안 설계 설명 포인트가 됩니다.
+원본 정책/해시는 [vendor 기록](vendor/README.md), 최초 설치 순서는 [배포 준비 기록](../../../docs/restart/https-app-deployment.md)을 참고한다.

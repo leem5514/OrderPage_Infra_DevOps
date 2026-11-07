@@ -7,7 +7,7 @@
 - 인프라: Terraform → VPC/ECR/EKS 및 후속 데이터·권한·관측.
 - 관측: CloudWatch Alarm → Amazon SNS, Kubernetes 지표 → Prometheus/Grafana, 비용 → Cost Explorer.
 
-현재 코드 검증 범위는 VPC/ECR/EKS/OIDC 및 RDS/Redis/MQ이며 AWS 생성은 아직 하지 않았다.
+현재 코드 검증 범위는 VPC/ECR/EKS/OIDC, RDS/Redis/MQ와 ACM/IRSA/상품 이미지 S3/Kubernetes 설정이며 AWS 생성은 아직 하지 않았다.
 저장소의 기존 orderpage-devops-architecture 이미지/SVG와 아이콘은 향후 그림 수정용 원본이다.
 기존 그림에는 Jenkins 직접 배포 등 옛 설계가 있어 현행 구조 그림으로 인용하지 않는다.
 

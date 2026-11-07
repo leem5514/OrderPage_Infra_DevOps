@@ -1,9 +1,9 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
-기준일: 2026-11-06 (KST)
-현재 단계: 요구사항/비용 계획, BE·FE 로컬 검증, Terraform 기반 + 관리형 데이터/OIDC 코드 검증 완료.
-AWS 리소스는 아직 생성하지 않았다. 다음은 서비스별 권한, Kubernetes/CI/CD/관측 설정이다.
-현재 dev root는 VPC/ECR/EKS 및 RDS/Redis/MQ를 연결하지만 전체 앱 배포 준비는 아직 끝나지 않았다.
+기준일: 2026-11-07 (KST)
+현재 단계: 기반/데이터와 ALB HTTPS·서비스별 IRSA·상품 이미지 S3·Kubernetes 설정의 로컬 검증 완료.
+AWS 리소스는 아직 생성하지 않았다. 다음은 CI/CD/관측 및 실제 배포 사전 준비다.
+인증서 DNS 검증, 실제 계정/Secret/서비스 연결은 아직 미실행이다.
 
 ## 1. 확정한 요구사항
 
@@ -250,3 +250,14 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - Terraform validate 및 mock 12개, AWS 없이 MQ 로그 후처리 스크립트 테스트 7개 통과.
 - 현재는 코드 검증이다. 관리형 서비스 실제 생성/TLS 접속/SNS 알림은 아직 수행하지 않았다.
 - [상세 절차·변수·실제 검증 체크·다음 사전 결정](managed-data-services.md)
+
+## 15. 6단계 — HTTPS·서비스별 권한·Kubernetes 준비
+
+- 사용자 선택: 상품 이미지 전용 S3 버킷의 HTTPS 읽기만 공개, 백엔드 IRSA에 업로드 권한 부여.
+- ACM은 서울 API 하위 도메인 인증서 요청만 구성. DNS 제공자/기존 레코드는 자동 변경하지 않음.
+- Controller 정책/chart v3.6.2 고정, 정확한 ServiceAccount/STS 신뢰. 별도 수동 IAM/SA 생성 코드 제거.
+- 기본 Pod 2개/HTTPS/ALB readiness gate/CA ConfigMap 연결, 가짜 Secret과 중복 튜닝 override 제거.
+- 실제 Terraform 출력과 digest로 배포 파일 생성. 다른 계정·미완성 값·비밀 입력 거부.
+- Terraform mock 15개, Kubernetes/Helm/Secret 검증 7개, 설치 스크립트 모의 테스트 5개 통과.
+- BE/FE 코드 변경 및 AWS 리소스 생성은 하지 않음. SSE heartbeat/재연결, 실제 관측/CI/CD는 후속 작업.
+- [파일 역할·최초 적용 순서·정리 내역·검증 한계](https-app-deployment.md)
