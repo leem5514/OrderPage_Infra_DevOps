@@ -4,6 +4,7 @@
 
 - 서비스: 브라우저 → Vercel 정적 Vue 화면. 브라우저 API 요청 → 서울 ALB → EKS Service/Pod → 관리형 데이터 서비스.
 - 배포: private EC2 Jenkins 테스트/이미지 빌드 → ECR digest 및 Infra PR → 병합 → Argo CD → EKS.
+- 프론트 배포: FE main → 같은 Jenkins agent의 Node 22 테스트/정적 빌드 → Vercel CDN. 현재 실제 배포는 비활성이다. [설정과 검증 범위](restart/frontend-vercel.md)
 - 인프라: Terraform → VPC/ECR/EKS 및 후속 데이터·권한·관측.
 - 관측: CloudWatch Alarm → Amazon SNS, Kubernetes 지표 → Prometheus/Grafana, 비용 → Cost Explorer.
 

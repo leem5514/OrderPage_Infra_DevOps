@@ -1,0 +1,7 @@
+{
+  "deploymentEnabled": false,
+  "apiOrigin": "https://api-devops.auctionbid.shop",
+  "frontendOrigin": "https://devops.auctionbid.shop",
+  "vercelProjectId": null,
+  "vercelOrgId": null
+}
