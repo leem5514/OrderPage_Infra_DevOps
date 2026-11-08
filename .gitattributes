@@ -1,0 +1,4 @@
+# Windows checkout에서도 Linux 실행 파일과 다운로드 원본의 줄바꿈을 보존한다.
+*.sh text eol=lf
+*.pem text eol=lf
+terraform/modules/load-balancer-controller-irsa/vendor/* text eol=lf

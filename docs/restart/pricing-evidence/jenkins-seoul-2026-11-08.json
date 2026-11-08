@@ -1,0 +1,87 @@
+{
+  "publicationDate": "2026-11-07T00:28:52Z",
+  "rows": [
+    {
+      "sku": "MTK7D9SGKGYR3JD6",
+      "attributes": {
+        "servicecode": "AmazonEC2",
+        "location": "Asia Pacific (Seoul)",
+        "locationType": "AWS Region",
+        "storageMedia": "SSD-backed",
+        "volumeType": "General Purpose",
+        "maxVolumeSize": "64 TiB",
+        "maxIopsvolume": "80000",
+        "maxThroughputvolume": "2000 MiB/s",
+        "usagetype": "APN2-EBS:VolumeUsage.gp3",
+        "operation": "",
+        "regionCode": "ap-northeast-2",
+        "servicename": "Amazon Elastic Compute Cloud",
+        "volumeApiName": "gp3"
+      },
+      "effectiveDate": "2026-11-01T00:00:00Z",
+      "rateCode": "MTK7D9SGKGYR3JD6.JRTCKXETXF.6YS6EN2CT7",
+      "description": "$0.0912 per GB-month of General Purpose (gp3) provisioned storage - Asia Pacific (Seoul)",
+      "beginRange": "0",
+      "endRange": "Inf",
+      "unit": "GB-Mo",
+      "pricePerUnit": {
+        "USD": "0.0912000000"
+      },
+      "appliesTo": []
+    },
+    {
+      "sku": "YNF8U8R6NK3DHPTM",
+      "attributes": {
+        "servicecode": "AmazonEC2",
+        "location": "Asia Pacific (Seoul)",
+        "locationType": "AWS Region",
+        "instanceType": "m6i.large",
+        "currentGeneration": "Yes",
+        "instanceFamily": "General purpose",
+        "vcpu": "2",
+        "physicalProcessor": "Intel Xeon 8375C (Ice Lake)",
+        "clockSpeed": "3.5 GHz",
+        "memory": "8 GiB",
+        "storage": "EBS only",
+        "networkPerformance": "Up to 12500 Megabit",
+        "processorArchitecture": "64-bit",
+        "tenancy": "Shared",
+        "operatingSystem": "Linux",
+        "licenseModel": "No License required",
+        "usagetype": "APN2-BoxUsage:m6i.large",
+        "operation": "RunInstances",
+        "availabilityzone": "NA",
+        "capacitystatus": "Used",
+        "classicnetworkingsupport": "false",
+        "dedicatedEbsThroughput": "Up to 10000 Mbps",
+        "dedicatedEbsThroughputDescription": "650 Mbps",
+        "ecu": "NA",
+        "enhancedNetworkingSupported": "Yes",
+        "gpuMemory": "NA",
+        "instanceFamilyCategory": "General Purpose",
+        "intelAvxAvailable": "Yes",
+        "intelAvx2Available": "Yes",
+        "intelTurboAvailable": "Yes",
+        "marketoption": "OnDemand",
+        "normalizationSizeFactor": "4",
+        "preInstalledSw": "NA",
+        "processorFeatures": "Intel AVX; Intel AVX2; Intel AVX512; Intel Turbo",
+        "regionCode": "ap-northeast-2",
+        "servicename": "Amazon Elastic Compute Cloud",
+        "vpcnetworkingsupport": "true"
+      },
+      "effectiveDate": "2026-11-01T00:00:00Z",
+      "rateCode": "YNF8U8R6NK3DHPTM.JRTCKXETXF.6YS6EN2CT7",
+      "description": "$0.118 per On Demand Linux m6i.large Instance Hour",
+      "beginRange": "0",
+      "endRange": "Inf",
+      "unit": "Hrs",
+      "pricePerUnit": {
+        "USD": "0.1180000000"
+      },
+      "appliesTo": []
+    }
+  ],
+  "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/ap-northeast-2/index.json",
+  "retrievedAt": "2026-11-08T05:09:15.993Z"
+}

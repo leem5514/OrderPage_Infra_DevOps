@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: orderpage
+  namespace: argocd
+spec:
+  description: OrderPage 백엔드 전용 프로젝트
+  sourceRepos:
+    - https://github.com/leem5514/OrderPage_Infra_DevOps.git
+  destinations:
+    - namespace: orderpage
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - {group: '', kind: ServiceAccount}
+    - {group: '', kind: Service}
+    - {group: '', kind: ConfigMap}
+    - {group: apps, kind: Deployment}
+    - {group: networking.k8s.io, kind: Ingress}
+  # Secret, RBAC, 다른 앱, HPA는 이 기본 프로젝트의 GitOps 관리 대상이 아니다.

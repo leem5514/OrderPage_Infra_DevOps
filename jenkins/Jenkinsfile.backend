@@ -1,0 +1,77 @@
+pipeline {
+    // EC2의 전용 Linux agent. Controller의 built-in executor는 0으로 설정한다.
+    agent { label 'orderpage-ci' }
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        timeout(time: 40, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
+        skipDefaultCheckout(true)
+    }
+    parameters {
+        string(name: 'AWS_ACCOUNT_ID', defaultValue: '', description: '최초 이미지: 실습 계정 12자리. 승격 후 비우면 GitOps 환경에서 자동 읽기')
+        string(name: 'ECR_NAME', defaultValue: 'orderpage-backend', description: 'Terraform ECR 저장소 이름')
+        string(name: 'BE_REVISION', defaultValue: '', description: '비우면 BE main 최신. 지정하면 main에 포함된 전체 SHA만 허용')
+        booleanParam(name: 'CREATE_DEPLOYMENT_PR', defaultValue: true, description: '최초 이미지 준비 때만 false. GitOps 환경 승격 후 true')
+    }
+    environment {
+        AWS_REGION = 'ap-northeast-2'
+        AWS_DEFAULT_REGION = 'ap-northeast-2'
+        AWS_PAGER = ''
+        GIT_TERMINAL_PROMPT = '0'
+    }
+    // 공개 webhook 포트 없이 BE main만 조회한다. Infra 배포 커밋이 CI를 재귀 실행하지 않게 한다.
+    triggers { pollSCM('H/5 * * * *') }
+    stages {
+        stage('신뢰한 코드 준비') {
+            steps {
+                // 이 Job의 SCM은 Infra main으로 고정한다. PR/fork Job에 배포 자격증명을 연결하지 않는다.
+                deleteDir()
+                checkout changelog: false, poll: false, scm: scm
+                sh 'npm ci --ignore-scripts'
+                script {
+                    // SCM polling은 기본 parameter로 실행되므로 수동 실행 때 입력한 계정에 의존하지 않는다.
+                    if (!params.AWS_ACCOUNT_ID?.trim() && fileExists('gitops/environments/dev/kustomization.yaml')) {
+                        def target = sh(script: 'node scripts/gitops-release.mjs target', returnStdout: true).trim().split('\n')
+                        env.AWS_ACCOUNT_ID = target[0]
+                        env.ECR_NAME = target[1]
+                    }
+                }
+                dir('.local/backend') {
+                    git branch: 'main', url: 'https://github.com/leem5514/OrderPage_BE_DevOps.git'
+                }
+                sh 'bash scripts/ci-backend.sh prepare'
+                script { env.BE_COMMIT = readFile('.local/be-commit').trim() }
+            }
+        }
+        stage('Java 11 테스트') {
+            steps { sh 'bash scripts/ci-backend.sh test' }
+            post { always { junit testResults: '.local/backend/build/test-results/test/*.xml', allowEmptyResults: false } }
+        }
+        stage('Docker 빌드 · ECR 저장') {
+            steps {
+                sh 'bash scripts/ci-backend.sh publish'
+                script {
+                    env.IMAGE_DIGEST = readFile('.local/image-digest').trim()
+                    env.ECR_REPOSITORY = readFile('.local/image-repository').trim()
+                }
+                sh 'node scripts/gitops-release.mjs record'
+                archiveArtifacts artifacts: '.local/ci-image.json', fingerprint: true
+            }
+        }
+        stage('GitOps 배포 PR') {
+            when { expression { params.CREATE_DEPLOYMENT_PR } }
+            steps {
+                sh 'node scripts/gitops-release.mjs update'
+                // Infra 한 저장소의 Contents/PR 쓰기 권한만 가진 Jenkins credential.
+                withCredentials([usernamePassword(credentialsId: 'orderpage-infra-github', usernameVariable: 'GH_USER', passwordVariable: 'GH_TOKEN')]) {
+                    sh 'set +x; node scripts/create-release-pr.mjs'
+                }
+                archiveArtifacts artifacts: 'gitops/environments/dev/release.json,.local/ci-timings.tsv', fingerprint: true
+            }
+        }
+    }
+    post {
+        always { archiveArtifacts artifacts: '.local/ci-timings.tsv', allowEmptyArchive: true }
+    }
+}
