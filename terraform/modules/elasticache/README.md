@@ -1,40 +1,9 @@
-# ElastiCache Module
+# ElastiCache Redis (실습용)
 
-Redis 기반 Amazon ElastiCache replication group을 private subnet에 생성하는 모듈입니다.
+Redis OSS 7.1 / cache.t4g.micro 1대, replica 없음, cluster mode disabled.
+앱이 사용하는 Redis DB 1/2/3과 호환되도록 cluster mode를 고정한다.
+TLS required + AUTH 필수, EKS SG의 6379만 허용한다. 저장 암호화, snapshot 1일, 로그 3일 보관.
 
-## Features
-
-- ElastiCache Redis replication group
-- ElastiCache subnet group
-- VPC security group
-- Redis parameter group
-- Private subnet only
-- At-rest encryption
-- Snapshot retention
-- CloudWatch slow-log / engine-log export
-
-## Usage
-
-```hcl
-module "redis" {
-  source = "../../modules/elasticache"
-
-  replication_group_id = "orderpage-dev-redis"
-  vpc_id               = module.vpc.vpc_id
-  subnet_ids           = module.vpc.private_subnet_ids
-  allowed_cidr_blocks  = [module.vpc.vpc_cidr_block]
-
-  node_type          = "cache.t4g.micro"
-  num_cache_clusters = 1
-
-  tags = {
-    Project     = "orderpage"
-    Environment = "dev"
-    ManagedBy   = "terraform"
-  }
-}
-```
-
-## Portfolio Point
-
-Redis를 ElastiCache로 전환하면 재고 차감, refresh token 저장, SSE pub/sub 같은 기능을 관리형 캐시로 분리할 수 있습니다. 이후 k6 테스트에서 Redis 적용 전/후 API latency, DB query 감소, HPA scale out 반응을 비교하는 근거가 됩니다.
+auth_token_update_strategy=SET이며 무중단 비밀번호 교체 절차는 아니다.
+앱의 REDIS_SSL_ENABLED=true와 REDIS_PASSWORD를 함께 설정한다.
+[입력·검증·한계](../../../docs/restart/managed-data-services.md)

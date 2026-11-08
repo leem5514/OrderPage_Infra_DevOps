@@ -37,3 +37,8 @@ output "node_role_arn" {
   description = "Managed node group IAM role ARN."
   value       = aws_iam_role.node.arn
 }
+
+output "oidc_provider_arn" {
+  description = "서비스별 IRSA Role trust policy에 사용할 IAM OIDC provider."
+  value       = aws_iam_openid_connect_provider.cluster.arn
+}
