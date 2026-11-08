@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: orderpage-backend
+  namespace: argocd
+  # 삭제 finalizer를 넣지 않는다. Application 삭제가 앱/ALB 삭제로 이어지지 않게 한다.
+spec:
+  project: orderpage
+  source:
+    repoURL: https://github.com/leem5514/OrderPage_Infra_DevOps.git
+    targetRevision: main
+    path: gitops/environments/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: orderpage
+  revisionHistoryLimit: 5
+  syncPolicy:
+    automated:
+      # 실제 환경 승격/Secret/ALB TGB 및 최초 Pod gate 검증 후 true로 바꾼다.
+      enabled: false
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - PruneLast=true
+    retry:
+      limit: 3
+      backoff: {duration: 10s, factor: 2, maxDuration: 1m}

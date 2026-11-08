@@ -1,0 +1,43 @@
+# 단기 실습용 단일 replica. 관리 UI는 ClusterIP + kubectl port-forward만 사용한다.
+global:
+  domain: localhost
+dex:
+  enabled: false
+notifications:
+  enabled: false
+applicationSet:
+  # 이 chart에는 enabled 스위치가 없다. controller Pod만 0개로 유지한다.
+  replicas: 0
+redis-ha:
+  enabled: false
+redis:
+  enabled: true
+  resources:
+    requests: {cpu: 50m, memory: 64Mi}
+    limits: {memory: 256Mi}
+controller:
+  replicas: 1
+  resources:
+    requests: {cpu: 100m, memory: 256Mi}
+    limits: {memory: 768Mi}
+repoServer:
+  replicas: 1
+  resources:
+    requests: {cpu: 100m, memory: 128Mi}
+    limits: {memory: 512Mi}
+server:
+  replicas: 1
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {memory: 512Mi}
+configs:
+  params:
+    server.insecure: false
+  cm:
+    # 공개 webhook 없이 Git polling. 실측에서는 이 대기시간도 CD 시간에 포함한다.
+    timeout.reconciliation: 60s
+    timeout.reconciliation.jitter: 15s

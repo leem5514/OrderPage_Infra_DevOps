@@ -6,5 +6,6 @@
 
 - 현재 호출: modules/vpc, modules/ecr, modules/eks, modules/rds, modules/elasticache, modules/amazonmq.
 - 추가 연결: modules/load-balancer-controller-irsa, modules/product-images와 ACM 인증서 요청. 실제 Controller 설치/DNS 검증은 아직이다.
+- 선택 연결: modules/jenkins. EC2 사용으로 결정했고 실제 plan/비용 검토 전에는 enable_jenkins=false다. [구성·가동 절차](../docs/restart/jenkins-argocd.md).
 - [HTTPS·이미지·실제 입력 준비 절차](../docs/restart/https-app-deployment.md)
 - 실제 입력/검증/삭제 주의사항: [기반 기록](../docs/restart/terraform-foundation.md), [관리형 데이터 기록](../docs/restart/managed-data-services.md).

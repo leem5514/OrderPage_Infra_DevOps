@@ -1,8 +1,8 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
-기준일: 2026-11-07 (KST)
-현재 단계: 기반/데이터와 ALB HTTPS·서비스별 IRSA·상품 이미지 S3·Kubernetes 설정의 로컬 검증 완료.
-AWS 리소스는 아직 생성하지 않았다. 다음은 CI/CD/관측 및 실제 배포 사전 준비다.
+기준일: 2026-11-08 (KST)
+현재 단계: 기반/데이터/HTTPS에 이어 EC2 Jenkins·ECR·Argo CD GitOps 코드와 로컬 검증을 진행했다.
+AWS 리소스는 아직 생성하지 않았다. 다음은 FE Vercel 연결/관측 및 실제 배포 사전 준비다.
 인증서 DNS 검증, 실제 계정/Secret/서비스 연결은 아직 미실행이다.
 
 ## 1. 확정한 요구사항
@@ -37,7 +37,7 @@ AWS 리소스는 아직 생성하지 않았다. 다음은 CI/CD/관측 및 실�
 | Amazon MQ RabbitMQ | mq.m7g.medium 1개, SINGLE_INSTANCE | 신규 생성 가능한 평가용. 기본 200 GB 스토리지 별도 계산 |
 | ALB | 1개, public subnet 2 AZ, HTTPS | Ingress용. 관리 UI에는 별도 ALB를 만들지 않음 |
 | NAT | zonal NAT Gateway 1개 | private Node egress. 타 AZ 전송료와 NAT AZ 장애 한계를 명시 |
-| Jenkins | t3.medium 1대, 누적 실행 12시간 가정 | EKS와 빌드 분리. 동시 빌드 1개, JVM/Gradle 메모리 및 CPU credit 관측 |
+| Jenkins | m6i.large 1대, private, 누적 실행 12시간 가정 | 11/08 EC2 선택 반영. 8GiB/CPU credit 없음, controller·agent 분리, 동시 빌드 1개 |
 | k6 | m6i.large 1대, 누적 실행 6시간 가정 | 부하 발생기를 앱 및 Jenkins와 분리, 발생기 CPU도 측정 |
 | EBS | 합계 138 GB gp3 가정 | Node 40 + Jenkins 30 + k6 20 + Prometheus 20 + Grafana 8 + 운영/PVC 여유 20 GB |
 | S3/ECR | 상품 이미지·State·증거, Backend 이미지 | 소량 사용, 이미지 보존 개수 제한 |
@@ -61,6 +61,7 @@ Prometheus는 Node/AZ 장애를 견디는 HA 구성이 아니다. 실험 범위�
 
 2026-11-06에 AWS 공개 가격표 서울 On-Demand 항목을 조회했다. SKU와 조회시각은 pricing-evidence에 보존한다.
 단가 증거: [seoul-2026-11-06.json](pricing-evidence/seoul-2026-11-06.json). 저장소 루트에서 `node docs/restart/pricing-evidence/estimate.mjs`로 계산을 재현한다. 네트워크나 AWS 인증은 필요 없다.
+Jenkins는 11/08 결정에 따라 private m6i.large로 변경했고 [새 단가 증거](pricing-evidence/jenkins-seoul-2026-11-08.json)를 계산에 반영했다.
 월 단가는 비교 편의를 위해 730시간으로 나누는 근사치이며 실제 월/서비스 청구 규칙과 차이가 날 수 있다.
 세금, 환율, 계정 할인, Vercel 유료 플랜은 아래 계산에 포함하지 않았다. 원화 환율은 임의 지정하지 않는다.
 
@@ -74,23 +75,23 @@ Prometheus는 Node/AZ 장애를 견디는 HA 구성이 아니다. 실험 범위�
 | ALB 기본 | 0.0225/h | 1 x 72 | 1.62 |
 | NAT 기본 | 0.059/h | 1 x 72 | 4.25 |
 | 기본 public IPv4 | 0.005/IP-h | ALB 최소 2 + NAT 1, 72h | 1.08 |
-| Jenkins | 0.052/h | 12h | 0.62 |
+| Jenkins m6i.large | 0.118/h | 12h | 1.42 |
 | k6 | 0.118/h | 6h | 0.71 |
-| 임시 EC2 public IPv4 | 0.005/IP-h | Jenkins 12h + k6 6h | 0.09 |
+| 임시 EC2 public IPv4 | 0.005/IP-h | k6 6h만, Jenkins는 private | 0.03 |
 | EBS gp3 | 0.0912/GB-month | 138 x 72/730 | 1.24 |
 | RDS gp3 | 0.131/GB-month | 20 x 72/730 | 0.26 |
 | MQ RabbitMQ storage | 0.114/GB-month | 200 x 72/730 | 2.25 |
-| 합계 (반올림 전 합산) | | | **51.95** |
+| 합계 (반올림 전 합산) | | | **52.68** |
 
-ALB IP는 확장으로 늘어날 수 있다. Jenkins/k6는 public subnet에서 아웃바운드 통신을 하고 인바운드는 열지 않으며 SSM으로 관리하는 후보다.
-Jenkins webhook을 public UI 노출 없이 받기 어렵다면 짧은 SCM polling을 쓰고 그 대기시간을 CI/CD 측정에 포함한다.
+ALB IP는 확장으로 늘어날 수 있다. Jenkins는 private subnet/기존 NAT를 사용한다. k6는 public subnet/인바운드 없음/SSM 관리 후보로 남긴다.
+Jenkins는 공개 webhook 없이 BE main을 5분 polling하고 그 대기시간을 CI/CD 측정에 포함한다.
 
 ### 변동비와 여유분
 
 - ALB: 사용 LCU-hour당 0.008 USD. NAT: 처리 GB당 0.059 USD. AZ 간/인터넷 전송료는 별도다.
 - CloudWatch 로그 수집/보관, metric/alarm/dashboard, SNS, S3, ECR, Cost Explorer API 호출은 사용량에 따라 별도다.
-- Jenkins/RDS CPU surplus credits, 추가 snapshot/backup, 잔존 리소스도 별도다.
-- 소량 트래픽 기준 **변동비·예비비 10~20 USD**를 잡으면 72시간 예산안은 **약 62~72 USD, 세금 별도**다.
+- RDS CPU surplus credits, 추가 snapshot/backup, 잔존 리소스도 별도다. 현행 Jenkins m6i에는 CPU credit이 없다.
+- 소량 트래픽 기준 **변동비·예비비 10~20 USD**를 잡으면 72시간 예산안은 **약 63~73 USD, 세금 별도**다.
 - 이 여유분은 사용량 단가 합산 견적이 아니라 계획용 예비비다. 대량 로그/높은 RPS에는 범위를 초과할 수 있다.
 - 로그 1 GB, NAT 처리 5 GB, 인터넷 응답 5 GB 이내를 초기 실험 사용량 목표로 두고 실제 수집량을 감시한다. 강제 과금 상한은 아니다.
 - 단순 카탈로그 API처럼 요청당 로그가 많은 경로는 실제 로그량을 먼저 확인한다. 동일한 운영 로그 설정을 비교군 모두에 적용한다.
@@ -98,10 +99,10 @@ Jenkins webhook을 public UI 노출 없이 받기 어렵다면 짧은 SCM pollin
 
 | AWS 환경 유지시간 | 기본/저장소/임시 EC2 합계 | 변동비 예비분 포함 계획 범위 |
 |---|---:|---:|
-| 12h | 9.84 | 15~25 USD |
-| 24h | 18.26 | 25~35 USD |
-| 48h | 35.11 | 45~55 USD |
-| 72h | 51.95 | 62~72 USD |
+| 12h | 10.58 | 16~26 USD |
+| 24h | 19.00 | 26~36 USD |
+| 48h | 35.84 | 46~56 USD |
+| 72h | 52.68 | 63~73 USD |
 
 모든 행은 Jenkins 12h/k6 6h와 동일한 부하 실험 횟수를 가정한다. 실제 켜진 시간이 달라지면 다시 계산한다.
 
@@ -261,3 +262,12 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - Terraform mock 15개, Kubernetes/Helm/Secret 검증 7개, 설치 스크립트 모의 테스트 5개 통과.
 - BE/FE 코드 변경 및 AWS 리소스 생성은 하지 않음. SSE heartbeat/재연결, 실제 관측/CI/CD는 후속 작업.
 - [파일 역할·최초 적용 순서·정리 내역·검증 한계](https-app-deployment.md)
+
+## 16. 7단계 — EC2 Jenkins와 Argo CD GitOps 준비
+
+- 사용자 결정: Jenkins를 AWS EC2에서 실행. private/no inbound/SSM/IMDSv2, 전용 ECR IAM. 실제 생성은 하지 않음.
+- BE main 테스트 → Docker → ECR digest → 한국어 배포 PR. 최초 이미지 전용 모드로 초기 승격 의존성 해결.
+- Argo CD 공식 chart 고정/비HA/내부 UI, 제한된 프로젝트와 초기 자동 동기화 OFF. 실제 설정 승격 후 활성화.
+- Secret/kubeconfig 없이 GitOps 설정 승격, digest 변경, 단계별 시간·코드/이미지 추적 기록.
+- BE/FE 소스 변경 없음. 현재 테스트는 Terraform mock, Helm/Kustomize 렌더, CI 실패 경로 모의 검사다.
+- [설치/자격증명/최초 배포/비용/비교·복구 상세](jenkins-argocd.md)

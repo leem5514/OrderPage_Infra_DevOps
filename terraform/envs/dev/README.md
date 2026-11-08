@@ -1,7 +1,8 @@
 # Dev 기반 구성
 
 현재 root는 **VPC + ECR + EKS/OIDC + RDS/Redis/MQ + ACM/IRSA/상품 이미지 S3**를 연결한다. 아직 AWS에 적용하지 않았다.
-ALB는 이후 Controller가 Ingress를 보고 생성한다. 앱 실제 배포, Jenkins/Argo CD, Prometheus/Grafana, SNS/Budget은 다음 단계다.
+ALB는 이후 Controller가 Ingress를 보고 생성한다. 선택 모듈 Jenkins EC2(enable_jenkins=false 기본)도 연결했다.
+Jenkins/Argo CD 코드는 준비했으며 실제 설치는 미실행이다. Prometheus/Grafana, SNS/Budget은 후속 단계다.
 
 ## 자격증명 없이 검사
 
@@ -14,7 +15,7 @@ terraform -chdir=terraform/envs/dev validate
 terraform -chdir=terraform/envs/dev test
 ```
 
-test는 mock provider와 plan으로만 실행하며 AWS API를 호출하지 않는다.
+test는 mock provider를 사용하며 AWS API를 호출하지 않는다. 일부 정책 검사는 mock apply로 평가한다.
 이 결과가 실제 AWS 호환성/권한/Node 기동 성공을 의미하지는 않는다.
 
 ## 실제 AWS plan 전 준비

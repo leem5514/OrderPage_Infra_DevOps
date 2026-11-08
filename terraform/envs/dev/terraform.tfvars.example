@@ -21,3 +21,7 @@ rds_engine_version = "REPLACE_WITH_SUPPORTED_10.11_PATCH"
 # TF_VAR_redis_auth_token
 # TF_VAR_rabbitmq_admin_password
 # sensitive는 출력 마스킹이며 state 저장을 막지 않는다.
+
+# Jenkins 실행 위치는 EC2로 결정했다. 비용/AMI를 검토한 실제 가동 시 활성화한다.
+enable_jenkins = false
+# jenkins_ami_id = "ami-검증한서울AL2023x86_64ID"
