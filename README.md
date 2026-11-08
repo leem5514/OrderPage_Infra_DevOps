@@ -1,66 +1,23 @@
 # OrderPage Infra DevOps
 
-OrderPage 서비스의 DevOps 인프라 레포지토리입니다.
+Terraform으로 AWS EKS 기반을 구성하고, Jenkins CI / Argo CD CD와 운영 모니터링을 검증하는 실습 프로젝트다. 프론트엔드는 Vercel을 사용한다.
 
-이 레포지토리는 Terraform, Kubernetes, Jenkins, Monitoring, Load Test, 운영 문서를 관리합니다.
+현재: 애플리케이션 로컬 검증 완료, **VPC·EKS·ECR 기반 코드 검증 단계**. AWS 리소스는 아직 생성하지 않았다.
 
-## Repository Map
+- [전체 요구사항·비용·진행 기록](docs/restart/project-process.md)
+- [이번 기반 구성, 정리 내역, 검증과 다음 단계](docs/restart/terraform-foundation.md)
+- [Terraform 실행 범위와 입력](terraform/envs/dev/README.md)
+- [로컬 종료/Probe 검증](docs/restart/lifecycle-readiness.md)
 
-```text
-terraform/
-  bootstrap/
-    remote-state/
-  envs/
-    dev/
-    prod/
-  modules/
-    vpc/
-    ecr/
-    eks/
-    rds/
-    elasticache/
-    amazonmq/
-    iam/
-k8s/
-  base/
-  controllers/
-    aws-load-balancer-controller/
-  overlays/
-    dev/
-    prod/
-jenkins/
-monitoring/
-  prometheus/
-  grafana/
-load-test/
-  k6/
-docs/
-```
+| 경로 | 역할 / 상태 |
+|---|---|
+| terraform/envs/dev | 현재 실행 root: VPC, ECR, EKS만 연결 |
+| terraform/bootstrap/remote-state | 별도로 생성할 S3 state 저장소, 아직 미생성 |
+| terraform/modules | 기반 모듈 + 후속 연결 전 재검토할 데이터/IRSA 모듈 |
+| k8s | 기존 배포 초안. Probe 수정은 반영했으나 이미지·Secret·HPA 등 새 설계 전환 필요 |
+| jenkins | 자격증명 없는 Terraform 검증 pipeline. 앱 CI와 Argo CD 연결은 후속 작업 |
+| monitoring | CloudWatch/SNS, Prometheus/Grafana 구현 예정 |
+| benchmarks, load-test | 읽기 부하 시험 도구. AWS 측정 결과 없음 |
+| docs/restart | 새 요구사항 이후의 유효한 진행 기록 |
 
-## Target Architecture
-
-- Frontend: Vercel
-- Backend Runtime: Amazon EKS
-- Container Registry: Amazon ECR
-- Database: Amazon RDS MariaDB
-- Cache: Amazon ElastiCache Redis
-- Message Queue: Amazon MQ for RabbitMQ
-- Load Balancer: AWS Load Balancer Controller + ALB
-- Observability: Prometheus + Grafana + CloudWatch Logs
-- IaC: Terraform
-- CI/CD: Jenkins
-
-## First Milestones
-
-1. Terraform backend and provider setup
-2. ECR module
-3. VPC module
-4. EKS cluster
-5. Backend Docker image push pipeline
-6. Backend Kubernetes deployment
-7. RDS MariaDB
-8. ElastiCache Redis
-9. Amazon MQ for RabbitMQ
-10. AWS Load Balancer Controller
-11. Prometheus/Grafana dashboard
-12. k6 performance test report
+목표 구성에는 RDS MariaDB, ElastiCache Redis, Amazon MQ, ALB/HTTPS, CloudWatch/SNS, Cost Explorer가 포함된다. Cost Anomaly Detection은 비활성 예제만 유지할 예정이다.

@@ -1,42 +1,10 @@
 # Terraform
 
-AWS 인프라를 코드로 관리한다.
+[dev root](envs/dev/README.md)는 VPC/ECR/EKS 기반만 실행한다. [S3 state bootstrap](bootstrap/remote-state/README.md)은 별도 root다.
 
-## Structure
+현재 생성 완료를 뜻하는 폴더는 없다. fmt/validate/mock test와 실제 AWS plan/apply는 구별한다.
 
-```text
-envs/dev
-envs/prod
-bootstrap/remote-state
-modules/vpc
-modules/ecr
-modules/eks
-modules/rds
-modules/elasticache
-modules/amazonmq
-modules/load-balancer-controller-irsa
-modules/iam
-```
-
-## Commands
-
-```bash
-terraform fmt -recursive
-terraform init -backend-config=backend.hcl
-terraform plan
-terraform apply
-```
-
-## Current Scope
-
-현재 dev 환경에는 VPC 네트워크, 백엔드 Docker 이미지를 저장할 ECR repository, EKS cluster와 managed node group, RDS MariaDB, ElastiCache Redis, Amazon MQ RabbitMQ, AWS Load Balancer Controller IRSA 구성이 포함되어 있습니다.
-
-```bash
-cd terraform/bootstrap/remote-state
-terraform init
-terraform apply
-
-cd terraform/envs/dev
-terraform init -backend-config=backend.hcl
-terraform plan
-```
+- 현재 호출: modules/vpc, modules/ecr, modules/eks.
+- 후속 검토용: modules/rds, modules/elasticache, modules/amazonmq, modules/load-balancer-controller-irsa.
+- 후속 모듈은 root에서 호출하지 않는다. 옛 MQ 타입/Redis TLS/광범위한 SG 등은 연결 전에 새 계획으로 수정한다.
+- 실제 입력/검증/삭제 주의사항은 [기반 구성 기록](../docs/restart/terraform-foundation.md)에 모았다.

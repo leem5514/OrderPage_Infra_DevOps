@@ -1,117 +1,48 @@
 variable "cluster_name" {
-  description = "EKS cluster name."
-  type        = string
+  type = string
 }
-
 variable "kubernetes_version" {
-  description = "Kubernetes version. Null uses the current EKS default version."
+  description = "배포 직전에 표준 지원 상태를 확인한 명시적 버전."
   type        = string
-  default     = null
-}
-
-variable "cluster_subnet_ids" {
-  description = "Subnet IDs used by the EKS control plane."
-  type        = list(string)
-}
-
-variable "node_subnet_ids" {
-  description = "Subnet IDs used by the managed node group."
-  type        = list(string)
-}
-
-variable "endpoint_private_access" {
-  description = "Enable private API server endpoint."
-  type        = bool
-  default     = true
-}
-
-variable "endpoint_public_access" {
-  description = "Enable public API server endpoint."
-  type        = bool
-  default     = true
-}
-
-variable "public_access_cidrs" {
-  description = "CIDR blocks allowed to access the public API server endpoint."
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-}
-
-variable "enabled_cluster_log_types" {
-  description = "EKS control plane log types."
-  type        = list(string)
-  default     = ["api", "audit", "authenticator"]
-}
-
-variable "node_instance_types" {
-  description = "Managed node group EC2 instance types."
-  type        = list(string)
-  default     = ["t3.medium"]
-}
-
-variable "node_ami_type" {
-  description = "Managed node group AMI type."
-  type        = string
-  default     = "AL2_x86_64"
-}
-
-variable "node_capacity_type" {
-  description = "Managed node group capacity type."
-  type        = string
-  default     = "ON_DEMAND"
-
   validation {
-    condition     = contains(["ON_DEMAND", "SPOT"], var.node_capacity_type)
-    error_message = "node_capacity_type must be ON_DEMAND or SPOT."
+    condition     = can(regex("^1\\.[0-9]+$", var.kubernetes_version))
+    error_message = "Kubernetes minor version을 명시해야 합니다."
   }
 }
-
-variable "node_disk_size" {
-  description = "Managed node root disk size in GiB."
-  type        = number
-  default     = 20
+variable "cluster_subnet_ids" {
+  type = list(string)
 }
-
-variable "node_desired_size" {
-  description = "Initial desired node count."
-  type        = number
-  default     = 2
+variable "node_subnet_ids" {
+  type = list(string)
 }
-
-variable "node_min_size" {
-  description = "Minimum node count."
-  type        = number
-  default     = 1
-}
-
-variable "node_max_size" {
-  description = "Maximum node count."
-  type        = number
-  default     = 3
-}
-
-variable "node_max_unavailable" {
-  description = "Maximum unavailable nodes during node group updates."
-  type        = number
-  default     = 1
-}
-
-variable "node_labels" {
-  description = "Kubernetes labels applied to the managed node group."
-  type        = map(string)
-  default = {
-    workload = "general"
+variable "public_access_cidrs" {
+  type = list(string)
+  validation {
+    condition = length(var.public_access_cidrs) > 0 && alltrue([
+      for cidr in var.public_access_cidrs :
+      can(cidrnetmask(cidr)) && can(regex("/32$", cidr))
+    ])
+    error_message = "운영자 IPv4 /32만 허용합니다. 0.0.0.0/0은 사용할 수 없습니다."
   }
 }
-
-variable "cluster_addons" {
-  description = "EKS managed add-ons installed after node group creation."
-  type        = list(string)
-  default     = ["vpc-cni", "coredns", "kube-proxy"]
+variable "admin_principal_arn" {
+  type = string
+  validation {
+    condition     = can(regex("^arn:aws:iam::[0-9]{12}:role/.+$", var.admin_principal_arn))
+    error_message = "IAM Role ARN이 필요합니다. root/user/STS 세션 ARN은 허용하지 않습니다."
+  }
 }
-
+variable "addon_versions" {
+  type = map(string)
+  validation {
+    condition = (
+      toset(keys(var.addon_versions)) == toset(["vpc-cni", "coredns", "kube-proxy"]) &&
+      alltrue([for version in values(var.addon_versions) : can(regex("^v[0-9]+\\.[0-9]+\\.[0-9]+-eksbuild\\.[0-9]+$", version))])
+    )
+    error_message = "기본 add-on 3개의 호환 버전(vX.Y.Z-eksbuild.N)을 지정해야 합니다."
+  }
+}
 variable "tags" {
-  description = "Common resource tags."
-  type        = map(string)
-  default     = {}
+  type    = map(string)
+  default = {}
 }

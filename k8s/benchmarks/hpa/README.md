@@ -14,7 +14,7 @@ Probe, CPU/Memory requests와 limits는 동일하다.
 
 ## 선행조건
 
-Terraform EKS Add-on 목록에 `metrics-server`가 포함되어 있어야 한다.
+새 Terraform 기반에는 metrics-server를 포함하지 않는다. HPA 실험 단계에서 호환 버전을 설치하고 검증해야 한다.
 
 ```powershell
 kubectl get apiservice v1beta1.metrics.k8s.io

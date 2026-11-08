@@ -23,12 +23,6 @@ variable "private_subnet_cidrs" {
   type        = list(string)
 }
 
-variable "enable_nat_gateway" {
-  description = "Create a NAT Gateway for private subnet outbound internet access."
-  type        = bool
-  default     = true
-}
-
 variable "tags" {
   description = "Common resource tags."
   type        = map(string)
