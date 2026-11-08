@@ -16,3 +16,7 @@ output "rabbitmq_port" {
 output "security_group_id" {
   value = aws_security_group.this.id
 }
+output "broker_name" {
+  description = "CloudWatch Broker dimension은 이름이다."
+  value       = aws_mq_broker.this.broker_name
+}

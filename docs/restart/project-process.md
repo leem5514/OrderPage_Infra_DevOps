@@ -1,8 +1,8 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
 기준일: 2026-11-08 (KST)
-현재 단계: 기반/데이터/HTTPS·EC2 Jenkins·ECR·Argo CD의 기존 PR #2~#5를 병합하고 FE Jenkins/Vercel 코드와 로컬 검증을 진행했다.
-AWS 리소스는 아직 생성하지 않았다. 다음은 CloudWatch/SNS·Prometheus/Grafana·비용 관측 구성과 실제 배포 사전 준비다.
+현재 단계: 기존 Infra #2~#5에 이어 FE #2/Infra #6도 검토 후 병합하고 CloudWatch/SNS·비용 관측 코드를 작성했다.
+AWS 리소스는 아직 생성하지 않았다. 다음은 Prometheus/Grafana·앱 로그 수집과 실제 배포 사전 준비다.
 인증서 DNS 검증, 실제 계정/Secret/서비스 연결은 아직 미실행이다.
 
 ## 1. 확정한 요구사항
@@ -283,3 +283,15 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 고정 CLI 버전/도움말은 확인했으나 인증 없는 dry run은 거부됐다. 실제 서비스 성공이나 성능 개선율을 입증한 결과가 아니다.
 - 이번 FE/Infra 변경은 각각 별도 PR로 제공한다. FE PR부터 병합해야 Infra pipeline의 새 빌드 명령을 사용할 수 있다.
 - [파일 설명·최초 설정·계측 기록·실패/복구와 한계](frontend-vercel.md)
+
+## 18. 9단계 — PR 검토·병합과 AWS 기본 관측
+
+- FE #2 → Infra #6 변경 파일/의존 관계를 검토하고 기존 테스트 9개/23개 재검증 후 main에 병합했다. GitHub 자동 검사 등록은 없었다.
+- CloudWatch 기본 경보 6개, 옵션 Jenkins 1개/ALB 3개, SNS 이메일/권한/Dashboard 구성. 실제 수신 주소가 없어 기본 활성화는 꺼져 있다.
+- Redis CacheClusterId/MQ Broker 이름으로 실제 차원을 연결하고 ALB는 Controller 생성 후 2차 plan으로 연결한다.
+- Cost Explorer는 지정 계정 전체와 선택 Project 태그를 분리해서 DAILY/SERVICE 비용·Estimated·원본 페이지를 보관한다. 빈 결과를 비용 0으로 바꾸지 않는다.
+- Budget은 금액 null 기본이며 계정 월 ACTUAL 알림만 선택 지원. Cost Anomaly monitor/subscription은 요청대로 전부 주석으로 유지했다.
+- 수동 상태 확인 vs CloudWatch/SNS 탐지/알림/복구 구간과 반복 측정 절차를 작성했다. 아직 실제 장애·지출 실측은 없다.
+- 앱 코드/성능 로직은 수정하지 않았다. AWS 생성, 유료 비용 API 조회, SNS 발송, 실제 메일 확인은 하지 않았다.
+- Terraform fmt/validate 및 전체 mock 22개, Infra Node 검사 30개(비용 조회 7개 포함), 문서 로컬 링크/diff 검사 통과.
+- [경보 조건·파일 역할·실행 순서·한계·공식 근거](cloudwatch-cost-monitoring.md)
