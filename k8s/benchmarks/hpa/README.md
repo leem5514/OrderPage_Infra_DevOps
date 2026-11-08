@@ -1,52 +1,14 @@
-# HPA Benchmark Variants
+# 고정 Replica / HPA 비교
 
-동일한 애플리케이션과 리소스 요청값을 유지한 채 HPA 유무만 바꾸는 S05 비교 구성이다.
+기본 배포는 Pod 2개 고정이다. hpa-enabled/hpa.yaml만 적용하면 CPU requests 대비 평균 사용률 70%를 기준으로 2~4개를 조절한다.
+메모리 기준과 기존 max 5는 제거했다. requests/limits/이미지/DB 설정은 비교 중 바꾸지 않는다.
 
-## 비교군
+metrics-server는 아직 설치하지 않았다. 실제 실험 전에 metrics.k8s.io, kubectl top pods/nodes, 관측 도구 포함 Node 여유를 확인한다.
+고정/활성 overlay는 현재 템플릿 렌더 검증용이며 실환경에서는 준비된 manifest에 실험용 HPA만 추가한다.
 
-| Variant | Deployment replicas | HPA |
-|---|---:|---|
-| `fixed-replicas` | 2 | 없음 |
-| `hpa-enabled` | 시작 2, 최소 2, 최대 5 | CPU 70%, Memory 80% |
+Before로 되돌릴 때 manifest에서 빼는 것만으로 기존 HPA가 지워지지 않는다.
+실험 대상 context를 확인하고 해당 HPA를 삭제한 후 replicas=2로 맞춘다.
+Argo CD를 붙인 뒤에는 선언 상태와 실험 변경이 서로 되돌리지 않도록 GitOps 소유권을 먼저 정한다.
 
-두 Variant는 모두 `k8s/overlays/dev`를 재사용한다. 이미지, ConfigMap, Secret, Service, Ingress,
-Probe, CPU/Memory requests와 limits는 동일하다.
-
-## 선행조건
-
-새 Terraform 기반에는 metrics-server를 포함하지 않는다. HPA 실험 단계에서 호환 버전을 설치하고 검증해야 한다.
-
-```powershell
-kubectl get apiservice v1beta1.metrics.k8s.io
-kubectl top nodes
-kubectl top pods -n orderpage
-```
-
-Metrics Server는 HPA용 현재 CPU/Memory 값을 제공한다. 장기 보관과 성능 분석은 Prometheus/Grafana를 사용한다.
-
-## Before: Pod 2개 고정
-
-이미 존재하는 HPA는 렌더링 결과에서 빠지는 것만으로 삭제되지 않으므로 먼저 명시적으로 제거한다.
-
-```powershell
-kubectl delete hpa orderpage-backend -n orderpage --ignore-not-found
-kubectl apply -k k8s/benchmarks/hpa/fixed-replicas
-kubectl scale deployment/orderpage-backend -n orderpage --replicas=2
-kubectl rollout status deployment/orderpage-backend -n orderpage --timeout=180s
-```
-
-## After: HPA 활성
-
-```powershell
-kubectl apply -k k8s/benchmarks/hpa/hpa-enabled
-kubectl get hpa orderpage-backend -n orderpage --watch
-```
-
-## 측정 규칙
-
-- 두 Variant는 같은 Git commit과 ECR image tag를 사용한다.
-- Before와 After 사이에 DB/Redis/RabbitMQ 설정을 변경하지 않는다.
-- 워밍업 2분, 본 테스트 10분, 정리 3분을 동일하게 적용한다.
-- 동시 사용자 100, 300, 500 단계를 각각 최소 3회 실행한다.
-- p50/p95/p99, TPS, 오류율, Pod 수, CPU/Memory, Scale-out/Ready 시간을 기록한다.
-- 테스트 직전 `kubectl get deployment,hpa,pods -n orderpage` 결과를 증거로 저장한다.
+측정 항목: 동일 부하의 p95, 처리 RPS, 5xx/timeout, Pod 수, 증설/Ready 시간. 최소 3회 반복하고 실제 결과만 기록한다.
+[실험 기준](../../../docs/restart/project-process.md)

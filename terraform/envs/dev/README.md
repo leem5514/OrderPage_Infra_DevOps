@@ -1,7 +1,7 @@
 # Dev 기반 구성
 
-현재 root는 **VPC + ECR + EKS/OIDC + RDS/Redis/MQ**를 연결한다. 아직 AWS에 적용하지 않았다.
-ALB/ACM, 서비스별 IRSA, 앱, Jenkins 서버, Argo CD, Prometheus/Grafana, SNS/Budget은 다음 단계다.
+현재 root는 **VPC + ECR + EKS/OIDC + RDS/Redis/MQ + ACM/IRSA/상품 이미지 S3**를 연결한다. 아직 AWS에 적용하지 않았다.
+ALB는 이후 Controller가 Ingress를 보고 생성한다. 앱 실제 배포, Jenkins/Argo CD, Prometheus/Grafana, SNS/Budget은 다음 단계다.
 
 ## 자격증명 없이 검사
 
@@ -46,3 +46,5 @@ state/plan/tfvars에는 계정 정보와 민감 값이 포함될 수 있으므�
 [구조·정리 근거·검증 한계·다음 단계](../../../docs/restart/terraform-foundation.md)
 
 [관리형 데이터 연결, 비밀번호/state, TLS 및 MQ 로그 후처리](../../../docs/restart/managed-data-services.md)
+
+[HTTPS 인증서 DNS 검증·S3 공개 정책 사전 확인·배포 파일 생성](../../../docs/restart/https-app-deployment.md)

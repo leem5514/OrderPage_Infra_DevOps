@@ -5,3 +5,5 @@ metadata:
   labels:
     app.kubernetes.io/name: orderpage
     app.kubernetes.io/part-of: orderpage
+    # 새 Pod는 ALB TargetGroup에서도 Healthy가 되어야 Ready로 처리한다.
+    elbv2.k8s.aws/pod-readiness-gate-inject: enabled

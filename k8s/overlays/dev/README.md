@@ -1,14 +1,11 @@
-# Dev Overlay
+# dev
 
-개발 환경 Kubernetes overlay를 관리합니다.
+이 디렉터리는 계정 정보가 없는 base의 렌더 확인용이다.
 
-현재 dev overlay는 base manifest 위에 개발 환경용 endpoint placeholder를 덮어씁니다.
+```powershell
+kubectl kustomize k8s/overlays/dev
+```
 
-배포 전 교체 대상:
-
-- `patch-configmap.yaml`의 RDS endpoint
-- `patch-configmap.yaml`의 Redis endpoint
-- `patch-configmap.yaml`의 Amazon MQ RabbitMQ endpoint
-- `patch-configmap.yaml`의 Vercel frontend origin
-- `patch-ingress.yaml`의 API host
-- `base/secret.yaml`의 placeholder secret 값
+실제 배포 파일은 Terraform JSON 출력 + deployment-settings.example.json의 실제 값을 사용해 생성한다.
+prepare-deployment는 .local/deploy 아래 새 디렉터리에만 생성하며 AWS/클러스터에 적용하지 않는다.
+[전체 사용 절차](../../../docs/restart/https-app-deployment.md)

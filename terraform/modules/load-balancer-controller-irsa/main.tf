@@ -1,44 +1,30 @@
 locals {
   oidc_provider_host = replace(var.oidc_provider_url, "https://", "")
 }
-
-data "aws_iam_policy_document" "assume_role" {
-  statement {
-    effect = "Allow"
-
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-
-    principals {
-      type        = "Federated"
-      identifiers = [var.oidc_provider_arn]
-    }
-
-    # 이 Role은 kube-system/aws-load-balancer-controller ServiceAccount만 assume할 수 있다.
-    condition {
-      test     = "StringEquals"
-      variable = "${local.oidc_provider_host}:sub"
-      values   = ["system:serviceaccount:${var.namespace}:${var.service_account_name}"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "${local.oidc_provider_host}:aud"
-      values   = ["sts.amazonaws.com"]
-    }
-  }
+# 정책은 공식 v3.6.2 파일을 고정한다. 최신 URL을 apply 때마다 내려받지 않는다.
+resource "aws_iam_policy" "controller" {
+  name   = "${var.role_name}-policy"
+  policy = jsonencode(jsondecode(file("${path.module}/vendor/iam_policy.v3.6.2.json")))
+  tags   = var.tags
 }
-
 resource "aws_iam_role" "this" {
-  name               = var.role_name
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
-
-  tags = merge(var.tags, {
-    Name = var.role_name
+  name = var.role_name
+  # audience와 정확한 ServiceAccount를 모두 검사한다.
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Action    = "sts:AssumeRoleWithWebIdentity"
+      Principal = { Federated = var.oidc_provider_arn }
+      Condition = { StringEquals = {
+        "${local.oidc_provider_host}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+        "${local.oidc_provider_host}:aud" = "sts.amazonaws.com"
+      } }
+    }]
   })
+  tags = var.tags
 }
-
 resource "aws_iam_role_policy_attachment" "this" {
-  # AWS Load Balancer Controller가 ALB, TargetGroup, SecurityGroup 등을 만들 수 있는 정책을 붙인다.
   role       = aws_iam_role.this.name
-  policy_arn = var.policy_arn
+  policy_arn = aws_iam_policy.controller.arn
 }
