@@ -1,0 +1,49 @@
+pipeline {
+    agent { label 'orderpage-ci' }
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        timeout(time: 25, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
+        skipDefaultCheckout(true)
+    }
+    // FE main만 polling한다. Infra 문서/배포 설정 변경은 수동 실행으로 반영한다.
+    triggers { pollSCM('H/5 * * * *') }
+    stages {
+        stage('코드와 공개 설정 준비') {
+            steps {
+                deleteDir()
+                checkout changelog: false, poll: false, scm: scm
+                script {
+                    def settings = sh(script: 'node scripts/vercel-deploy.mjs settings', returnStdout: true).trim().split('\n')
+                    env.VUE_APP_API_BASIC_URL = settings[0]
+                    env.VERCEL_DEPLOY_ENABLED = settings[1]
+                }
+                dir('.local/frontend') {
+                    git branch: 'main', url: 'https://github.com/leem5514/OrderPage_FE_DevOps.git'
+                }
+            }
+        }
+        stage('테스트 · 정적 빌드') {
+            steps {
+                sh 'bash scripts/ci-frontend.sh'
+                archiveArtifacts artifacts: '.local/frontend/.local/build-evidence.json,.local/frontend-ci.json,.local/frontend-tests.tap', fingerprint: true
+            }
+        }
+        stage('Vercel 운영 배포') {
+            when { expression { env.VERCEL_DEPLOY_ENABLED == 'true' } }
+            steps {
+                // CLI는 앱 devDependencies와 분리한다. 빌드 단계에는 토큰을 주입하지 않는다.
+                dir('jenkins/vercel-cli') { sh 'npm ci --ignore-scripts --no-fund --no-audit' }
+                withCredentials([string(credentialsId: 'orderpage-vercel-token', variable: 'VERCEL_TOKEN')]) {
+                    sh 'set +x; node scripts/vercel-deploy.mjs deploy .local/frontend'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: '.local/frontend-ci.json,.local/frontend-tests.tap,.local/frontend-deployment.json', allowEmptyArchive: true
+        }
+    }
+}

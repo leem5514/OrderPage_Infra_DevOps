@@ -1,8 +1,8 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
 기준일: 2026-11-08 (KST)
-현재 단계: 기반/데이터/HTTPS에 이어 EC2 Jenkins·ECR·Argo CD GitOps 코드와 로컬 검증을 진행했다.
-AWS 리소스는 아직 생성하지 않았다. 다음은 FE Vercel 연결/관측 및 실제 배포 사전 준비다.
+현재 단계: 기반/데이터/HTTPS·EC2 Jenkins·ECR·Argo CD의 기존 PR #2~#5를 병합하고 FE Jenkins/Vercel 코드와 로컬 검증을 진행했다.
+AWS 리소스는 아직 생성하지 않았다. 다음은 CloudWatch/SNS·Prometheus/Grafana·비용 관측 구성과 실제 배포 사전 준비다.
 인증서 DNS 검증, 실제 계정/Secret/서비스 연결은 아직 미실행이다.
 
 ## 1. 확정한 요구사항
@@ -271,3 +271,15 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - Secret/kubeconfig 없이 GitOps 설정 승격, digest 변경, 단계별 시간·코드/이미지 추적 기록.
 - BE/FE 소스 변경 없음. 현재 테스트는 Terraform mock, Helm/Kustomize 렌더, CI 실패 경로 모의 검사다.
 - [설치/자격증명/최초 배포/비용/비교·복구 상세](jenkins-argocd.md)
+
+## 17. 8단계 — 기존 PR 병합과 FE Jenkins/Vercel 준비
+
+- 사용자 요청으로 Infra PR #2 → #3 → #4 → #5를 순서대로 main에 병합했다. 병합 SHA는 아래 상세 문서에 기록했다.
+- FE main 테스트/lint/운영 빌드 → Build Output API v3 정적 패키지 → 활성화된 경우만 Vercel 운영 배포를 구성했다.
+- FE Git 자동 배포를 끄고 중복 실행을 방지한다. 앱 소스·성능 알고리즘·앱 의존성 버전은 수정하지 않았다.
+- API origin과 정적 파일 hash, Vercel 계정/Production 도메인, API CORS를 확인하고 배포 후 SPA/JS 응답을 검증한다.
+- FE Node 22 테스트 9개/lint/실제 production 빌드/정적 파일 12개 패키징 통과. Infra Node 검사 23개와 FE CI shell 모의 시나리오 6개 통과.
+- Vercel 배포는 기본 비활성이다. 실제 token/도메인 연결/업로드, Jenkins Job 실행, AWS 생성은 하지 않았다.
+- 고정 CLI 버전/도움말은 확인했으나 인증 없는 dry run은 거부됐다. 실제 서비스 성공이나 성능 개선율을 입증한 결과가 아니다.
+- 이번 FE/Infra 변경은 각각 별도 PR로 제공한다. FE PR부터 병합해야 Infra pipeline의 새 빌드 명령을 사용할 수 있다.
+- [파일 설명·최초 설정·계측 기록·실패/복구와 한계](frontend-vercel.md)
