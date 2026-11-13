@@ -1,0 +1,20 @@
+# Chart CRD 설치 후 적용. release label이 Prometheus selector와 같아야 발견된다.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: orderpage-backend
+  namespace: observability
+  labels:
+    release: orderpage-observe
+spec:
+  namespaceSelector:
+    matchNames: [orderpage]
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orderpage-backend
+      app.kubernetes.io/component: api
+  endpoints:
+    - port: http # k8s/base/service.yaml의 이름. ALB 공개 Ingress는 /actuator를 404로 차단한다.
+      path: /actuator/prometheus
+      interval: 30s
+      scrapeTimeout: 10s

@@ -2,9 +2,10 @@
 
 Terraform으로 AWS EKS 기반을 구성하고, Jenkins CI / Argo CD CD와 운영 모니터링을 검증하는 실습 프로젝트다. 프론트엔드는 Vercel을 사용한다.
 
-현재: 기반/관리형 데이터/HTTPS·EC2 Jenkins·Argo CD·FE Vercel의 선행 PR을 main에 병합하고 **CloudWatch/SNS·비용 관측 코드**를 추가했다. 실제 설치·배포는 미실행이며 AWS 리소스는 아직 생성하지 않았다. Prometheus/Grafana와 앱 로그 수집은 다음 단계다.
+현재: 기반/관리형 데이터/HTTPS·EC2 Jenkins·Argo CD·FE Vercel의 선행 PR을 main에 병합하고 **CloudWatch/SNS·비용 관측 및 Prometheus/Grafana 준비 코드**를 추가했다. 실제 설치·배포는 미실행이며 AWS 리소스는 아직 생성하지 않았다.
 
 - [전체 요구사항·비용·진행 기록](docs/restart/project-process.md)
+- [Prometheus·Grafana·Metrics Server 설정과 수집/정량 실험 절차](docs/restart/prometheus-grafana.md)
 - [CloudWatch/SNS·비용 조회·장애 탐지 비교와 적용 순서](docs/restart/cloudwatch-cost-monitoring.md)
 - [FE Jenkins 검증·Vercel 정적 배포와 활성화 절차](docs/restart/frontend-vercel.md)
 - [EC2 Jenkins·Argo CD 설정과 최초 적용·측정 절차](docs/restart/jenkins-argocd.md)
@@ -22,7 +23,7 @@ Terraform으로 AWS EKS 기반을 구성하고, Jenkins CI / Argo CD CD와 운�
 | k8s | 기본 고정 Pod 2개/HTTPS/CA. 실제 값은 준비 도구로 생성하고 Secret은 별도 주입 |
 | jenkins | Terraform 검증 + BE 테스트/Docker/ECR/배포 PR + FE 테스트/정적 빌드/Vercel pipeline. 서버 실행은 미검증 |
 | argocd, gitops | 비HA chart 설정, 제한된 AppProject/Application, 최초 실제 환경 승격 도구 |
-| monitoring | 비용 조회 입력과 관측 안내. CloudWatch/SNS는 Terraform 모듈, Prometheus/Grafana는 다음 단계 |
+| monitoring | CloudWatch/SNS Terraform 모듈, Prometheus/Grafana와 Metrics Server chart 값, 대시보드. 실제 설치 전 |
 | benchmarks, load-test | 읽기 부하 시험 도구. AWS 측정 결과 없음 |
 | docs/restart | 새 요구사항 이후의 유효한 진행 기록 |
 

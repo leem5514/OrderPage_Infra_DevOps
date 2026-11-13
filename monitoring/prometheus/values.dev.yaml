@@ -1,0 +1,77 @@
+# kube-prometheus-stack 92.7.0 / 2노드·72시간 이하 실습용.
+# 운영 namespace=observability, release=orderpage-observe를 유지한다.
+defaultRules:
+  create: false # 기본 수백 경보와 Alertmanager 중복 알림을 만들지 않는다.
+alertmanager:
+  enabled: false # 기본 장애 이메일은 CloudWatch -> SNS가 담당한다.
+kubeControllerManager:
+  enabled: false # EKS 관리형 control plane endpoint는 직접 scrape 불가.
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeApiServer:
+  enabled: true
+kubelet:
+  enabled: true
+  serviceMonitor:
+    cAdvisorInterval: 60s
+kubeStateMetrics:
+  enabled: true
+nodeExporter:
+  enabled: true
+prometheusOperator:
+  admissionWebhooks:
+    enabled: false # 이번 실습은 자체 PrometheusRule을 설치하지 않는다.
+  resources:
+    requests: {cpu: 100m, memory: 128Mi}
+    limits: {memory: 384Mi}
+prometheus:
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+  prometheusSpec:
+    replicas: 1
+    scrapeInterval: 30s
+    evaluationInterval: 30s
+    retention: 3d
+    retentionSize: 2GB
+    # PVC/EBS CSI를 만들지 않는다. Pod 재시작 시 TSDB가 유실되므로 매 실험 종료 시 API로 증거를 내보낸다.
+    storageSpec: {}
+    resources:
+      requests: {cpu: 250m, memory: 512Mi}
+      limits: {memory: 1536Mi}
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector:
+      matchLabels:
+        release: orderpage-observe
+    serviceMonitorNamespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: observability # Prometheus selector는 Namespace의 label을 선택한다.
+grafana:
+  defaultDashboardsEnabled: false
+  rbac:
+    namespaced: true # Dashboard/Datasource ConfigMap과 Secret 조회를 관측 namespace로 제한한다.
+  admin:
+    existingSecret: orderpage-grafana-admin # 수동 생성·Git 제외, keys=admin-user/admin-password
+    userKey: admin-user
+    passwordKey: admin-password
+  ingress:
+    enabled: false
+  service:
+    type: ClusterIP
+  persistence:
+    enabled: false # UI 수동 수정은 재시작 시 소실. Dashboard는 ConfigMap으로 관리한다.
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: observability
+    datasources:
+      enabled: true
+      searchNamespace: observability
+  resources:
+    requests: {cpu: 100m, memory: 192Mi}
+    limits: {memory: 512Mi}

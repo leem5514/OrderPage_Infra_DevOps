@@ -59,7 +59,8 @@ export function createOverlay(config, outputDir) {
       literals: [
         'DB_URL=jdbc:mariadb://'+config.dbHost+':3306/ordersystem?sslMode=verify-full&serverSslCert=/etc/rds-ca/ap-northeast-2-bundle.pem',
         'REDIS_HOST='+config.redisHost, 'RABBITMQ_HOST='+config.rabbitmqHost,
-        'AWS_S3_BUCKET='+config.imageBucket, 'CORS_ALLOWED_ORIGINS='+config.frontendOrigin, 'ADMIN_EMAIL='+config.adminEmail
+        'AWS_S3_BUCKET='+config.imageBucket, 'CORS_ALLOWED_ORIGINS='+config.frontendOrigin, 'ADMIN_EMAIL='+config.adminEmail,
+        'MANAGEMENT_METRICS_DISTRIBUTION_PERCENTILES_HISTOGRAM_HTTP_SERVER_REQUESTS=true'
       ]
     }],
     patches: [

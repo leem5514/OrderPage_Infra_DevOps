@@ -6,6 +6,6 @@ RDS/Redis/MQ 6개 경보, 옵션 Jenkins 1개/ALB 3개, SNS 이메일, Dashboard
 
 - [파일 역할·적용 순서·장애 비교·비용과 미검증 범위](../docs/restart/cloudwatch-cost-monitoring.md)
 - cost-settings.example.json: Cost Explorer 조회 입력 예시. 실제 값은 .local에 복사한다.
-- prometheus/grafana: 다음 단계의 Kubernetes 관측 작업 경로. 아직 설치 설정은 없다.
+- [Prometheus·Grafana·Metrics Server 구성과 실험 원본 내보내기](../docs/restart/prometheus-grafana.md): chart와 수집 설정은 로컬 렌더 검증 단계이며 실제 설치는 아직 하지 않았다.
 
-기존 빈 설명만 있던 README를 현재 구현과 연결했다. 사용하지 않는 Prometheus/Grafana 수집기를 실행 중이라고 표시하지 않는다.
+관리형 서비스 경보는 CloudWatch, Kubernetes/애플리케이션 지표는 Prometheus가 담당한다.
