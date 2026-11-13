@@ -295,3 +295,12 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 앱 코드/성능 로직은 수정하지 않았다. AWS 생성, 유료 비용 API 조회, SNS 발송, 실제 메일 확인은 하지 않았다.
 - Terraform fmt/validate 및 전체 mock 22개, Infra Node 검사 30개(비용 조회 7개 포함), 문서 로컬 링크/diff 검사 통과.
 - [경보 조건·파일 역할·실행 순서·한계·공식 근거](cloudwatch-cost-monitoring.md)
+
+## 19. 10단계 — Kubernetes와 HTTP 지표 관측 준비
+
+- 공식 kube-prometheus-stack 92.7.0, Metrics Server chart 3.14.0을 고정해 로컬 렌더한다. HPA는 Prometheus가 아닌 Metrics Server의 CPU API를 사용한다.
+- 내부 ServiceMonitor로 백엔드 `/actuator/prometheus`를 수집하며 공개 ALB의 `/actuator` 404 경계는 유지한다. BE 변경 PR 병합과 새 이미지가 먼저 필요하다.
+- Grafana 내부 대시보드 6개, HTTP histogram, 동일 시간창의 원본 지표 export를 추가한다. RabbitMQ/Redis exporter, Alertmanager와 기본 규칙은 이번 범위 밖이다.
+- Prometheus/Grafana는 PVC 없이 짧은 실험에만 사용한다. Pod 재시작 시 측정 원본을 잃을 수 있으므로 각 실험 후 export한다.
+- 이 단계는 설정/렌더 및 테스트이며 실제 EKS 설치, 수집 성공, HPA 작동, 성능 개선율을 입증하지 않았다.
+- [파일별 역할·설치 순서·측정 비교·제한](prometheus-grafana.md)

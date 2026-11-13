@@ -8,7 +8,7 @@
 - 인프라: Terraform → VPC/ECR/EKS 및 후속 데이터·권한·관측.
 - 관측: CloudWatch Alarm → Amazon SNS, Kubernetes 지표 → Prometheus/Grafana, 비용 → Cost Explorer.
 
-CloudWatch/SNS와 비용 조회 코드는 [관측 단계 기록](restart/cloudwatch-cost-monitoring.md)에 정리했다. 기본 지표와 Kubernetes 관측 범위를 나누며 Prometheus/Grafana는 아직 구현 전이다.
+CloudWatch/SNS와 비용 조회 코드는 [기본 관측 기록](restart/cloudwatch-cost-monitoring.md)에 정리했다. [Kubernetes 관측 코드](restart/prometheus-grafana.md)는 Helm chart/ServiceMonitor/Dashboard로 준비했으며 실제 설치와 수집은 미검증이다.
 
 현재 코드 검증 범위는 VPC/ECR/EKS/OIDC, RDS/Redis/MQ와 ACM/IRSA/상품 이미지 S3/Kubernetes 설정이며 AWS 생성은 아직 하지 않았다.
 EC2 Jenkins/IAM과 CI·GitOps 설정도 추가했다. [가동 순서와 미검증 범위](restart/jenkins-argocd.md)를 구분한다.

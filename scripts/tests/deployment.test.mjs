@@ -56,6 +56,7 @@ test('TLS 설정 및 CA 내용/hash/volume 참조 연결', () => {
   assert.equal(env.data.RABBITMQ_SSL_ENABLED,'true');
   assert.match(env.data.DB_URL,/sslMode=verify-full&serverSslCert=/);
   assert.equal(env.data.CORS_ALLOWED_ORIGINS,settings.frontendOrigin);
+  assert.equal(env.data.MANAGEMENT_METRICS_DISTRIBUTION_PERCENTILES_HISTOGRAM_HTTP_SERVER_REQUESTS,'true');
   const ca=docs.find(doc=>doc.kind==='ConfigMap' && doc.metadata.name.startsWith('orderpage-rds-ca-'));
   const certs=ca.data['ap-northeast-2-bundle.pem'].match(/-----BEGIN CERTIFICATE-----[\s\S]+?-----END CERTIFICATE-----/g);
   assert.ok(certs.length>=3);
