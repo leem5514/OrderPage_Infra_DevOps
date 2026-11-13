@@ -1,5 +1,5 @@
 # 네트워크/EKS 기반과 관리형 데이터 서비스를 연결한다.
-# 아직 실제 apply하지 않는다. 앱/컨트롤러/CI·CD 설정은 별도 경로에 있고 관측은 후속 단계다.
+# 아직 실제 apply하지 않는다. 앱/컨트롤러/CI·CD는 별도 경로, AWS 기본 관측 연결은 monitoring.tf다.
 module "vpc" {
   source = "../../modules/vpc"
 

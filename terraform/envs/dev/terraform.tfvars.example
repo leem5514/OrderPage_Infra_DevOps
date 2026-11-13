@@ -25,3 +25,16 @@ rds_engine_version = "REPLACE_WITH_SUPPORTED_10.11_PATCH"
 # Jenkins 실행 위치는 EC2로 결정했다. 비용/AMI를 검토한 실제 가동 시 활성화한다.
 enable_jenkins = false
 # jenkins_ami_id = "ami-검증한서울AL2023x86_64ID"
+
+# 실제 가동 전 수신 이메일을 보호된 tfvars에 넣고 활성화한다.
+# apply 시 SNS 구독 확인 메일이 발송되며 수신자가 승인해야 한다.
+enable_operations_monitoring = false
+# operations_email = "실제 수신 주소"
+# 월 예산은 미확정이므로 기본 null. 계정 전체 월 누적 알림이며 자동 차단은 아니다.
+monthly_budget_usd = null
+
+# ALB/TG는 Controller가 만든 뒤 확인한다. 이름을 추측해서 채우면 지표가 수집되지 않는다.
+# monitoring_alb = {
+#   load_balancer = "app/실제이름/실제16자리id"
+#   target_group  = "targetgroup/실제이름/실제16자리id"
+# }

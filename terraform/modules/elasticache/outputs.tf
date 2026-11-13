@@ -27,3 +27,7 @@ output "subnet_group_name" {
   description = "ElastiCache subnet group name."
   value       = aws_elasticache_subnet_group.this.name
 }
+output "monitoring_cluster_id" {
+  description = "단일 노드 구성의 실제 CacheClusterId. replication group ID와 구분한다."
+  value       = one(aws_elasticache_replication_group.this.member_clusters)
+}

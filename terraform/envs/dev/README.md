@@ -2,7 +2,7 @@
 
 현재 root는 **VPC + ECR + EKS/OIDC + RDS/Redis/MQ + ACM/IRSA/상품 이미지 S3**를 연결한다. 아직 AWS에 적용하지 않았다.
 ALB는 이후 Controller가 Ingress를 보고 생성한다. 선택 모듈 Jenkins EC2(enable_jenkins=false 기본)도 연결했다.
-Jenkins/Argo CD 코드는 준비했으며 실제 설치는 미실행이다. Prometheus/Grafana, SNS/Budget은 후속 단계다.
+Jenkins/Argo CD 코드는 준비했으며 실제 설치는 미실행이다. CloudWatch/SNS는 enable_operations_monitoring=false 기본으로 연결했다. 수신 주소와 생성 목록을 검토한 가동 시 활성화한다. Budget은 금액 null 기본, Cost Anomaly는 주석만 있다. Prometheus/Grafana는 후속 단계다.
 
 ## 자격증명 없이 검사
 
@@ -49,3 +49,5 @@ state/plan/tfvars에는 계정 정보와 민감 값이 포함될 수 있으므�
 [관리형 데이터 연결, 비밀번호/state, TLS 및 MQ 로그 후처리](../../../docs/restart/managed-data-services.md)
 
 [HTTPS 인증서 DNS 검증·S3 공개 정책 사전 확인·배포 파일 생성](../../../docs/restart/https-app-deployment.md)
+
+[CloudWatch/SNS 최초 활성화·ALB 2차 연결·Cost Explorer·실험 절차](../../../docs/restart/cloudwatch-cost-monitoring.md)

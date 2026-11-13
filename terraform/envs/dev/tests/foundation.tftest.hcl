@@ -142,4 +142,8 @@ run "root_module_wiring" {
     condition     = output.data_endpoints.db_port == 3306 && output.data_endpoints.redis_port == 6379 && output.data_endpoints.rabbitmq_port == 5671
     error_message = "Root 데이터 서비스 접속 계약이 예상 포트와 다릅니다."
   }
+  assert {
+    condition     = output.operations_monitoring == null
+    error_message = "수신 설정을 준비하지 않은 기본 상태에서는 관측 모듈을 생성하지 않습니다."
+  }
 }
