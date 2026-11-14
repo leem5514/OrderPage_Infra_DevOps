@@ -32,4 +32,6 @@ GitHub의 alert 0개나 패턴 검색 통과는 **유출이 절대 없었다는 
 2. Terraform `plan`/state에는 DB·Redis·MQ 비밀번호가 포함될 수 있다. Git, PR, Jenkins artifact, 채팅에 첨부하지 않는다. 원격 S3 state 접근 정책과 보존 버전을 확인한다.
 3. BE `compose.yaml`의 DB `1234`, RabbitMQ `guest`, 개발용 JWT 값은 로컬 데모 전용이다. 포트는 localhost에만 바인딩하도록 보강했지만 이 값을 EKS Secret에 복사하지 않는다.
 4. BE Dockerfile은 `src`를 이미지에 포함한다. `.dockerignore`로 로컬 환경 파일과 별도 프로필 YAML을 제외했지만 **이미 추적된 `application.yml`에 비밀값을 넣으면 JAR/ECR에도 들어간다**.
-5. 배포용 Jenkins credential 저장소/사용자 권한, Vercel 팀 접근자, AWS IAM 사용자/Role 및 S3 bucket policy는 실제 계정 연결 후 별도 조회한다. 지금은 코드와 GitHub 저장소 상태까지만 확인했다.
+5. BE `application.yml`의 공개 개발용 JWT 기본값을 운영에서 쓰면 해당 키를 아는 사람이 권한 claim이 있는 토큰을 만들 수 있다. K8s Deployment는 필수 Secret key 7개를 각각 참조해 누락 시 Pod 시작을 막는다. 배포 전에 `.local/secrets/backend.env` 검증을 통과시키고 실제 Pod의 키 주입 상태를 값 출력 없이 확인해야 한다. K8s 외부 실행에서는 여전히 별도 강제가 필요하다.
+6. FE는 로그인/갱신 토큰을 `localStorage`에 보관한다. Git에 토큰을 올리는 경로는 아니지만, 같은 origin에서 실행된 악성 스크립트가 사용자 세션을 읽을 수 있다. 이 점검은 전체 XSS 검증을 대신하지 않는다.
+7. 배포용 Jenkins credential 저장소/사용자 권한, Vercel 팀 접근자, AWS IAM 사용자/Role 및 S3 bucket policy는 실제 계정 연결 후 별도 조회한다. 지금은 코드와 GitHub 저장소 상태까지만 확인했다.

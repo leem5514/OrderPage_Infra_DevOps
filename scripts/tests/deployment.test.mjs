@@ -47,7 +47,10 @@ test('기본 고정 Replica / Secret 부재 / Probe와 ALB readiness gate', () =
   const container=deployment.spec.template.spec.containers[0];
   assert.equal(container.readinessProbe.httpGet.path,'/actuator/health/readiness');
   assert.equal(container.livenessProbe.httpGet.path,'/actuator/health/liveness');
-  assert.equal(container.envFrom[1].secretRef.name,'orderpage-backend-secret');
+  assert.equal(container.envFrom.length,1);
+  const required=['DB_USERNAME','DB_PASSWORD','REDIS_PASSWORD','RABBITMQ_USERNAME','RABBITMQ_PASSWORD','JWT_SECRET_KEY','JWT_SECRET_KEY_RT'];
+  assert.deepEqual(container.env.map(item=>item.name),required);
+  for(const item of container.env) assert.deepEqual(item.valueFrom.secretKeyRef,{name:'orderpage-backend-secret',key:item.name});
   assert.equal(deployment.spec.template.spec.automountServiceAccountToken,false);
 });
 test('TLS 설정 및 CA 내용/hash/volume 참조 연결', () => {

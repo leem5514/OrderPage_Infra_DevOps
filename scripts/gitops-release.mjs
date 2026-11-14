@@ -41,7 +41,17 @@ export function checkRendered(text) {
     if (doc.kind === 'Deployment') {
       const container = doc.spec.template.spec.containers[0];
       assert(/@sha256:[a-f0-9]{64}$/.test(container.image), '불변 이미지 digest가 필요합니다.');
-      assert(!container.env?.length, '개별 env 추가는 검토가 필요합니다.');
+      const required=['DB_USERNAME','DB_PASSWORD','REDIS_PASSWORD','RABBITMQ_USERNAME','RABBITMQ_PASSWORD','JWT_SECRET_KEY','JWT_SECRET_KEY_RT'];
+      assert(Array.isArray(container.env) && container.env.length===required.length,'필수 Secret key 참조가 필요합니다.');
+      for(let i=0;i<required.length;i++) {
+        const item=container.env[i];
+        const source=item.valueFrom;
+        const ref=source?.secretKeyRef;
+        assert(item.name===required[i] && Object.keys(item).length===2 && source && ref &&
+          Object.keys(source).length===1 && Object.keys(ref).length===2 &&
+          ref.name==='orderpage-backend-secret' && ref.key===required[i],
+          '허용된 Secret key 참조만 배포할 수 있습니다.');
+      }
     }
   }
   return docs;
