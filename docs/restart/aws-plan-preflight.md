@@ -24,9 +24,23 @@ STS 오류는 현재 키가 AWS에서 인증되지 않는다는 뜻이다. 키 �
 
 **권장:** 별도 프로필 + 사람의 임시 자격증명 + 필요한 IAM 권한. 가능하면 IAM Identity Center의 SSO 프로필을 사용한다. 그렇지 않고 콘솔 IAM 사용자/연동 계정을 쓰는 경우 현재 CLI의 `aws login --profile orderpage-lab`을 고려한다. 이는 브라우저 인증으로 임시 자격증명을 만들며, IAM 사용자/역할에는 AWS가 요구하는 `SignInLocalDevelopmentAccess` 권한이 필요하다. 기존 장기 키를 새 프로필에 단순 복사하는 것은 보안 개선이 아니다. 루트 access key로 Terraform을 실행하지 않는다. CLI 로그인 세션은 갱신/재로그인이 필요할 수 있으므로 3일 가동 중 인증 상태를 확인한다.
 
-고정된 Terraform AWS provider v5.100.0은 `AWS_PROFILE`과 `credential_process`를 지원한다. `aws login` 프로필을 provider가 직접 읽지 못한다면 AWS 공식 예시대로 별도 프로필의 `credential_process = aws configure export-credentials --profile orderpage-lab --format process`를 사용한다. 이 출력에는 임시 비밀값이 있으므로 터미널에 직접 출력하거나 저장하지 않는다. 실제 적용 전 `aws sts get-caller-identity`와 Terraform의 동일 계정 접근을 각각 확인한다.
+고정된 Terraform AWS provider v5.100.0은 `AWS_PROFILE`과 `credential_process`를 지원한다. 이 버전은 `aws login`보다 먼저 출시됐으므로 로그인 프로필을 직접 읽는지는 실제 인증 후 확인해야 한다. 직접 읽지 못하면 AWS 공식 예시처럼 **서로 다른** 프로필을 연결한다: `aws login --profile orderpage-login` 후 `%USERPROFILE%\.aws\config`의 `[profile orderpage-lab]`에 `region = ap-northeast-2`와 `credential_process = aws configure export-credentials --profile orderpage-login --format process`를 지정한다. 같은 프로필을 자기 자신의 `credential_process`에 지정하면 순환 호출이 되므로 금지한다. export 명령의 출력에는 임시 비밀값이 있으므로 터미널에 직접 출력하거나 저장하지 않는다. 실제 적용 전 두 프로필의 `aws sts get-caller-identity`와 Terraform의 동일 계정 접근을 각각 확인한다.
 
 AWS CLI는 명시적 `--profile`을 우선 사용하고, Terraform은 현재 셸의 `AWS_PROFILE`을 읽는다. `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` 환경 변수가 있으면 프로필보다 우선할 수 있으므로 이름의 존재 여부만 확인하고 잘못된 값을 사용하는 셸을 정리한다. 기존 `default` 인증이 실패한다고 임의로 키를 삭제하지 않는다.
+
+## 연결 경로 점검 — 별도 프로필의 영향
+
+| 경로 | 프로필 전달 방법 | 확인할 문제 |
+|---|---|---|
+| Terraform dev + S3 원격 state | 운영자 PowerShell의 `$env:AWS_PROFILE = 'orderpage-lab'` | provider와 backend가 같은 계정에 접근해야 한다. 다른 셸에서는 값이 유지되지 않는다 |
+| 직접 AWS CLI / 비용 조회 | CLI는 `--profile orderpage-lab`, 비용 export는 현재 셸의 `AWS_PROFILE` | 비밀 환경 변수가 프로필을 가리지 않는지, STS 계정 ID가 입력값과 같은지 확인 |
+| EKS Controller 설치 | `install-aws-load-balancer-controller.ps1 -Profile orderpage-lab` | 스크립트는 CLI 계정/클러스터 ARN을 확인한다. 환경 키가 있으면 kubeconfig의 EKS 토큰 갱신에 다른 인증이 섞일 수 있어 설치 전에 중단한다 |
+| 운영자 `kubectl`·`helm` | 생성된 별도 kubeconfig의 exec가 `aws eks get-token`을 호출 | kubeconfig에 지정한 프로필과 현재 셸의 AWS 환경 키를 확인한다. 세션이 만료되면 재로그인 필요 |
+| Jenkins EC2 → ECR | EC2 instance role | 로컬 프로필을 EC2에 복사하거나 `AWS_PROFILE`을 Jenkins 전역에 설정하지 않는다 |
+| EKS 백엔드 → S3 | Pod IRSA / SDK 기본 인증 체인 | 로컬 프로필을 Secret/Pod 환경 변수에 넣지 않는다 |
+| Vercel 프론트 | Vercel 계정/토큰 | AWS 프로필과 무관하다 |
+
+PowerShell에서 `$env:AWS_PROFILE`은 **현재 터미널**에만 설정한다. 현재 터미널에 남은 `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY`/`AWS_SESSION_TOKEN`은 존재 여부만 확인하며 값을 출력하지 않는다. 잘못된 프로필로 `kubectl`이 인증되면 `aws eks get-token --profile orderpage-lab --region ap-northeast-2 --cluster-name orderpage-dev`를 별도 셸에서 검증하고 kubeconfig의 `exec.env`를 확인한다. EKS 접근 실패는 프로필 문제 외에도 IAM Role의 EKS Access Entry, /32 허용 IP, 토큰 만료 때문일 수 있으므로 차례대로 분리한다. [EKS kubeconfig 설명](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html), [AWS CLI 프로필과 환경 키 우선순위 사례](https://github.com/aws/aws-cli/issues/7794).
 
 공식 근거: [AWS CLI 프로필](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html), [AWS CLI 로그인](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html), [IAM 임시 자격증명·최소 권한](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html), [AWS provider 5.100.0 인증](https://registry.terraform.io/providers/hashicorp/aws/5.100.0/docs).
 

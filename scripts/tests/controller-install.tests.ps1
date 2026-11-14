@@ -3,6 +3,10 @@ $savedNativeExitCode = if ($null -eq $LASTEXITCODE) { 0 } else { $LASTEXITCODE }
 foreach ($name in @('aws','helm','kubectl')) {
     if (Test-Path "Function:\$name") { throw '기존 mock 함수를 덮어쓰지 않습니다.' }
 }
+$savedCredentialEnvironment = @{}
+foreach ($name in @('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_SESSION_TOKEN')) {
+    $savedCredentialEnvironment[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
+}
 $directory = Join-Path $PSScriptRoot "../../.local/deploy/installer-test-$([Guid]::NewGuid().ToString('N'))"
 New-Item -ItemType Directory -Path $directory -Force | Out-Null
 @{
@@ -34,26 +38,35 @@ function global:kubectl {
     $global:LASTEXITCODE = 0
 }
 try {
+    foreach ($name in $savedCredentialEnvironment.Keys) {
+        [Environment]::SetEnvironmentVariable($name, $null, 'Process')
+    }
     foreach ($case in @(
         @{Mode='ok';Error=$false;Writes=1;Installs=1;Rollouts=1},
         @{Mode='wrong-account';Error=$true;Writes=0;Installs=0;Rollouts=0},
         @{Mode='wrong-cluster';Error=$true;Writes=0;Installs=0;Rollouts=0},
         @{Mode='aws-error';Error=$true;Writes=0;Installs=0;Rollouts=0},
+        @{Mode='env-key';Error=$true;Writes=0;Installs=0;Rollouts=0},
         @{Mode='helm-error';Error=$true;Writes=1;Installs=1;Rollouts=0}
     )) {
         $global:OrderPageInstallTest = @{Mode=$case.Mode;KubeconfigWrites=0;Installs=0;Rollouts=0}
         $failed=$false
+        if ($case.Mode -eq 'env-key') { $env:AWS_ACCESS_KEY_ID = 'test-only-key' }
         try { $null = & (Join-Path $PSScriptRoot '../install-aws-load-balancer-controller.ps1') -PreparedDirectory $directory -ExpectedAccountId '123456789012' -Profile 'mock-only' }
         catch { $failed=$true }
+        if ($case.Mode -eq 'env-key') { $env:AWS_ACCESS_KEY_ID = $null }
         $state=$global:OrderPageInstallTest
         if ($failed -ne $case.Error -or $state.KubeconfigWrites -ne $case.Writes -or $state.Installs -ne $case.Installs -or $state.Rollouts -ne $case.Rollouts) {
             throw "실패: $($case.Mode)"
         }
         Write-Output "PASS $($case.Mode)"
     }
-    Write-Output 'Controller 설치 스크립트 5개 통과. 실제 AWS/Helm/kubectl 호출 없음.'
+    Write-Output 'Controller 설치 스크립트 6개 통과. 실제 AWS/Helm/kubectl 호출 없음.'
 } finally {
     foreach ($name in @('aws','helm','kubectl')) { Remove-Item "Function:\$name" }
+    foreach ($name in $savedCredentialEnvironment.Keys) {
+        [Environment]::SetEnvironmentVariable($name, $savedCredentialEnvironment[$name], 'Process')
+    }
     Remove-Variable OrderPageInstallTest -Scope Global
     $global:LASTEXITCODE = $savedNativeExitCode
 }
