@@ -9,3 +9,5 @@ RDS/Redis/MQ 6개 경보, 옵션 Jenkins 1개/ALB 3개, SNS 이메일, Dashboard
 - [Prometheus·Grafana·Metrics Server 구성과 실험 원본 내보내기](../docs/restart/prometheus-grafana.md): chart와 수집 설정은 로컬 렌더 검증 단계이며 실제 설치는 아직 하지 않았다.
 
 관리형 서비스 경보는 CloudWatch, Kubernetes/애플리케이션 지표는 Prometheus가 담당한다.
+
+실제 수집 전 점검과 다섯 비교 실험의 원본 목록은 [실험 자료](../docs/restart/experiment-plan-review.md)를 따른다.

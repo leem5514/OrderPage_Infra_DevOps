@@ -312,3 +312,10 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 현재 AWS CLI `default`의 기존 키는 STS `InvalidClientTokenId`로 거부됐다. 실제 계정 조회·버전 확인·원격 state·`plan`은 미실행이다.
 - 짧은 실습도 별도 AWS 프로필과 임시 자격증명을 권장한다. 프로필 분리 자체는 권한 축소가 아니며, 실제 계정·IAM Role·비용·종료 시각을 확인한 뒤에만 적용 계획을 검토한다.
 - [인증 방식 비교·필요 입력·비용·실제 plan 순서](aws-plan-preflight.md)
+
+## 21. 12단계 — 실제 plan 검토 도구와 실험 자료
+
+- 실제 AWS 자격증명과 tfvars/원격 backend가 없어 계정별 Terraform plan은 아직 만들 수 없다. mock 검증을 실제 생성 목록으로 표현하지 않는다.
+- 저장된 plan을 `terraform show -json`으로 메모리에서 읽고 action·자원 타입만 요약하며 삭제·교체를 별도 경고하는 로컬 도구를 준비한다. plan·요약 파일은 Git에서 제외한다.
+- 배포 중 지속 읽기 부하 k6 시나리오와 E01~E05의 baseline/after 기록 양식을 추가한다. 실제 ECR digest·계정·관측 Target이 준비되기 전에는 실행하지 않는다.
+- [Terraform plan 검토·측정 조건·실험별 자료](experiment-plan-review.md)
