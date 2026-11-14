@@ -7,7 +7,7 @@
 | 대상 | 확인 결과 |
 |---|---|
 | GitHub 저장소 | 세 저장소 모두 공개. 각 저장소의 협업자 목록은 `leem5514` 관리자 1명, deploy key 0개, GitHub Actions secret 0개. Secret scanning과 push protection이 활성화됐고 조회 가능한 미해결 alert는 0개였다. |
-| Git 원격·이력·PR | HTTPS 원격 URL에 사용자명/토큰이 없었다. 모든 원격 브랜치를 가져와 커밋 이력의 AWS access key, GitHub PAT, 개인키 등 알려진 형식을 검색했다. 발견된 형식 일치는 테스트용 URL 문자열뿐이며 실제 키로 확인된 것은 없다. 공개 PR 14개의 제목·본문과 일반 댓글(0개)에서도 해당 키 형식은 없었다. |
+| Git 원격·이력·PR | HTTPS 원격 URL에 사용자명/토큰이 없었다. 모든 원격 브랜치를 가져와 커밋 이력의 AWS access key, GitHub PAT, 개인키 등 알려진 형식을 검색했다. 발견된 형식 일치는 테스트용 URL 문자열뿐이며 실제 키로 확인된 것은 없다. 새 보안 PR을 포함한 공개 PR 17개의 제목·본문과 일반 댓글(0개)에서도 해당 키 형식은 없었다. |
 | 현재 로컬 입력 | AWS/GitHub/Vercel 관련 환경 변수 이름의 값은 현재 셸에 없었다. 실제 `terraform.tfvars`, `backend.hcl`, `.tfplan`, bootstrap 변수, `.local/secrets/backend.env`도 없었다. 이전 AWS `default` 프로필은 인증 실패였고, 로컬 Git 자격증명은 저장소 파일이 아닌 OS 자격증명 경로에서 사용한다. |
 | 배포 자격증명 흐름 | Jenkins의 GitHub/Vercel 토큰은 `withCredentials` 구간에만 바인딩한다. Jenkins EC2는 인스턴스 역할로 ECR에 접근하고, Backend Pod는 IRSA로 상품 이미지 버킷에 `PutObject`만 한다. 로컬 AWS 프로필을 Pod나 Jenkins에 복사하는 경로는 없다. |
 | 공개 접근 | 상품 이미지 전용 S3는 사용자가 선택한 대로 HTTPS `GetObject`만 공개한다. 객체 키를 아는 누구나 이미지를 읽을 수 있다. Terraform state 버킷은 공개 접근 차단과 암호화가 설정돼 있다. EKS 관리 Role은 클러스터 관리자 권한이므로 지정할 ARN과 AssumeRole 권한을 별도로 확인해야 한다. |
