@@ -2,6 +2,8 @@
 
 DevOps Before/After 실험에서 동일한 부하를 반복하기 위한 k6 스크립트다.
 
+배포·CI/CD·Requests·장애 탐지의 저율 지속 부하는 [실험 계획](../../docs/restart/experiment-plan-review.md)과 `run-availability.ps1`을 사용한다. 아래 HPA manifest는 실제 계정 값이 없는 정적 초안이다. EKS에 바로 적용하지 말고 실제 GitOps 환경 승격 후 이미지 digest/리소스/자동 동기화 설정을 확인한다.
+
 ## S05 HPA 시나리오
 
 HPA 실험은 인증이나 재고 소모가 없는 `GET /product/list?page=0&size=20`을 사용한다.
@@ -28,44 +30,9 @@ HPA 실험은 인증이나 재고 소모가 없는 `GET /product/list?page=0&siz
 
 ## 실행 순서
 
-Before 환경을 적용한다.
+현재 `k8s/benchmarks/hpa`는 값이 비어 있는 정적 초안이다. 실제 EKS에 `kubectl apply -k`를 실행하지 않는다. 클러스터와 GitOps 환경이 준비되면 해당 환경의 불변 이미지 digest, kubecontext, Argo CD 동기화 동작, Metrics API와 Node 여유를 먼저 검증하고 실험용 overlay를 별도 검토한다.
 
-```powershell
-kubectl delete hpa orderpage-backend -n orderpage --ignore-not-found
-kubectl apply -k k8s/benchmarks/hpa/fixed-replicas
-kubectl scale deployment/orderpage-backend -n orderpage --replicas=2
-```
-
-Before 테스트를 실행한다.
-
-```powershell
-.\benchmarks\k6\run-hpa.ps1 `
-  -Variant fixed `
-  -Users 100 `
-  -RunNumber 1 `
-  -BaseUrl https://api.dev.example.com `
-  -ImageTag <immutable-ecr-tag>
-```
-
-After 환경을 적용한다.
-
-```powershell
-kubectl apply -k k8s/benchmarks/hpa/hpa-enabled
-kubectl get hpa orderpage-backend -n orderpage --watch
-```
-
-After 테스트를 실행한다.
-
-```powershell
-.\benchmarks\k6\run-hpa.ps1 `
-  -Variant hpa `
-  -Users 100 `
-  -RunNumber 1 `
-  -BaseUrl https://api.dev.example.com `
-  -ImageTag <immutable-ecr-tag>
-```
-
-같은 방식으로 사용자 300명과 500명, Run 1~5를 실행한다.
+그 뒤 같은 digest와 데이터로 고정 2 Pod와 HPA 2~4 Pod를 각각 적용해 100 VU부터 실행한다. 부하 발생기 한계와 비용을 확인한 다음에만 300/500 VU를 고려한다. 매 반복에서 `run-hpa.ps1`의 k6 원본·Kubernetes 상태를 수집하고 [보고서 양식](../experiment-report.template.md)에 기록한다. 현재의 실행기는 실제 kubecontext·호스트를 고정하지 않으므로 승격 환경과 맞춰 검증하기 전에는 실행하지 않는다.
 
 ## 결과
 
