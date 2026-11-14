@@ -2,7 +2,7 @@
 
 현재 root는 **VPC + ECR + EKS/OIDC + RDS/Redis/MQ + ACM/IRSA/상품 이미지 S3**를 연결한다. 아직 AWS에 적용하지 않았다.
 ALB는 이후 Controller가 Ingress를 보고 생성한다. 선택 모듈 Jenkins EC2(enable_jenkins=false 기본)도 연결했다.
-Jenkins/Argo CD 코드는 준비했으며 실제 설치는 미실행이다. CloudWatch/SNS는 enable_operations_monitoring=false 기본으로 연결했다. 수신 주소와 생성 목록을 검토한 가동 시 활성화한다. Budget은 금액 null 기본, Cost Anomaly는 주석만 있다. Prometheus/Grafana는 후속 단계다.
+Jenkins/Argo CD 코드는 준비했으며 실제 설치는 미실행이다. CloudWatch/SNS는 enable_operations_monitoring=false 기본으로 연결했다. 수신 주소와 생성 목록을 검토한 가동 시 활성화한다. Budget은 금액 null 기본, Cost Anomaly는 주석만 있다. Prometheus/Grafana 설정도 준비했으나 EKS 설치 전이다. [실제 AWS plan 사전 점검](../../../docs/restart/aws-plan-preflight.md)을 먼저 따른다.
 
 ## 자격증명 없이 검사
 
