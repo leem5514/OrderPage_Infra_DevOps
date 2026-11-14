@@ -23,7 +23,8 @@ test('release 갱신은 기존 저장소 digest만 바꾸고 나머지 overlay�
   assert.throws(()=>updatedOverlay(YAML.stringify(overlay),{...release,digest:'latest'}));
   assert.throws(()=>updatedOverlay(YAML.stringify(overlay),{...release,sourceCommit:'main; evil'}));
 });
-const deployment={apiVersion:'apps/v1',kind:'Deployment',metadata:{name:'orderpage-backend',namespace:'orderpage'},spec:{template:{spec:{containers:[{image:repository+'@'+release.digest}]}}}};
+const required=['DB_USERNAME','DB_PASSWORD','REDIS_PASSWORD','RABBITMQ_USERNAME','RABBITMQ_PASSWORD','JWT_SECRET_KEY','JWT_SECRET_KEY_RT'];
+const deployment={apiVersion:'apps/v1',kind:'Deployment',metadata:{name:'orderpage-backend',namespace:'orderpage'},spec:{template:{spec:{containers:[{image:repository+'@'+release.digest,env:required.map(name=>({name,valueFrom:{secretKeyRef:{name:'orderpage-backend-secret',key:name}}}))}]}}}};
 test('GitOps 렌더는 Secret/비밀 ConfigMap/다른 namespace/태그 이미지를 거부',()=>{
   assert.equal(checkRendered(YAML.stringify(deployment)).length,1);
   for(const extra of [
@@ -32,6 +33,9 @@ test('GitOps 렌더는 Secret/비밀 ConfigMap/다른 namespace/태그 이미지
     {kind:'Service',metadata:{namespace:'default'}}
   ]) assert.throws(()=>checkRendered(YAML.stringify(deployment)+'---\n'+YAML.stringify(extra)));
   assert.throws(()=>checkRendered(YAML.stringify(deployment).replace(release.digest,'latest')));
+  const wrong=structuredClone(deployment);
+  wrong.spec.template.spec.containers[0].env[5].valueFrom={value:'public-dev-key'};
+  assert.throws(()=>checkRendered(YAML.stringify(wrong)));
 });
 test('최초 승격은 실제 로컬 Kustomize 결과만 복사하고 Secret/kubeconfig는 제외',()=>{
   // 앞 테스트 파일 실행과 독립적이도록 이미 저장된 검증 fixture를 의존하지 않는다.
