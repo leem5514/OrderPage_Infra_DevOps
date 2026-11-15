@@ -25,15 +25,14 @@ const scenarios = [12,24,48,72].map(hours=>{
     alb:rate('VUV9M7PZ543S2SC9')*hours,
     nat:rate('P63FHTYZXQBC6HX5')*hours,
     baseIpv4:ip*3*hours,
-    jenkins:jenkinsRate*12,
-    loadGenerator:rate('YNF8U8R6NK3DHPTM')*6,
-    // Jenkins는 private IP만 사용한다. 부하 발생기의 6시간만 별도로 남긴다.
-    temporaryIpv4:ip*6,
-    ebs:rate('MTK7D9SGKGYR3JD6')*138*hours/730,
+    // 별도 중지 자동화가 없으므로 Jenkins도 전체 가동시간으로 계산한다.
+    jenkins:jenkinsRate*hours,
+    // k6는 기존 로컬 PC에서 실행한다. 별도 EC2 발생기는 현재 Terraform에 없다.
+    ebs:rate('MTK7D9SGKGYR3JD6')*70*hours/730,
     rdsStorage:rate('3TZJNNJAT7WAYW56')*20*hours/730,
     mqStorage:rate('7V99YDCKWQACRR4R')*200*hours/730
   };
   const round=value=>Math.round(value*100)/100;
   return {hours, costs:Object.fromEntries(Object.entries(costs).map(([k,v])=>[k,round(v)])), totalUSD:round(Object.values(costs).reduce((a,b)=>a+b,0))};
 });
-console.log(JSON.stringify({currency:'USD',notice:'Estimate: variable usage, taxes and Vercel fees excluded; private m6i.large Jenkins 12h and k6 6h in every scenario; Jenkins pricing updated 2026-11-08',scenarios},null,2));
+console.log(JSON.stringify({currency:'USD',notice:'Historical 2026-11-06/08 rates, not a live quote or spending cap. Jenkins enabled for the full scenario; 40 GiB workers + 30 GiB Jenkins EBS; local k6, no extra load-generator EC2. Variable usage, monitoring charges, taxes and Vercel fees excluded.',scenarios},null,2));
