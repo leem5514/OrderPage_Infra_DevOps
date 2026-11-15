@@ -56,9 +56,29 @@ spec:
             # ConfigMap은 endpoint, pool size처럼 공개되어도 되는 환경 설정을 담는다.
             - configMapRef:
                 name: orderpage-backend-config
-            # Secret은 DB password, JWT secret처럼 노출되면 안 되는 값을 담는다.
-            - secretRef:
-                name: orderpage-backend-secret
+          # 필수 Secret key가 하나라도 없으면 Pod 시작을 막아 공개 개발용 기본값 사용을 방지한다.
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef: { name: orderpage-backend-secret, key: DB_USERNAME }
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: orderpage-backend-secret, key: DB_PASSWORD }
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: orderpage-backend-secret, key: REDIS_PASSWORD }
+            - name: RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef: { name: orderpage-backend-secret, key: RABBITMQ_USERNAME }
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: orderpage-backend-secret, key: RABBITMQ_PASSWORD }
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef: { name: orderpage-backend-secret, key: JWT_SECRET_KEY }
+            - name: JWT_SECRET_KEY_RT
+              valueFrom:
+                secretKeyRef: { name: orderpage-backend-secret, key: JWT_SECRET_KEY_RT }
 
           lifecycle:
             preStop:

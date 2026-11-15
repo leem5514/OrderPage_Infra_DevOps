@@ -16,5 +16,16 @@ reports/
 *.log
 iam_policy.json
 .local/
+.env
+.env.*
+*.env
+*.env.*
+*.key
+*.p12
+*.pfx
+*.jks
+.vercel/
+kubeconfig*
+k8s/**/secret.yaml
 benchmarks/results/*
 !benchmarks/results/README.md
