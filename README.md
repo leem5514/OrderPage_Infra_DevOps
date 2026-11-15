@@ -6,6 +6,7 @@ Terraform으로 AWS EKS 기반을 구성하고, Jenkins CI / Argo CD CD와 운�
 
 - [전체 요구사항·비용·진행 기록](docs/restart/project-process.md)
 - [실제 AWS plan 전 계정·인증·비용 점검](docs/restart/aws-plan-preflight.md)
+- [Terraform plan 검토 도구와 다섯 비교 실험 자료](docs/restart/experiment-plan-review.md)
 - [Prometheus·Grafana·Metrics Server 설정과 수집/정량 실험 절차](docs/restart/prometheus-grafana.md)
 - [CloudWatch/SNS·비용 조회·장애 탐지 비교와 적용 순서](docs/restart/cloudwatch-cost-monitoring.md)
 - [FE Jenkins 검증·Vercel 정적 배포와 활성화 절차](docs/restart/frontend-vercel.md)
