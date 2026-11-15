@@ -1,5 +1,7 @@
 # 배포 전 계획 검토와 배포 후 비교 실험 자료
 
+2026-11-15: 아래 과거 비용 예시 대신 [수정된 가동시간·비용 가정](deployment-review.md)을 적용한다.
+
 기준일: 2026-11-14 KST. 이 단계는 **실행 도구·측정 양식·검토 절차**를 준비한다. AWS 계정의 Terraform plan, EKS 배포, Prometheus 시계열, CloudWatch 경보와 성능 개선율은 아직 없다.
 
 ## 1. 지금 확인한 Terraform plan 상태

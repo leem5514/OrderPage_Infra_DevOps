@@ -1,5 +1,7 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
+2026-11-15 갱신: 아래 비용 표는 과거 가정이다. Jenkins 전체 가동·로컬 k6 기준의 수정 계산과 최신 검증은 [배포 전 재검토](deployment-review.md)를 따른다.
+
 기준일: 2026-11-08 (KST)
 현재 단계: 기존 Infra #2~#5에 이어 FE #2/Infra #6도 검토 후 병합하고 CloudWatch/SNS·비용 관측 코드를 작성했다.
 AWS 리소스는 아직 생성하지 않았다. 다음은 Prometheus/Grafana·앱 로그 수집과 실제 배포 사전 준비다.

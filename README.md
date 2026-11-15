@@ -1,5 +1,7 @@
 # OrderPage Infra DevOps
 
+- [최신 코드·보안·최소 비용 재검토](docs/restart/deployment-review.md)
+
 Terraform으로 AWS EKS 기반을 구성하고, Jenkins CI / Argo CD CD와 운영 모니터링을 검증하는 실습 프로젝트다. 프론트엔드는 Vercel을 사용한다.
 
 현재: 기반/관리형 데이터/HTTPS·EC2 Jenkins·Argo CD·FE Vercel의 선행 PR을 main에 병합하고 **CloudWatch/SNS·비용 관측 및 Prometheus/Grafana 준비 코드**를 추가했다. 실제 설치·배포는 미실행이며 AWS 리소스는 아직 생성하지 않았다.
