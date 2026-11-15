@@ -304,3 +304,11 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - Prometheus/Grafana는 PVC 없이 짧은 실험에만 사용한다. Pod 재시작 시 측정 원본을 잃을 수 있으므로 각 실험 후 export한다.
 - 이 단계는 설정/렌더 및 테스트이며 실제 EKS 설치, 수집 성공, HPA 작동, 성능 개선율을 입증하지 않았다.
 - [파일별 역할·설치 순서·측정 비교·제한](prometheus-grafana.md)
+
+## 20. 11단계 — 실제 AWS plan 사전 점검
+
+- Infra #7 → BE #2 → Infra #8을 순서대로 검토·병합하고 로컬 `main`에 반영했다. AWS 리소스·Vercel 배포는 아직 없다.
+- Terraform 1.16.2/AWS provider 5.100.0의 `init -backend=false`, `validate`, mock 22개를 병합된 코드에서 재검증했다.
+- 현재 AWS CLI `default`의 기존 키는 STS `InvalidClientTokenId`로 거부됐다. 실제 계정 조회·버전 확인·원격 state·`plan`은 미실행이다.
+- 짧은 실습도 별도 AWS 프로필과 임시 자격증명을 권장한다. 프로필 분리 자체는 권한 축소가 아니며, 실제 계정·IAM Role·비용·종료 시각을 확인한 뒤에만 적용 계획을 검토한다.
+- [인증 방식 비교·필요 입력·비용·실제 plan 순서](aws-plan-preflight.md)

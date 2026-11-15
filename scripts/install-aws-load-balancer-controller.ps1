@@ -5,6 +5,13 @@ param(
     [Parameter(Mandatory)][string]$Profile
 )
 $ErrorActionPreference = 'Stop'
+# kubeconfig의 exec는 나중에 aws eks get-token을 다시 실행한다. 이때 기존 환경 키가
+# kubeconfig에 기록된 AWS_PROFILE보다 우선하면 다른 계정으로 인증될 수 있으므로 중단한다.
+$credentialOverrides = @('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_SESSION_TOKEN') |
+    Where-Object { -not [string]::IsNullOrEmpty([Environment]::GetEnvironmentVariable($_, 'Process')) }
+if ($credentialOverrides.Count -gt 0) {
+    throw '현재 셸의 AWS 자격증명 환경 변수가 지정한 프로필보다 우선할 수 있습니다. 별도 셸에서 프로필 인증을 확인한 뒤 다시 실행하세요.'
+}
 $dir = (Resolve-Path -LiteralPath $PreparedDirectory).Path
 $metadata = Get-Content -LiteralPath (Join-Path $dir 'environment.json') -Raw | ConvertFrom-Json
 if ($metadata.accountId -ne $ExpectedAccountId -or $metadata.region -ne 'ap-northeast-2' -or $metadata.chartVersion -ne '3.6.2') {
