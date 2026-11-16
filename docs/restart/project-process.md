@@ -1,6 +1,8 @@
 # Terraform 배포·운영 모니터링 프로젝트 진행서
 
-2026-11-16 갱신: README PR #13은 main에 병합했다. [보안 추가 판단](predeploy-security-assessment.md)에서 재현된 입력·비밀번호 문제와 의존성/CLI 권고를 공개 배포 전 해결 대상으로 확정했다. 다음은 해당 보안 수정이며, 계정·plan 사전 준비와 공개 배포 허용은 구분한다.
+2026-11-16 후속 갱신: README PR #13과 보안 판단 PR #14를 main에 병합했다. 주문 검증 수정은 [BE PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과했으며 병합 대기다. 목록 전체를 업무 호출 전에 검증하고, 잘못된 JSON은 원문을 노출하지 않는 400으로 응답한다. [코드·검사 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/adf1eea042b1e369f8cd612b7de949b80bd274ad/docs/order-input-validation.md)를 기록했다. 이전 주문 진단은 Service mock으로 현재 검증을 평가할 수 없어 제거하고 정식 회귀 검사로 대체했다.
+
+[보안 추가 판단](predeploy-security-assessment.md)의 비밀번호·실행 의존성·CLI 항목은 남아 있다. 다음은 주문 수정 병합 후 BE 보안 기반 갱신이며, 계정·plan 사전 준비와 공개 배포 허용은 구분한다.
 
 현재 상태 갱신: 2026-11-15 (KST). 기반·배포·CloudWatch/SNS·Prometheus/Grafana 준비 코드와 배포 전 재검토 PR까지 main에 병합했다. 로컬 검증을 마쳤으며, 다음은 계정 연결·실제 입력과 Terraform plan 검토다. AWS 리소스 생성, 실제 배포·계정/Secret 연결·정량 실험은 아직 수행하지 않았다.
 

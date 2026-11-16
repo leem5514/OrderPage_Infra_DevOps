@@ -10,7 +10,7 @@
 
 > **2026-11-16 보안 추가 판단: 공개 배포 보류**
 >
-> 주문 입력·긴 비밀번호 검증 문제를 로컬에서 재현했고, BE 실행 의존성과 Vercel CLI의 추가 보안 권고를 확인했습니다. 기존 테스트 통과와 공개 배포 가능 여부를 구분합니다. [필수 수정 항목·조건부 허용·재현 근거](docs/restart/predeploy-security-assessment.md)를 먼저 확인하세요.
+> 주문 검증 수정은 [BE PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과했고 병합 대기 중입니다. 긴 비밀번호·BE 실행 의존성·Vercel CLI 보안 항목은 남아 있습니다. [필수 수정 항목·조건부 허용·재현 근거](docs/restart/predeploy-security-assessment.md)를 먼저 확인하세요.
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 
@@ -135,7 +135,7 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 |---|---|---|
 | 요구사항·실험 설계 | 준비 완료 | 필수 기술, 최대 72시간, 5개 비교 시나리오와 측정 양식 정리 |
 | 앱·기반·CI/CD·관측 코드 | main 반영 완료 | 코드 및 로컬 검사 완료. 실제 AWS/Jenkins/Vercel 연동과는 구분 |
-| 보안·비용 재검토 | 추가 보안 점검에서 수정 필요 | 11/16 재현된 입력·비밀번호 문제 및 의존성/배포 CLI 권고는 공개 배포 전 해결 |
+| 보안·비용 재검토 | 주문 수정 PR 검증 완료, 나머지 진행 필요 | BE PR #5 병합 대기. 비밀번호·실행 의존성·배포 CLI 권고는 공개 배포 전 해결 |
 | 계정 연결·실제 plan | 다음 단계 | 유효한 AWS 인증, 운영자 Role/IP, 호환 버전, 보호된 입력, state 저장소 준비 |
 | AWS 생성·최초 배포 | 미실행 | ACM/DNS, 관리형 서비스 연결, Jenkins·Argo CD, Secret, 실제 ECR digest, FE·API 확인 |
 | 관측 연결·비교 실험 | 미실행 | SNS 수신 확인, Prometheus Targets, 기준값 확보 후 E01~E05 실행 |
@@ -143,7 +143,7 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 
 2026-11-15 재검토에서는 **BE 테스트 23개, FE 테스트 9개·lint·운영 빌드, Infra Node 테스트 36개와 Terraform mock 테스트 22개·validate**를 통과했습니다. 이는 로컬 검증 결과이며 실제 인프라 기동, 운영 성능 또는 완전한 보안 검증을 의미하지 않습니다. FE 개발·빌드 의존성 권고 18건과 전체 BE 의존성 보안 점검 등 남은 범위는 [배포 전 재검토](docs/restart/deployment-review.md)에 공개했습니다.
 
-**바로 다음 작업은 보안 필수 항목 수정입니다.** [보안 판단서](docs/restart/predeploy-security-assessment.md)의 주문 검증 → BE 보안 기반 → Vercel CLI 순서로 처리합니다. 계정·예산·보호된 입력과 plan은 준비할 수 있지만 공개 앱 배포는 필수 항목 해결 후 진행합니다. 이후 [사전 점검](docs/restart/aws-plan-preflight.md)에 따라 plan의 생성·삭제·공개 접근·유료 자원을 검토합니다. 기본 예시의 `enable_jenkins`, `enable_operations_monitoring`과 Argo CD 자동 동기화는 비활성입니다.
+**다음은 주문 수정 PR 검토·병합 후 BE 보안 기반 갱신입니다.** [보안 판단서](docs/restart/predeploy-security-assessment.md)에 따라 비밀번호·실행 의존성을 해결한 뒤 Vercel CLI를 정비합니다. 계정·예산·보호된 입력과 plan은 준비할 수 있지만 공개 앱 배포는 필수 항목 해결 후 진행합니다. 이후 [사전 점검](docs/restart/aws-plan-preflight.md)에 따라 plan의 생성·삭제·공개 접근·유료 자원을 검토합니다. 기본 예시의 `enable_jenkins`, `enable_operations_monitoring`과 Argo CD 자동 동기화는 비활성입니다.
 
 <a id="guide"></a>
 ## 코드를 읽거나 직접 진행하려면
