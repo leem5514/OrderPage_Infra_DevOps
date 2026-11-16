@@ -1,0 +1,17 @@
+import groovy.json.JsonOutput
+allprojects {
+    afterEvaluate { project ->
+        if (project.configurations.findByName('runtimeClasspath')) {
+            project.tasks.register('exportSecurityRuntime') {
+                doLast {
+                    def modules = project.configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts.collect {
+                        [name: it.moduleVersion.id.group + ':' + it.name, version: it.moduleVersion.id.version]
+                    }.unique().sort { a, b -> a.name <=> b.name }
+                    def target = new File(project.findProperty('securityInventoryPath').toString())
+                    target.text = JsonOutput.prettyPrint(JsonOutput.toJson(modules)) + '\n'
+                    println 'Exported ' + modules.size() + ' runtime coordinates (no source or credentials)'
+                }
+            }
+        }
+    }
+}
