@@ -1,0 +1,1308 @@
+{
+  "date": "2026-11-17",
+  "scope": "npm audit of declared CLI dependencies; not native/bundled binary exploitability or account audit",
+  "registry": "https://registry.npmjs.org",
+  "runtime": "Node 22.23.4",
+  "observations": [
+    {
+      "label": "before",
+      "version": "65.12.1",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 16,
+        "high": 21,
+        "critical": 1,
+        "total": 38
+      },
+      "uniqueAdvisoryUrls": 43,
+      "lockfileSha256": "bf364549164ab26a5ae09ef65b4c787c46a57bf11572407c8f972f344485c2dc",
+      "launcherSha256": "50fcbba72652b3c313163e1e3417b86edf1f5a1d4c5db1e84c9a348b91eb0198",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x8mw-p69m-v3mx",
+          "title": "@fastify/busboy vulnerable to Denial of Service via prototype-named multipart part header",
+          "severity": "high",
+          "package": "@fastify/busboy",
+          "range": ">=1.0.0 <3.2.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-gxm5-99cw-xjw9",
+          "title": "@fastify/busboy vulnerable to CRLF injection via multipart Content-Disposition filename and name",
+          "severity": "moderate",
+          "package": "@fastify/busboy",
+          "range": "<3.2.2"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2g4f-4pwh-qvx6",
+          "title": "ajv has ReDoS when using `$data` option",
+          "severity": "moderate",
+          "package": "ajv",
+          "range": ">=7.0.0-alpha.0 <8.18.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-3g3m-2fjr-6pw4",
+          "title": "Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal",
+          "severity": "moderate",
+          "package": "glob",
+          "range": ">=9.0.0 <=14.0.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+          "title": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+          "severity": "moderate",
+          "package": "js-yaml",
+          "range": ">=4.0.0 <=4.1.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+          "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+          "severity": "high",
+          "package": "js-yaml",
+          "range": ">=4.0.0 <4.3.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+          "severity": "high",
+          "package": "js-yaml",
+          "range": ">=4.0.0 <4.3.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+          "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+          "severity": "high",
+          "package": "js-yaml",
+          "range": ">=4.0.0 <4.3.2"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-3ppc-4f35-3m26",
+          "title": "minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern",
+          "severity": "high",
+          "package": "minimatch",
+          "range": ">=10.0.0 <10.2.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-7r86-cg39-jmmj",
+          "title": "minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments",
+          "severity": "high",
+          "package": "minimatch",
+          "range": ">=10.0.0 <10.2.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-23c5-xmqv-rm74",
+          "title": "minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions",
+          "severity": "high",
+          "package": "minimatch",
+          "range": ">=10.0.0 <10.2.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+          "title": "minimatch has potential denial of service via globparts amplification",
+          "severity": "moderate",
+          "package": "minimatch",
+          "range": ">=7.0.0 <11.0.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-9wv6-86v2-598j",
+          "title": "path-to-regexp outputs backtracking regular expressions",
+          "severity": "high",
+          "package": "path-to-regexp",
+          "range": ">=4.0.0 <6.3.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-j3q9-mxjg-w52f",
+          "title": "path-to-regexp vulnerable to Denial of Service via sequential optional groups",
+          "severity": "high",
+          "package": "path-to-regexp",
+          "range": ">=8.0.0 <8.4.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-27v5-c462-wpq7",
+          "title": "path-to-regexp vulnerable to Regular Expression Denial of Service via multiple wildcards",
+          "severity": "moderate",
+          "package": "path-to-regexp",
+          "range": ">=8.0.0 <8.4.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-v3rj-xjv7-4jmq",
+          "title": "smol-toml: Denial of Service via TOML documents containing thousands of consecutive commented lines",
+          "severity": "moderate",
+          "package": "smol-toml",
+          "range": "<1.6.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-7w5x-hrqm-74c2",
+          "title": "smol-toml: Denial of Service via malformed TOML documents",
+          "severity": "high",
+          "package": "smol-toml",
+          "range": "<=1.7.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-r4xh-jqrq-34v2",
+          "title": "smol-toml: Quadratic-time parse() from parseKey rescanning to end of document on each key line",
+          "severity": "moderate",
+          "package": "smol-toml",
+          "range": "<=1.8.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-vmf3-w455-68vh",
+          "title": "node-tar applies PAX size override to intermediary GNU long-name/long-link headers, causing tar parser interpretation differential (file smuggling)",
+          "severity": "moderate",
+          "package": "tar",
+          "range": "<=7.5.15"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-w8wr-v893-vjvp",
+          "title": "node-tar: Process crash via PAX numeric path type confusion",
+          "severity": "moderate",
+          "package": "tar",
+          "range": "<=7.5.17"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-23hp-3jrh-7fpw",
+          "title": "node-tar: Decompression/parse DoS via unlimited input",
+          "severity": "critical",
+          "package": "tar",
+          "range": "<=7.5.18"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-8x88-c5mf-7j5w",
+          "title": "node-tar: Negative tar entry size causes infinite loop in archive replace",
+          "severity": "high",
+          "package": "tar",
+          "range": "<=7.5.17"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-gvwx-54wh-qm9j",
+          "title": "node-tar: Uncaught Exception DoS via NUL byte in PAX path/linkpath records",
+          "severity": "moderate",
+          "package": "tar",
+          "range": "<=7.5.16"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-r292-9mhp-454m",
+          "title": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+          "severity": "high",
+          "package": "tar",
+          "range": "<=7.5.20"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-c76h-2ccp-4975",
+          "title": "Use of Insufficiently Random Values in undici",
+          "severity": "moderate",
+          "package": "undici",
+          "range": ">=4.5.0 <5.28.5"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-g9mf-h72j-4rw9",
+          "title": "Undici has an unbounded decompression chain in HTTP responses on Node.js Fetch API via Content-Encoding leads to resource exhaustion",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.23.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-cxrh-j4jr-qwg3",
+          "title": "undici Denial of Service attack via bad certificate data",
+          "severity": "low",
+          "package": "undici",
+          "range": "<5.29.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2mjp-6q6p-2qxm",
+          "title": "Undici has an HTTP Request/Response Smuggling issue",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.24.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-vrm6-8vpv-qv8q",
+          "title": "Undici has Unbounded Memory Consumption in WebSocket permessage-deflate Decompression",
+          "severity": "high",
+          "package": "undici",
+          "range": "<6.24.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-v9p9-hfj2-hcw8",
+          "title": "Undici has Unhandled Exception in WebSocket Client Due to Invalid server_max_window_bits Validation",
+          "severity": "high",
+          "package": "undici",
+          "range": "<6.24.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-4992-7rv2-5pvq",
+          "title": "Undici has CRLF Injection in undici via `upgrade` option",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.24.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+          "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.27.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+          "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+          "severity": "low",
+          "package": "undici",
+          "range": "<6.27.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+          "title": "undici vulnerable to downstream response desynchronization via retry interceptor",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.28.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+          "title": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.28.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+          "title": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.28.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+          "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+          "severity": "low",
+          "package": "undici",
+          "range": "<6.27.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+          "title": "undici vulnerable to downstream response splitting via retry interceptor",
+          "severity": "low",
+          "package": "undici",
+          "range": "<6.28.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2m5v-pch6-74hx",
+          "title": "undici vulnerable to TLS certificate validation bypass via dropped tls options in Agent",
+          "severity": "high",
+          "package": "undici",
+          "range": ">=4.0.0 <6.29.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-qrxm-fqhp-jwvm",
+          "title": "undici vulnerable to Denial of Service via TLS 1.2 certificate-changing renegotiation",
+          "severity": "high",
+          "package": "undici",
+          "range": ">=4.2.1 <6.29.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-9fm3-97px-rjf6",
+          "title": "undici WebSocket client vulnerable to Denial of Service via unbounded automatic PONG buffering",
+          "severity": "moderate",
+          "package": "undici",
+          "range": ">=5.15.0 <6.29.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+          "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+          "severity": "high",
+          "package": "undici",
+          "range": "<6.27.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+          "title": "Zod can exhaust memory while validating oversized constrained collections",
+          "severity": "high",
+          "package": "zod",
+          "range": "<4.6.6"
+        }
+      ],
+      "affectedPackages": [
+        {
+          "name": "@fastify/busboy",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@fastify/busboy"
+          ],
+          "range": "<=3.2.1"
+        },
+        {
+          "name": "@vercel/backends",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/backends"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/blob",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/blob"
+          ],
+          "range": ">=2.4.1-b7027de-20260616193056"
+        },
+        {
+          "name": "@vercel/cervel",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/cervel"
+          ],
+          "range": ">=0.0.12"
+        },
+        {
+          "name": "@vercel/cli-config",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/oidc/node_modules/@vercel/cli-config",
+            "node_modules/@vercel/sandbox/node_modules/@vercel/cli-config"
+          ],
+          "range": "<=0.3.5"
+        },
+        {
+          "name": "@vercel/cli-support",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/cli-support"
+          ],
+          "range": ">=65.3.1"
+        },
+        {
+          "name": "@vercel/container",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/container"
+          ],
+          "range": ">=8.1.0"
+        },
+        {
+          "name": "@vercel/elysia",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/elysia"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/express",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/express"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/fastify",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/fastify"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/h3",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/h3"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/hono",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/hono"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/hydrogen",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/hydrogen"
+          ],
+          "range": ">=1.0.1"
+        },
+        {
+          "name": "@vercel/koa",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/koa"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/nestjs",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/nestjs"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/next",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/next"
+          ],
+          "range": ">=4.7.11"
+        },
+        {
+          "name": "@vercel/nft",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/nft"
+          ],
+          "range": "0.29.2 - 1.11.1"
+        },
+        {
+          "name": "@vercel/node",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/node"
+          ],
+          "range": ">=2.1.1-canary.0"
+        },
+        {
+          "name": "@vercel/oidc",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/oidc",
+            "node_modules/@vercel/sandbox/node_modules/@vercel/oidc"
+          ],
+          "range": "3.6.0 - 4.0.5"
+        },
+        {
+          "name": "@vercel/python",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/python"
+          ],
+          "range": "6.11.0 - 6.12.0 || >=6.14.1"
+        },
+        {
+          "name": "@vercel/python-analysis",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/python-analysis"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/redwood",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/redwood"
+          ],
+          "range": ">=2.1.0"
+        },
+        {
+          "name": "@vercel/remix-builder",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/remix-builder"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/rust",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/rust"
+          ],
+          "range": ">=1.0.6"
+        },
+        {
+          "name": "@vercel/sandbox",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/sandbox"
+          ],
+          "range": ">=3.7.0"
+        },
+        {
+          "name": "@vercel/static-build",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/static-build"
+          ],
+          "range": ">=2.0.7"
+        },
+        {
+          "name": "@vercel/static-config",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/static-config"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "ajv",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/ajv"
+          ],
+          "range": "7.0.0-alpha.0 - 8.17.1"
+        },
+        {
+          "name": "glob",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/glob"
+          ],
+          "range": "9.0.0 - 14.0.1"
+        },
+        {
+          "name": "js-yaml",
+          "severity": "high",
+          "nodes": [
+            "node_modules/js-yaml"
+          ],
+          "range": "4.0.0 - 4.3.1"
+        },
+        {
+          "name": "minimatch",
+          "severity": "high",
+          "nodes": [
+            "node_modules/glob/node_modules/minimatch",
+            "node_modules/minimatch"
+          ],
+          "range": "7.0.0 - 11.0.0"
+        },
+        {
+          "name": "path-to-regexp",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/node/node_modules/path-to-regexp",
+            "node_modules/@vercel/remix-builder/node_modules/path-to-regexp",
+            "node_modules/path-to-regexp"
+          ],
+          "range": "4.0.0 - 6.2.2 || 8.0.0 - 8.3.0"
+        },
+        {
+          "name": "sandbox",
+          "severity": "high",
+          "nodes": [
+            "node_modules/sandbox"
+          ],
+          "range": "1.0.0-beta.1 - 1.0.0 || >=4.8.0"
+        },
+        {
+          "name": "smol-toml",
+          "severity": "high",
+          "nodes": [
+            "node_modules/smol-toml"
+          ],
+          "range": "<=1.8.0"
+        },
+        {
+          "name": "tar",
+          "severity": "critical",
+          "nodes": [
+            "node_modules/tar"
+          ],
+          "range": "<=7.5.20"
+        },
+        {
+          "name": "undici",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/node/node_modules/undici",
+            "node_modules/undici"
+          ],
+          "range": "<=6.29.0"
+        },
+        {
+          "name": "vercel",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/vercel"
+          ],
+          "range": ">=65.3.1"
+        },
+        {
+          "name": "zod",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/backends/node_modules/zod",
+            "node_modules/@vercel/express/node_modules/zod",
+            "node_modules/@vercel/hono/node_modules/zod",
+            "node_modules/@vercel/oidc/node_modules/zod",
+            "node_modules/@vercel/python-analysis/node_modules/zod",
+            "node_modules/@vercel/sandbox/node_modules/zod"
+          ],
+          "range": "<4.6.6"
+        }
+      ]
+    },
+    {
+      "label": "candidate",
+      "version": "65.17.0",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 16,
+        "high": 21,
+        "critical": 1,
+        "total": 38
+      },
+      "uniqueAdvisoryUrls": 43,
+      "lockfileSha256": "b471b8cce8a083a31f5d656f7a0702d7f10069bcc59de605e93588b47e8a1c55",
+      "launcherSha256": "42f0176a737c2222eea6178c9f79e870ac18bb94f895f749b6bc4d10dca7f919",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x8mw-p69m-v3mx",
+          "title": "@fastify/busboy vulnerable to Denial of Service via prototype-named multipart part header",
+          "severity": "high",
+          "package": "@fastify/busboy",
+          "range": ">=1.0.0 <3.2.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-gxm5-99cw-xjw9",
+          "title": "@fastify/busboy vulnerable to CRLF injection via multipart Content-Disposition filename and name",
+          "severity": "moderate",
+          "package": "@fastify/busboy",
+          "range": "<3.2.2"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2g4f-4pwh-qvx6",
+          "title": "ajv has ReDoS when using `$data` option",
+          "severity": "moderate",
+          "package": "ajv",
+          "range": ">=7.0.0-alpha.0 <8.18.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-3g3m-2fjr-6pw4",
+          "title": "Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal",
+          "severity": "moderate",
+          "package": "glob",
+          "range": ">=9.0.0 <=14.0.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+          "title": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+          "severity": "moderate",
+          "package": "js-yaml",
+          "range": ">=4.0.0 <=4.1.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+          "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+          "severity": "high",
+          "package": "js-yaml",
+          "range": ">=4.0.0 <4.3.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+          "severity": "high",
+          "package": "js-yaml",
+          "range": ">=4.0.0 <4.3.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+          "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+          "severity": "high",
+          "package": "js-yaml",
+          "range": ">=4.0.0 <4.3.2"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-3ppc-4f35-3m26",
+          "title": "minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern",
+          "severity": "high",
+          "package": "minimatch",
+          "range": ">=10.0.0 <10.2.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-7r86-cg39-jmmj",
+          "title": "minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments",
+          "severity": "high",
+          "package": "minimatch",
+          "range": ">=10.0.0 <10.2.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-23c5-xmqv-rm74",
+          "title": "minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions",
+          "severity": "high",
+          "package": "minimatch",
+          "range": ">=10.0.0 <10.2.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+          "title": "minimatch has potential denial of service via globparts amplification",
+          "severity": "moderate",
+          "package": "minimatch",
+          "range": ">=7.0.0 <11.0.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-9wv6-86v2-598j",
+          "title": "path-to-regexp outputs backtracking regular expressions",
+          "severity": "high",
+          "package": "path-to-regexp",
+          "range": ">=4.0.0 <6.3.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-j3q9-mxjg-w52f",
+          "title": "path-to-regexp vulnerable to Denial of Service via sequential optional groups",
+          "severity": "high",
+          "package": "path-to-regexp",
+          "range": ">=8.0.0 <8.4.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-27v5-c462-wpq7",
+          "title": "path-to-regexp vulnerable to Regular Expression Denial of Service via multiple wildcards",
+          "severity": "moderate",
+          "package": "path-to-regexp",
+          "range": ">=8.0.0 <8.4.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-v3rj-xjv7-4jmq",
+          "title": "smol-toml: Denial of Service via TOML documents containing thousands of consecutive commented lines",
+          "severity": "moderate",
+          "package": "smol-toml",
+          "range": "<1.6.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-7w5x-hrqm-74c2",
+          "title": "smol-toml: Denial of Service via malformed TOML documents",
+          "severity": "high",
+          "package": "smol-toml",
+          "range": "<=1.7.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-r4xh-jqrq-34v2",
+          "title": "smol-toml: Quadratic-time parse() from parseKey rescanning to end of document on each key line",
+          "severity": "moderate",
+          "package": "smol-toml",
+          "range": "<=1.8.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-vmf3-w455-68vh",
+          "title": "node-tar applies PAX size override to intermediary GNU long-name/long-link headers, causing tar parser interpretation differential (file smuggling)",
+          "severity": "moderate",
+          "package": "tar",
+          "range": "<=7.5.15"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-w8wr-v893-vjvp",
+          "title": "node-tar: Process crash via PAX numeric path type confusion",
+          "severity": "moderate",
+          "package": "tar",
+          "range": "<=7.5.17"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-23hp-3jrh-7fpw",
+          "title": "node-tar: Decompression/parse DoS via unlimited input",
+          "severity": "critical",
+          "package": "tar",
+          "range": "<=7.5.18"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-8x88-c5mf-7j5w",
+          "title": "node-tar: Negative tar entry size causes infinite loop in archive replace",
+          "severity": "high",
+          "package": "tar",
+          "range": "<=7.5.17"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-gvwx-54wh-qm9j",
+          "title": "node-tar: Uncaught Exception DoS via NUL byte in PAX path/linkpath records",
+          "severity": "moderate",
+          "package": "tar",
+          "range": "<=7.5.16"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-r292-9mhp-454m",
+          "title": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+          "severity": "high",
+          "package": "tar",
+          "range": "<=7.5.20"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-c76h-2ccp-4975",
+          "title": "Use of Insufficiently Random Values in undici",
+          "severity": "moderate",
+          "package": "undici",
+          "range": ">=4.5.0 <5.28.5"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-g9mf-h72j-4rw9",
+          "title": "Undici has an unbounded decompression chain in HTTP responses on Node.js Fetch API via Content-Encoding leads to resource exhaustion",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.23.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-cxrh-j4jr-qwg3",
+          "title": "undici Denial of Service attack via bad certificate data",
+          "severity": "low",
+          "package": "undici",
+          "range": "<5.29.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2mjp-6q6p-2qxm",
+          "title": "Undici has an HTTP Request/Response Smuggling issue",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.24.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-vrm6-8vpv-qv8q",
+          "title": "Undici has Unbounded Memory Consumption in WebSocket permessage-deflate Decompression",
+          "severity": "high",
+          "package": "undici",
+          "range": "<6.24.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-v9p9-hfj2-hcw8",
+          "title": "Undici has Unhandled Exception in WebSocket Client Due to Invalid server_max_window_bits Validation",
+          "severity": "high",
+          "package": "undici",
+          "range": "<6.24.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-4992-7rv2-5pvq",
+          "title": "Undici has CRLF Injection in undici via `upgrade` option",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.24.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+          "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.27.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+          "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+          "severity": "low",
+          "package": "undici",
+          "range": "<6.27.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+          "title": "undici vulnerable to downstream response desynchronization via retry interceptor",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.28.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+          "title": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.28.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+          "title": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+          "severity": "moderate",
+          "package": "undici",
+          "range": "<6.28.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+          "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+          "severity": "low",
+          "package": "undici",
+          "range": "<6.27.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+          "title": "undici vulnerable to downstream response splitting via retry interceptor",
+          "severity": "low",
+          "package": "undici",
+          "range": "<6.28.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2m5v-pch6-74hx",
+          "title": "undici vulnerable to TLS certificate validation bypass via dropped tls options in Agent",
+          "severity": "high",
+          "package": "undici",
+          "range": ">=4.0.0 <6.29.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-qrxm-fqhp-jwvm",
+          "title": "undici vulnerable to Denial of Service via TLS 1.2 certificate-changing renegotiation",
+          "severity": "high",
+          "package": "undici",
+          "range": ">=4.2.1 <6.29.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-9fm3-97px-rjf6",
+          "title": "undici WebSocket client vulnerable to Denial of Service via unbounded automatic PONG buffering",
+          "severity": "moderate",
+          "package": "undici",
+          "range": ">=5.15.0 <6.29.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+          "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+          "severity": "high",
+          "package": "undici",
+          "range": "<6.27.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+          "title": "Zod can exhaust memory while validating oversized constrained collections",
+          "severity": "high",
+          "package": "zod",
+          "range": "<4.6.6"
+        }
+      ],
+      "affectedPackages": [
+        {
+          "name": "@fastify/busboy",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@fastify/busboy"
+          ],
+          "range": "<=3.2.1"
+        },
+        {
+          "name": "@vercel/backends",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/backends"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/blob",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/blob"
+          ],
+          "range": ">=2.4.1-b7027de-20260616193056"
+        },
+        {
+          "name": "@vercel/cervel",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/cervel"
+          ],
+          "range": ">=0.0.12"
+        },
+        {
+          "name": "@vercel/cli-config",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/oidc/node_modules/@vercel/cli-config",
+            "node_modules/@vercel/sandbox/node_modules/@vercel/cli-config"
+          ],
+          "range": "<=0.3.5"
+        },
+        {
+          "name": "@vercel/cli-support",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/cli-support"
+          ],
+          "range": ">=65.3.1"
+        },
+        {
+          "name": "@vercel/container",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/container"
+          ],
+          "range": ">=8.1.0"
+        },
+        {
+          "name": "@vercel/elysia",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/elysia"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/express",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/express"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/fastify",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/fastify"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/h3",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/h3"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/hono",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/hono"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/hydrogen",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/hydrogen"
+          ],
+          "range": ">=1.0.1"
+        },
+        {
+          "name": "@vercel/koa",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/koa"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/nestjs",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/nestjs"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/next",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/next"
+          ],
+          "range": ">=4.7.11"
+        },
+        {
+          "name": "@vercel/nft",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/nft"
+          ],
+          "range": "0.29.2 - 1.11.1"
+        },
+        {
+          "name": "@vercel/node",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/node"
+          ],
+          "range": ">=2.1.1-canary.0"
+        },
+        {
+          "name": "@vercel/oidc",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/oidc",
+            "node_modules/@vercel/sandbox/node_modules/@vercel/oidc"
+          ],
+          "range": "3.6.0 - 4.0.5"
+        },
+        {
+          "name": "@vercel/python",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/python"
+          ],
+          "range": "6.11.0 - 6.12.0 || >=6.14.1"
+        },
+        {
+          "name": "@vercel/python-analysis",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/python-analysis"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/redwood",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/redwood"
+          ],
+          "range": ">=2.1.0"
+        },
+        {
+          "name": "@vercel/remix-builder",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/remix-builder"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "@vercel/rust",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/rust"
+          ],
+          "range": ">=1.0.6"
+        },
+        {
+          "name": "@vercel/sandbox",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/sandbox"
+          ],
+          "range": ">=3.7.0"
+        },
+        {
+          "name": "@vercel/static-build",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/static-build"
+          ],
+          "range": ">=2.0.7"
+        },
+        {
+          "name": "@vercel/static-config",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/@vercel/static-config"
+          ],
+          "range": "*"
+        },
+        {
+          "name": "ajv",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/ajv"
+          ],
+          "range": "7.0.0-alpha.0 - 8.17.1"
+        },
+        {
+          "name": "glob",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/glob"
+          ],
+          "range": "9.0.0 - 14.0.1"
+        },
+        {
+          "name": "js-yaml",
+          "severity": "high",
+          "nodes": [
+            "node_modules/js-yaml"
+          ],
+          "range": "4.0.0 - 4.3.1"
+        },
+        {
+          "name": "minimatch",
+          "severity": "high",
+          "nodes": [
+            "node_modules/glob/node_modules/minimatch",
+            "node_modules/minimatch"
+          ],
+          "range": "7.0.0 - 11.0.0"
+        },
+        {
+          "name": "path-to-regexp",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/node/node_modules/path-to-regexp",
+            "node_modules/@vercel/remix-builder/node_modules/path-to-regexp",
+            "node_modules/path-to-regexp"
+          ],
+          "range": "4.0.0 - 6.2.2 || 8.0.0 - 8.3.0"
+        },
+        {
+          "name": "sandbox",
+          "severity": "high",
+          "nodes": [
+            "node_modules/sandbox"
+          ],
+          "range": "1.0.0-beta.1 - 1.0.0 || >=4.8.0"
+        },
+        {
+          "name": "smol-toml",
+          "severity": "high",
+          "nodes": [
+            "node_modules/smol-toml"
+          ],
+          "range": "<=1.8.0"
+        },
+        {
+          "name": "tar",
+          "severity": "critical",
+          "nodes": [
+            "node_modules/tar"
+          ],
+          "range": "<=7.5.20"
+        },
+        {
+          "name": "undici",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/node/node_modules/undici",
+            "node_modules/undici"
+          ],
+          "range": "<=6.29.0"
+        },
+        {
+          "name": "vercel",
+          "severity": "moderate",
+          "nodes": [
+            "node_modules/vercel"
+          ],
+          "range": ">=65.3.1"
+        },
+        {
+          "name": "zod",
+          "severity": "high",
+          "nodes": [
+            "node_modules/@vercel/backends/node_modules/zod",
+            "node_modules/@vercel/express/node_modules/zod",
+            "node_modules/@vercel/hono/node_modules/zod",
+            "node_modules/@vercel/oidc/node_modules/zod",
+            "node_modules/@vercel/python-analysis/node_modules/zod",
+            "node_modules/@vercel/sandbox/node_modules/zod"
+          ],
+          "range": "<4.6.6"
+        }
+      ]
+    }
+  ],
+  "cliHelpChecks": [
+    {
+      "version": "65.12.1",
+      "command": "--version",
+      "exit": 0,
+      "versionMatches": true
+    },
+    {
+      "version": "65.12.1",
+      "command": "deploy --help",
+      "exit": 0,
+      "prebuilt": true,
+      "production": true
+    },
+    {
+      "version": "65.17.0",
+      "command": "--version",
+      "exit": 0,
+      "versionMatches": true
+    },
+    {
+      "version": "65.17.0",
+      "command": "deploy --help",
+      "exit": 0,
+      "prebuilt": true,
+      "production": true
+    }
+  ],
+  "decision": "No CLI version/override change applied. Production remains disabled. High/critical audit blocks Jenkins before token binding. REST API alternative pending user selection.",
+  "noDeployment": true
+}

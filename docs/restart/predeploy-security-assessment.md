@@ -2,7 +2,7 @@
 
 기준일: **2026-11-16 KST**. README PR [#13](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/13)은 main에 병합했다. 이번 단계는 최신 main의 잔여 위험을 판정하는 작업이며, 애플리케이션 수정·의존성 업그레이드·AWS 실행은 하지 않았다.
 
-**후속 진행:** 이 판단서의 Infra [PR #14](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/14)를 병합했다. 주문 입력 검증 수정은 BE [PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과한 후 main에 병합했다(Infra #15도 병합). [변경·검증 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/adf1eea042b1e369f8cd612b7de949b80bd274ad/docs/order-input-validation.md)를 따른다. 아래 버전·권고 수치는 수정 전 조사 기록이다. 2026-11-17의 [백엔드 보안 기반 갱신 결과](backend-security-baseline.md)는 새 PR에서 검증했으며, 병합과 Vercel CLI·계정 확인 등 남은 배포 조건은 별도로 관리한다.
+**후속 진행:** 이 판단서의 Infra [PR #14](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/14)를 병합했다. 주문 입력 검증 수정은 BE [PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과한 후 main에 병합했다(Infra #15도 병합). [변경·검증 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/adf1eea042b1e369f8cd612b7de949b80bd274ad/docs/order-input-validation.md)를 따른다. 아래 버전·권고 수치는 수정 전 조사 기록이다. 2026-11-17의 [백엔드 보안 기반 갱신 결과](backend-security-baseline.md)는 BE #6·Infra #16 병합까지 완료했다. [Vercel CLI 재검토](vercel-security-review.md)에서는 최신 후보에도 38개 영향 패키지가 남았으므로 실제 토큰 사용 보류를 유지한다.
 
 ## 결론: 현재 버전의 공개 배포는 보류
 
@@ -13,8 +13,8 @@
 | 분류 | 대상 | 판단과 통과 조건 |
 |---|---|---|
 | **병합 완료** | 주문 수량 검증 | BE PR #5가 main에 반영됐다. 전체 목록 선검증·400 응답·업무 의존성 미호출·정상 배열 계약을 확인했다. |
-| **수정 검증 완료 / 새 PR 반영 필요** | BE 실행 의존성·비밀번호 검증 | Java 21/Boot 4.1.2·72바이트 입력 정책·공통 encoder를 검증했다. Java 68건, Docker 기능 13개·보안/지표 6개·장애/종료 검사 통과. BE와 Infra의 후속 PR을 함께 반영한다. |
-| **실제 배포 토큰 사용 전 필수** | Vercel CLI 의존성 | CLI 전용 lockfile에도 권고가 남는다. 안전한 갱신 후보와 prebuilt 정적 배포 호환성을 검증하고, 잔여 권고의 실행 조건을 개별 판단해야 한다. |
+| **병합 완료** | BE 실행 의존성·비밀번호 검증 | Java 21/Boot 4.1.2·72바이트 입력 정책·공통 encoder를 검증했다. Java 68건, Docker 기능 13개·보안/지표 6개·장애/종료 검사 통과. BE #6·Infra #16에 반영됐다. |
+| **실제 배포 토큰 사용 전 필수** | Vercel CLI 의존성 | 현재 65.12.1과 최신 후보 65.17.0 모두 영향 패키지 38개다. Jenkins 토큰 바인딩 전 high/critical 검사를 추가했다. REST API 전환 또는 CLI 패치 대기 선택이 필요하며 현재 배포는 차단된다. |
 | **조건부 진행 가능** | FE 빌드·개발 도구 | 정적 파일 배포, 검토된 소스만 빌드, 개발 서버 중지, 토큰 없는 빌드가 전제다. devDependencies라는 이유만으로 안전하다고 결론 내리지 않는다. |
 | **실제 계정 연결 때 필수** | IAM·Secret·Jenkins·Vercel 접근자 | 코드에 있는 제한과 실제 계정 권한은 별개다. 계정/Role, SNS 구독, 최소 권한 토큰, state 접근 권한을 확인한다. |
 | **추가 보강 후보** | 컨테이너·CI 호스트·세션 회수 | 비root 실행·capability 제한, CI의 Docker 권한 경계, 비밀번호 변경 후 기존 refresh token 폐기 등을 검토한다. 실사용 계정 도입 전 세션 회수 정책은 필요하다. |

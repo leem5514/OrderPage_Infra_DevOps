@@ -1,6 +1,6 @@
 # 백엔드 보안 기반과 CI 연결
 
-2026-11-17. **BE #5와 Infra #15는 main에 병합 완료**했다. 후속 보안 변경은 [BE #6](https://github.com/leem5514/OrderPage_BE_DevOps/pull/6)과 이 Infra PR로 제공하며, 두 변경이 모두 반영돼야 다음 배포 단계를 진행할 수 있다.
+2026-11-17. **BE #5와 Infra #15는 main에 병합 완료**했다. 후속 보안 변경 [BE #6](https://github.com/leem5514/OrderPage_BE_DevOps/pull/6)과 [Infra #16](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/16)도 main에 병합했다. 아래 반영 순서는 작업 당시 기록이며, 현재 다음 단계는 [Vercel CLI 보안 검토](vercel-security-review.md)다.
 
 ## 이번에 바꾼 이유
 

@@ -10,7 +10,7 @@
 
 > **2026-11-17 보안 보강 진행: 공개 배포 보류 유지**
 >
-> 주문 검증 BE #5와 Infra #15는 병합했습니다. 후속 Java 21/Boot 4.1.2·비밀번호 보강은 테스트 68건과 Docker 실기동을 검증했고 새 PR로 제공합니다. Jenkins Java 및 p95 histogram 환경변수 수정은 함께 반영해야 합니다. [이번 변경과 근거](docs/restart/backend-security-baseline.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요. Vercel CLI·실제 계정 검증은 아직 남아 있습니다.
+> BE #6·Infra #16까지 병합했습니다. Java 테스트 68건과 Docker 실기동을 확인한 보안 기반은 main에 반영됐습니다. Vercel CLI는 최신 후보에도 영향 패키지 38개가 남아 토큰 사용 전 검사를 추가했습니다. [CLI 조사·보호·대안](docs/restart/vercel-security-review.md), [백엔드 검증](docs/restart/backend-security-baseline.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요. 실제 계정 연결과 배포는 아직 하지 않았습니다.
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { validateSettings, verifyArtifact, deploy } from '../vercel-deploy.mjs';
+import { validateSettings, verifyArtifact, deploy, cliEnvironment } from '../vercel-deploy.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 fs.mkdirSync(path.join(root,'.local'),{recursive:true});
 const settings={deploymentEnabled:true,apiOrigin:'https://api-devops.auctionbid.shop',frontendOrigin:'https://devops.auctionbid.shop',vercelProjectId:'prj_MockOnly',vercelOrgId:'team_MockOnly'};
@@ -38,12 +38,15 @@ function mocks(scenario='success'){
     return new Response(scenario==='stale'?'old deployment':html,{headers:{'Content-Type':'text/html'}});
   };
   const run=(command,args,options)=>{
-    if(command==='git')return args[0]==='rev-parse'?'a'.repeat(40)+'\n':scenario==='dirty'?' M src/main.js':'';
+    if(command==='git') {
+      assert.equal(options.env.VERCEL_TOKEN,'','Git 읽기 명령에는 배포 토큰을 넘기지 않음');
+      return args[0]==='rev-parse'?'a'.repeat(40)+'\n':scenario==='dirty'?' M src/main.js':'';
+    }
     calls.push({kind:'deploy',args});
     assert.ok(args.includes('--prebuilt') && args.includes('--prod'));
     assert.ok(!args.includes('--token'));
     assert.equal(options.env.VERCEL_TOKEN,'MockOnlyToken');
-    if(scenario==='cli')throw new Error('mock CLI failure MockOnlyToken');
+    if(scenario==='cli')throw new Error('mock CLI failure MockOnlyToken SyntheticUnrelatedSecret');
     return 'https://orderpage-mock.vercel.app\n';
   };
   return {calls,request,run};
@@ -53,6 +56,14 @@ test('활성화에는 실제 형식 ID가 필요하고 미승인 변수와 origi
   assert.throws(()=>validateSettings({...settings,vercelProjectId:null}));
   assert.throws(()=>validateSettings({...settings,token:'not-allowed'}));
   assert.throws(()=>validateSettings({...settings,apiOrigin:'http://localhost:8080'}));
+});
+
+test('CLI 환경에 다른 서비스 키나 Node 코드 주입·TLS 우회 변수를 넘기지 않음',()=>{
+  const env=cliEnvironment('MockOnlyToken',settings,{PATH:'/usr/bin',HOME:'/tmp/test-home',
+    AWS_ACCESS_KEY_ID:'MockOnlyAWS',GITHUB_TOKEN:'MockOnlyGit',NODE_OPTIONS:'--import malicious.mjs',
+    NODE_TLS_REJECT_UNAUTHORIZED:'0',VERCEL_TOKEN:'wrong-token'});
+  assert.deepEqual(env,{PATH:'/usr/bin',HOME:'/tmp/test-home',CI:'1',VERCEL_TELEMETRY_DISABLED:'1',
+    VERCEL_TOKEN:'MockOnlyToken',VERCEL_ORG_ID:settings.vercelOrgId,VERCEL_PROJECT_ID:settings.vercelProjectId});
 });
 test('산출물 변경과 functions 추가는 외부 호출 전에 거부',async()=>{
   const dir=fixture();const mock=mocks();
@@ -74,6 +85,17 @@ for(const scenario of ['cli','stale','mime'])test(scenario+' 실패를 성공으
   const raw=fs.readFileSync(path.join(root,'.local/frontend-deployment.json'),'utf8');
   assert.equal(JSON.parse(raw).status,'failed');
   assert.ok(!raw.includes('MockOnlyToken'));
+  assert.ok(!raw.includes('SyntheticUnrelatedSecret'));
+});
+
+test('static 디렉터리 자체가 symlink이면 외부 호출 전에 거부',async()=>{
+  const dir=fixture();const mock=mocks();
+  const staticDir=path.join(dir,'.vercel/output/static');
+  const moved=path.join(dir,'original-static');
+  fs.renameSync(staticDir,moved);
+  fs.symlinkSync(moved,staticDir,process.platform==='win32'?'junction':'dir');
+  await assert.rejects(()=>deploy({frontend:dir,settings,token:'MockOnlyToken',...mock}),/symlink/);
+  assert.equal(mock.calls.length,0);
 });
 test('정상 배포는 프로젝트/CORS 선확인 후 정적 경로와 JS hash까지 검사',async()=>{
   const mock=mocks();const report=await deploy({frontend:fixture(),settings,token:'MockOnlyToken',...mock});

@@ -5,7 +5,19 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const assert = (ok, message) => { if (!ok) throw new Error(message); };
+// 외부 API/프로세스의 오류 원문에는 토큰 외의 비밀도 포함될 수 있다.
+// 직접 작성한 고정 메시지만 보고서와 콘솔에 남긴다.
+class DeploymentError extends Error {}
+const assert = (ok, message) => { if (!ok) throw new DeploymentError(message); };
+const safeError = error => error instanceof DeploymentError ? error.message : '외부 응답 또는 실행 오류가 발생했습니다. 원문은 기록하지 않습니다.';
+export function cliEnvironment(token, settings, environment=process.env) {
+  // Jenkins 호스트의 AWS/GitHub 자격증명, NODE_OPTIONS, TLS 우회 설정은 상속하지 않는다.
+  const allowed=['PATH','Path','SystemRoot','SYSTEMROOT','WINDIR','COMSPEC','PATHEXT','HOME','USERPROFILE',
+    'APPDATA','LOCALAPPDATA','TMPDIR','TMP','TEMP','XDG_CACHE_HOME','XDG_CONFIG_HOME','LANG','LC_ALL'];
+  const base=Object.fromEntries(allowed.filter(key=>environment[key]!==undefined).map(key=>[key,environment[key]]));
+  return {...base,CI:'1',VERCEL_TELEMETRY_DISABLED:'1',VERCEL_TOKEN:token,
+    VERCEL_ORG_ID:settings.vercelOrgId,VERCEL_PROJECT_ID:settings.vercelProjectId};
+}
 const hash = data => createHash('sha256').update(data).digest('hex');
 export function validateSettings(settings, deploying = false) {
   const keys = ['deploymentEnabled','apiOrigin','frontendOrigin','vercelProjectId','vercelOrgId'];
@@ -22,6 +34,12 @@ export function validateSettings(settings, deploying = false) {
 }
 export function verifyArtifact(frontend, settings) {
   const output = path.join(frontend,'.vercel/output');
+  for (const directory of ['.vercel','.vercel/output','.vercel/output/static']) {
+    const stat=fs.lstatSync(path.join(frontend,directory));
+    assert(stat.isDirectory() && !stat.isSymbolicLink(),'정적 산출물 디렉터리에 symlink를 사용할 수 없습니다.');
+  }
+  const configStat=fs.lstatSync(path.join(output,'config.json'));
+  assert(configStat.isFile() && !configStat.isSymbolicLink(),'라우팅 설정은 일반 파일이어야 합니다.');
   const evidence = JSON.parse(fs.readFileSync(path.join(frontend,'.local/build-evidence.json'),'utf8'));
   assert(evidence.apiOrigin === settings.apiOrigin, '빌드 API와 배포 설정이 다릅니다.');
   assert(JSON.stringify(fs.readdirSync(output).sort()) === JSON.stringify(['config.json','static']), '정적 output 외의 functions/파일은 허용하지 않습니다.');
@@ -34,7 +52,7 @@ export function verifyArtifact(frontend, settings) {
       const absolute=path.join(dir,entry.name);
       assert(!entry.isSymbolicLink() && !entry.name.startsWith('.'),'symlink/숨김 파일은 배포하지 않습니다.');
       if(entry.isDirectory()) walk(absolute);
-      else { const data=fs.readFileSync(absolute);files.push({path:path.relative(staticRoot,absolute).replaceAll('\\','/'),bytes:data.length,sha256:hash(data)}); }
+      else { assert(entry.isFile(),'정적 산출물은 일반 파일이어야 합니다.');const data=fs.readFileSync(absolute);files.push({path:path.relative(staticRoot,absolute).replaceAll('\\','/'),bytes:data.length,sha256:hash(data)}); }
     }
   }
   walk(staticRoot);files.sort((a,b)=>a.path.localeCompare(b.path,'en'));
@@ -76,9 +94,10 @@ export async function smoke(settings, evidence, request = fetch) {
 export async function deploy({frontend, settings, token, request=fetch, run=execFileSync}) {
   validateSettings(settings,true);
   const evidence=verifyArtifact(frontend,settings);
-  const sourceCommit=run('git',['rev-parse','HEAD'],{cwd:frontend,encoding:'utf8'}).trim();
+  const gitEnv=cliEnvironment('',settings);
+  const sourceCommit=run('git',['rev-parse','HEAD'],{cwd:frontend,encoding:'utf8',env:gitEnv}).trim();
   assert(/^[a-f0-9]{40}$/.test(sourceCommit),'FE SHA 확인 실패.');
-  const dirty=run('git',['status','--porcelain','--untracked-files=no'],{cwd:frontend,encoding:'utf8'}).trim();
+  const dirty=run('git',['status','--porcelain','--untracked-files=no'],{cwd:frontend,encoding:'utf8',env:gitEnv}).trim();
   assert(!dirty,'빌드 후 추적 소스가 변경되었습니다.');
   const report={sourceCommit,apiOrigin:settings.apiOrigin,frontendOrigin:settings.frontendOrigin,artifactSha256:evidence.artifactSha256,projectId:settings.vercelProjectId,startedAt:new Date().toISOString(),phase:'preflight',status:'running'};
   const reportPath=path.join(root,'.local/frontend-deployment.json');
@@ -93,7 +112,7 @@ export async function deploy({frontend, settings, token, request=fetch, run=exec
     // 고정 CLI는 VERCEL_TOKEN 환경변수를 지원한다. token을 명령 인자/파일에 넣지 않는다.
     const output=run(process.execPath,[cli,'deploy','--prebuilt','--prod','--yes','--global-config',path.join(root,'.local/vercel-cli'), '--scope',settings.vercelOrgId,'--meta','feCommit='+sourceCommit],{
       cwd:frontend,encoding:'utf8',timeout:10*60*1000,maxBuffer:2*1024*1024,
-      env:{...process.env,CI:'1',VERCEL_TELEMETRY_DISABLED:'1',VERCEL_TOKEN:token,VERCEL_ORG_ID:settings.vercelOrgId,VERCEL_PROJECT_ID:settings.vercelProjectId},stdio:['ignore','pipe','pipe']
+      env:cliEnvironment(token,settings),stdio:['ignore','pipe','pipe']
     });
     const urls=output.trim().split(/\r?\n/).filter(line=>/^https:\/\/[a-z0-9-]+\.vercel\.app\/?$/.test(line));
     assert(urls.length===1,'배포 URL을 확인하지 못했습니다. Vercel 상태를 확인하세요.');
@@ -104,8 +123,8 @@ export async function deploy({frontend, settings, token, request=fetch, run=exec
   } catch(error) {
     report.status='failed';
     // 응답 본문/CLI 환경과 token은 기록하지 않는다. 도메인 전환 후 실패면 수동 복구가 필요하다.
-    report.error=String(error.message).split(token || '\0').join('[REDACTED]').slice(0,600);
-    throw new Error(report.error);
+    report.error=safeError(error);
+    throw new DeploymentError(report.error);
   } finally {report.finishedAt=new Date().toISOString();save();}
 }
 if(process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
@@ -113,6 +132,6 @@ if(process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.
     const settings=validateSettings(JSON.parse(fs.readFileSync(path.join(root,'jenkins/frontend-settings.json'),'utf8')));
     if(process.argv[2]==='settings') console.log(settings.apiOrigin+'\n'+settings.deploymentEnabled);
     else if(process.argv[2]==='deploy' && process.argv[3]) {const report=await deploy({frontend:path.resolve(process.argv[3]),settings,token:process.env.VERCEL_TOKEN});console.log('운영 배포 확인: '+report.deploymentUrl);}
-    else throw new Error('사용법: vercel-deploy.mjs settings | deploy FRONTEND_DIRECTORY');
-  } catch(error){console.error(error.message);process.exitCode=1;}
+    else throw new DeploymentError('사용법: vercel-deploy.mjs settings | deploy FRONTEND_DIRECTORY');
+  } catch(error){console.error(safeError(error));process.exitCode=1;}
 }
