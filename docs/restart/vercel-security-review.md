@@ -1,5 +1,7 @@
 # Vercel 배포 도구 보안 재검토
 
+> 후속 결정: 사용자가 공식 REST API 전환을 승인했다. CLI·전용 lockfile·설치 단계를 제거했으며 [현재 구현과 검증](vercel-rest-deployment.md)을 따른다. 아래는 전환 전 조사·차단 기록이며 upstream CLI 취약점이 패치됐다는 뜻이 아니다.
+
 2026-11-17. BE #6과 Infra #16은 main에 병합했다. 이번에는 실제 배포 토큰을 받는 Vercel CLI를 점검했다. **CLI 권고는 아직 해결되지 않았으며, 실제 배포 활성화는 보류한다.**
 
 ## 최신 버전으로 바꾸면 끝나는가
@@ -45,11 +47,11 @@ AWS/Vercel 자원 생성, 토큰 입력, 파일 업로드, 도메인 변경과 �
 
 ## 다음 선택
 
-사용자에게 두 경로를 제안했으며 아직 선택 전이다.
+조사 당시 두 경로를 제안했고, 이후 사용자는 1번을 선택했다.
 
 1. **공식 REST API 전환 검증**: Jenkins와 Vercel은 유지하고, 검증한 정적 파일을 파일 업로드·배포 생성 API로 전달한다. CLI 의존성을 없앨 수 있지만 업로드 실패·완료 대기·라우팅·산출물 일치 확인 코드를 직접 관리해야 한다. API의 공개 스키마에는 CLI의 `--prebuilt` 옵션이 그대로 존재하지 않으므로, 같은 동작이라고 가정하지 않고 정적 배포 계약부터 검증해야 한다.
 2. **CLI 유지**: 현재 검사에서 배포를 차단하고, 안전한 공식 패치 조합이 나온 뒤 번들/실행 경로와 실제 배포를 다시 확인한다.
 
-이 PR은 위의 공통 보호와 조사 기록만 반영한다. REST 전환이나 미해결 권고의 위험 수용을 승인한 것으로 처리하지 않는다.
+첫 커밋은 공통 보호와 조사 기록만 반영했다. 같은 PR의 후속 커밋은 사용자 선택에 따라 REST 전환을 구현한다. 미해결 upstream 권고의 위험 수용이나 실제 운영 배포 승인은 아니다.
 
 근거: [CLI 인증 옵션](https://vercel.com/docs/cli/global-options), [prebuilt 배포](https://vercel.com/docs/cli/deploy), [node-tar 권고](https://github.com/isaacs/node-tar/security/advisories/GHSA-23hp-3jrh-7fpw), [공식 API 스키마](https://vercel.com/openapi.json), [파일 업로드 API](https://vercel.com/docs/rest-api/deployments/upload-deployment-files), [배포 생성 API](https://vercel.com/docs/rest-api/deployments/create-a-new-deployment).

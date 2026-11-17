@@ -2,7 +2,7 @@
 
 기준일: **2026-11-16 KST**. README PR [#13](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/13)은 main에 병합했다. 이번 단계는 최신 main의 잔여 위험을 판정하는 작업이며, 애플리케이션 수정·의존성 업그레이드·AWS 실행은 하지 않았다.
 
-**후속 진행:** 이 판단서의 Infra [PR #14](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/14)를 병합했다. 주문 입력 검증 수정은 BE [PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과한 후 main에 병합했다(Infra #15도 병합). [변경·검증 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/adf1eea042b1e369f8cd612b7de949b80bd274ad/docs/order-input-validation.md)를 따른다. 아래 버전·권고 수치는 수정 전 조사 기록이다. 2026-11-17의 [백엔드 보안 기반 갱신 결과](backend-security-baseline.md)는 BE #6·Infra #16 병합까지 완료했다. [Vercel CLI 재검토](vercel-security-review.md)에서는 최신 후보에도 38개 영향 패키지가 남았으므로 실제 토큰 사용 보류를 유지한다.
+**후속 진행:** 이 판단서의 Infra [PR #14](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/14)를 병합했다. 주문 입력 검증 수정은 BE [PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과한 후 main에 병합했다(Infra #15도 병합). [변경·검증 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/adf1eea042b1e369f8cd612b7de949b80bd274ad/docs/order-input-validation.md)를 따른다. 아래 버전·권고 수치는 수정 전 조사 기록이다. 2026-11-17의 [백엔드 보안 기반 갱신 결과](backend-security-baseline.md)는 BE #6·Infra #16 병합까지 완료했다. [Vercel CLI 재검토](vercel-security-review.md) 후 사용자가 REST 전환을 선택했다. CLI 실행 의존성을 제거했고 [공식 API 구현·검증](vercel-rest-deployment.md)은 Infra #17에서 검토 중이다. 실제 배포는 비활성이다.
 
 ## 결론: 현재 버전의 공개 배포는 보류
 
@@ -14,7 +14,7 @@
 |---|---|---|
 | **병합 완료** | 주문 수량 검증 | BE PR #5가 main에 반영됐다. 전체 목록 선검증·400 응답·업무 의존성 미호출·정상 배열 계약을 확인했다. |
 | **병합 완료** | BE 실행 의존성·비밀번호 검증 | Java 21/Boot 4.1.2·72바이트 입력 정책·공통 encoder를 검증했다. Java 68건, Docker 기능 13개·보안/지표 6개·장애/종료 검사 통과. BE #6·Infra #16에 반영됐다. |
-| **실제 배포 토큰 사용 전 필수** | Vercel CLI 의존성 | 현재 65.12.1과 최신 후보 65.17.0 모두 영향 패키지 38개다. Jenkins 토큰 바인딩 전 high/critical 검사를 추가했다. REST API 전환 또는 CLI 패치 대기 선택이 필요하며 현재 배포는 차단된다. |
+| **CLI 제거 / REST 로컬 검증 완료** | Vercel 배포 경로 | CLI와 전용 lockfile을 제거했다. Infra #17의 REST 전환 검토·병합, 실제 토큰 범위·계정·도메인 및 최초 배포 검증이 남았다. upstream 권고를 패치한 것은 아니다. |
 | **조건부 진행 가능** | FE 빌드·개발 도구 | 정적 파일 배포, 검토된 소스만 빌드, 개발 서버 중지, 토큰 없는 빌드가 전제다. devDependencies라는 이유만으로 안전하다고 결론 내리지 않는다. |
 | **실제 계정 연결 때 필수** | IAM·Secret·Jenkins·Vercel 접근자 | 코드에 있는 제한과 실제 계정 권한은 별개다. 계정/Role, SNS 구독, 최소 권한 토큰, state 접근 권한을 확인한다. |
 | **추가 보강 후보** | 컨테이너·CI 호스트·세션 회수 | 비root 실행·capability 제한, CI의 Docker 권한 경계, 비밀번호 변경 후 기존 refresh token 폐기 등을 검토한다. 실사용 계정 도입 전 세션 회수 정책은 필요하다. |
@@ -88,7 +88,9 @@ Spring Boot 2.x의 OSS 지원은 [2.7.18 릴리스에서 종료](https://spring.
 
 FE lockfile에는 npmjs 373개, npmmirror 599개의 HTTPS resolved 항목이 섞여 있다. 악성 패키지가 있다는 증거는 아니지만, 향후 의존성 정비 때 출처를 정리하고 integrity·버전 변경을 검토할 대상이다. 자동 `--force`가 제시하는 Vue CLI 3 계열 변경을 보안 해결로 적용하지 않는다.
 
-### Vercel CLI: 토큰이 주입되는 실행 도구
+### Vercel CLI: 전환 전 조사 기록
+
+현재 실행 경로에서는 CLI를 제거했다. 아래는 당시 조사 근거이며 [REST 전환 문서](vercel-rest-deployment.md)가 후속 판단이다.
 
 `jenkins/vercel-cli`는 FE와 별도의 의존성 집합이다. 현재 실제 배포 시 이 CLI에 VERCEL_TOKEN 환경변수를 전달하므로 FE 런타임 audit 0개를 이 도구의 안전 근거로 사용할 수 없다.
 
@@ -117,7 +119,9 @@ FE lockfile에는 npmjs 373개, npmmirror 599개의 HTTPS resolved 항목이 섞
 
 전체 침투 테스트, 컨테이너 OS/JDK 이미지 CVE 검사, Jenkins WAR/플러그인 검사와 실제 AWS/Vercel 접근자 검토는 이번 결과에 포함하지 않는다. 새 프레임워크로 변경하면 의존성·보안 경계 판단을 다시 수행해야 한다.
 
-## 6. 다음 작업 순서
+## 6. 당시 작업 순서와 현재 남은 항목
+
+1·2번은 BE #6·Infra #16까지 병합 완료했다. 3번은 CLI 패치 대신 REST 전환으로 구현했고 #17 검토·병합 및 실제 연동 검증이 남았다. 이후 4·5번을 진행한다.
 
 1. **주문 검증 수정 PR 검토·병합**: BE PR #5의 전체 목록 선검증과 테스트 50건 결과를 확인한다. 변경 상세는 위 후속 기록을 따른다.
 2. **BE 보안 기반 갱신**: 지원되는 Java·Spring Boot 조합으로 변경하고 BCrypt 포함 실행 의존성을 다시 검사한다. 기능·성능 개선은 섞지 않는다.

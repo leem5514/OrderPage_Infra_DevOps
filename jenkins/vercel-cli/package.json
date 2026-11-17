@@ -1,6 +1,0 @@
-{
-  "name": "orderpage-vercel-cli",
-  "private": true,
-  "engines": { "node": "22.x" },
-  "devDependencies": { "vercel": "65.12.1" }
-}

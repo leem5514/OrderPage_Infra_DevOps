@@ -13,7 +13,7 @@
 ## 1. 확정한 요구사항
 
 - Terraform으로 AWS를 구성한다. Backend는 Spring Boot/EKS, Frontend는 Vue/Vercel이다.
-- CI는 Jenkins, Backend CD는 Argo CD, FE는 Jenkins 검증 후 Vercel CLI 배포다.
+- CI는 Jenkins, Backend CD는 Argo CD, FE는 Jenkins 검증 후 공식 Vercel REST API 배포다.
 - Docker로 빌드하고 Backend 이미지는 ECR에 저장한다.
 - MariaDB/Redis/RabbitMQ는 RDS/ElastiCache/Amazon MQ 관리형을 사용한다.
 - CloudWatch + Amazon SNS로 운영 장애를 알리고 Prometheus + Grafana로 Kubernetes를 관측한다.
@@ -343,3 +343,11 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 산출물 상위 symlink·외부 오류 원문·다른 서비스 자격증명 상속을 차단하고 회귀 검사를 추가했다.
 - 공식 REST API 대안을 제안했으며 사용자 선택 전에는 배포 방식 변경이나 위험 수용을 진행하지 않는다.
 - [검증 근거·적용 범위·다음 선택](vercel-security-review.md)
+
+## 24. 2026-11-17 — 사용자 선택에 따른 공식 REST API 전환
+
+- 사용자가 REST 전환 검증·구현을 선택했다. 열린 Infra #17에 후속 한국어 커밋으로 반영한다.
+- CLI 전용 package/lockfile과 Jenkins 설치·실행 경로를 제거했다. Node 기본 fetch로 파일 업로드·생성·상태/운영 alias 조회를 수행한다.
+- 앱은 재빌드하지 않고 검증한 정적 바이트를 public/에 전달한다. 실제 운영 도메인이 이번 배포 ID를 가리킨 뒤 HTML/JS·SPA·404를 확인한다.
+- 실패/시간 초과 시 자동 재생성하지 않는다. FE/BE 기능 코드나 AWS 사양·서비스를 추가하지 않았다.
+- 실제 토큰·Vercel 업로드·AWS 생성은 미실행이다. [결정 이유·과정·검증·후속 준비](vercel-rest-deployment.md)를 따른다.

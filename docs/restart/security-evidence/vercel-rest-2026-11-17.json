@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-17",
+  "scope": "Public JSON/OpenAPI contract validation only; no authenticated upload/deployment",
+  "api": {
+    "source": "https://vercel.com/openapi.json",
+    "sha256": "b53f70b5b81350a27f85c7fefc66ff644d161ae3306a9a3e3240333217051c8b",
+    "createPayloadValid": true,
+    "unknownPrebuiltRejected": true
+  },
+  "config": {
+    "source": "https://openapi.vercel.sh/vercel.json",
+    "sha256": "fa5f8005e6aaaece7d66ca5fddfe6ebe64471923cb1597b56886cff48bba1438",
+    "usedFieldSubschemasValid": true,
+    "unknownFieldRejected": true,
+    "scope": "Official subschemas for used fields only: version/framework/installCommand/buildCommand/outputDirectory/git/routes. Whole published schema mixes draft-04 with newer keywords in unused experimental fields."
+  },
+  "validator": "Ajv 6.15.0 (existing local FE build tool, not a new deployment dependency); OpenAPI nullable enabled, draft-04 meta-schema for vercel.json",
+  "artifact": {
+    "staticFiles": 12,
+    "bytes": 8187133,
+    "uploadedEntries": 13,
+    "sha256": "747abafc6de9c7d970fa5afd5affcfc70643e17981934335897eec259b0460ff"
+  },
+  "limitations": [
+    "No real Vercel token, server-side routing or alias behavior validated",
+    "Existing local FE artifact used; no new FE build claimed",
+    "CLI advisory history retained; no claim that underlying upstream vulnerabilities are patched"
+  ]
+}
