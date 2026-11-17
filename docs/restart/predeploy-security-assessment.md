@@ -2,7 +2,7 @@
 
 기준일: **2026-11-16 KST**. README PR [#13](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/13)은 main에 병합했다. 이번 단계는 최신 main의 잔여 위험을 판정하는 작업이며, 애플리케이션 수정·의존성 업그레이드·AWS 실행은 하지 않았다.
 
-**후속 진행:** 이 판단서의 Infra [PR #14](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/14)를 병합했다. 주문 입력 검증 수정은 BE [PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과했고 main 반영 대기 중이다. [변경·검증 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/adf1eea042b1e369f8cd612b7de949b80bd274ad/docs/order-input-validation.md)를 따른다. 아래 버전·권고 수치는 수정 전 조사 기록이며, 비밀번호·실행 의존성·CLI의 공개 배포 보류 사유는 남아 있다.
+**후속 진행:** 이 판단서의 Infra [PR #14](https://github.com/leem5514/OrderPage_Infra_DevOps/pull/14)를 병합했다. 주문 입력 검증 수정은 BE [PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과한 후 main에 병합했다(Infra #15도 병합). [변경·검증 상세](https://github.com/leem5514/OrderPage_BE_DevOps/blob/adf1eea042b1e369f8cd612b7de949b80bd274ad/docs/order-input-validation.md)를 따른다. 아래 버전·권고 수치는 수정 전 조사 기록이다. 2026-11-17의 [백엔드 보안 기반 갱신 결과](backend-security-baseline.md)는 새 PR에서 검증했으며, 병합과 Vercel CLI·계정 확인 등 남은 배포 조건은 별도로 관리한다.
 
 ## 결론: 현재 버전의 공개 배포는 보류
 
@@ -12,8 +12,8 @@
 
 | 분류 | 대상 | 판단과 통과 조건 |
 |---|---|---|
-| **수정 검증 완료 / 병합 대기** | 주문 수량 검증 | BE PR #5에서 전체 목록 선검증·400 응답·업무 의존성 미호출·정상 배열 계약을 확인했다. BE main 반영 후 완료로 전환한다. |
-| **공개 배포 전 필수** | BE 실행 의존성·비밀번호 검증 | Spring Boot 2.7.11 기반을 지원되는 보안 패치 조합으로 교체하는 계획이 필요하다. 비밀번호 문제 재현이 사라지고 인증·DB·Redis·MQ·SSE·관측 회귀 검증을 통과해야 한다. |
+| **병합 완료** | 주문 수량 검증 | BE PR #5가 main에 반영됐다. 전체 목록 선검증·400 응답·업무 의존성 미호출·정상 배열 계약을 확인했다. |
+| **수정 검증 완료 / 새 PR 반영 필요** | BE 실행 의존성·비밀번호 검증 | Java 21/Boot 4.1.2·72바이트 입력 정책·공통 encoder를 검증했다. Java 68건, Docker 기능 13개·보안/지표 6개·장애/종료 검사 통과. BE와 Infra의 후속 PR을 함께 반영한다. |
 | **실제 배포 토큰 사용 전 필수** | Vercel CLI 의존성 | CLI 전용 lockfile에도 권고가 남는다. 안전한 갱신 후보와 prebuilt 정적 배포 호환성을 검증하고, 잔여 권고의 실행 조건을 개별 판단해야 한다. |
 | **조건부 진행 가능** | FE 빌드·개발 도구 | 정적 파일 배포, 검토된 소스만 빌드, 개발 서버 중지, 토큰 없는 빌드가 전제다. devDependencies라는 이유만으로 안전하다고 결론 내리지 않는다. |
 | **실제 계정 연결 때 필수** | IAM·Secret·Jenkins·Vercel 접근자 | 코드에 있는 제한과 실제 계정 권한은 별개다. 계정/Role, SNS 구독, 최소 권한 토큰, state 접근 권한을 확인한다. |
@@ -54,14 +54,9 @@ npm의 `total`은 영향을 받는 패키지 항목 수이며, 서로 다른 취
 
 기존 주문 진단은 Service를 mock으로 대체하므로 새 Service 검증을 평가할 수 없다. 혼동을 막기 위해 실행 파일은 제거하고 [수정 전 진단 원본](https://github.com/leem5514/OrderPage_Infra_DevOps/blob/64de8de3f054c290a95de70ccc787e1dfdab6611/docs/restart/security-evidence/OrderValidationAssessmentTest.java)은 Git 이력으로 보존한다. 수정 후에는 BE의 실제 Service를 연결한 OrderInputValidationTest와 직접 Service 검사를 사용한다.
 
-미해결인 [비밀번호 진단](security-evidence/PasswordLengthAssessmentTest.java)과 [Gradle init](security-evidence/reproduce.init.gradle)은 유지한다. BE/Infra checkout이 같은 부모 디렉터리에 있을 때 Java 11과 Gradle 캐시를 준비하고 BE 루트에서 실행한다.
+이전 비밀번호 진단은 취약 동작의 성공을 기대하므로 최신 코드의 합격 기준으로 사용할 수 없다. 실행 파일과 전용 Gradle init을 제거했다. [수정 전 진단 원본](https://github.com/leem5514/OrderPage_Infra_DevOps/blob/ae854c56b318caa37e5b5e23332f7e580a78ea98/docs/restart/security-evidence/PasswordLengthAssessmentTest.java)은 Git 이력에 보존한다. 수정 후에는 BE의 PasswordValidationTest 및 실제 Docker security-smoke를 실행한다.
 
-```powershell
-$evidenceDir = (Resolve-Path '../OrderPage_Infra_DevOps_restart/docs/restart/security-evidence').Path
-.\gradlew.bat --offline --no-daemon --console=plain -I "$evidenceDir/reproduce.init.gradle" "-PsecurityAssessmentSources=$evidenceDir" test --tests '*PasswordLengthAssessmentTest'
-```
-
-**비밀번호 진단의 통과는 아직 문제가 존재한다는 뜻이며 안전함을 의미하지 않는다.** 해당 보안 기반 갱신 후 잘못된 비밀번호 거부를 기대하는 정규 회귀 검사로 대체한다. 일반 `gradlew test`에는 이 외부 소스 경로를 추가하지 않는다.
+주의: 최신 라이브러리만 적용한 실험에서도 기본 encoder의 초과 입력 허용이 남았다. 앱의 공통 encoder와 서비스 경계에서 명시적으로 거부하는 정책까지 적용한 것이 이번 완료 기준이다.
 
 초기 보안 판단 당시에는 BE 테스트 23개와 주문 진단 1개를 함께 실행해 통과했고, 이후 추가한 비밀번호 진단을 포함한 두 진단 검사도 통과했다. 이는 위 표의 수정 전 SHA에 대한 기록이며, 주문 수정 후 결과는 BE PR #5의 정규 테스트 50건으로 구분한다.
 

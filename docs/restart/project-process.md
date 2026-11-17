@@ -324,3 +324,13 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 저장된 plan을 `terraform show -json`으로 메모리에서 읽고 action·자원 타입만 요약하며 삭제·교체를 별도 경고하는 로컬 도구를 준비한다. plan·요약 파일은 Git에서 제외한다.
 - 배포 중 지속 읽기 부하 k6 시나리오와 E01~E05의 baseline/after 기록 양식을 추가한다. 실제 ECR digest·계정·관측 Target이 준비되기 전에는 실행하지 않는다.
 - [Terraform plan 검토·측정 조건·실험별 자료](experiment-plan-review.md)
+
+## 22. 2026-11-17 — 주문 PR 병합과 백엔드 보안 기반 갱신
+
+- BE #5 → Infra #15를 검토한 SHA로 병합하고 main을 동기화했다.
+- 후속 작업은 Java 21/Boot 4.1.2, 비밀번호 UTF-8 72바이트 제한, JWT·Jackson·Redis/MQ 호환 갱신이다. 주문 성능 로직은 변경하지 않았다.
+- Java 68건, Docker 기능 13개·보안/지표 6개, DB 장애/복구·SSE 정상 종료를 확인했다. Infra 검사 36건도 통과했다.
+- 실제 기동에서 histogram 환경변수 이름 오류를 발견해 기본값·생성기·검증을 함께 수정했다. 새 BE와 Infra PR을 함께 반영해야 한다.
+- 최종 실행 Maven 모듈 174개에 대해 OSV 버전 일치 0건을 확인했다. 취약점 부재 보장이나 성능 향상 수치가 아니다.
+- AWS/Vercel 생성·배포는 하지 않았다. 다음은 새 PR 검토와 Vercel CLI 잔여 권고 정리다.
+- [의사결정·파일 역할·실기동 결과·남은 조건](backend-security-baseline.md)

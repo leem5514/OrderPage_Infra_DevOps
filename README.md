@@ -8,9 +8,9 @@
 >
 > 기반 코드와 로컬 검증, 보안·비용 재검토는 완료했습니다. 실제 AWS 리소스 생성, 계정에 연결한 Terraform plan, Vercel 배포와 성능 측정은 아직 수행하지 않았습니다. 아래 그림은 **코드로 준비한 목표 구조**입니다.
 
-> **2026-11-16 보안 추가 판단: 공개 배포 보류**
+> **2026-11-17 보안 보강 진행: 공개 배포 보류 유지**
 >
-> 주문 검증 수정은 [BE PR #5](https://github.com/leem5514/OrderPage_BE_DevOps/pull/5)에서 전체 테스트 50건을 통과했고 병합 대기 중입니다. 긴 비밀번호·BE 실행 의존성·Vercel CLI 보안 항목은 남아 있습니다. [필수 수정 항목·조건부 허용·재현 근거](docs/restart/predeploy-security-assessment.md)를 먼저 확인하세요.
+> 주문 검증 BE #5와 Infra #15는 병합했습니다. 후속 Java 21/Boot 4.1.2·비밀번호 보강은 테스트 68건과 Docker 실기동을 검증했고 새 PR로 제공합니다. Jenkins Java 및 p95 histogram 환경변수 수정은 함께 반영해야 합니다. [이번 변경과 근거](docs/restart/backend-security-baseline.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요. Vercel CLI·실제 계정 검증은 아직 남아 있습니다.
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 

@@ -8,7 +8,7 @@
 
 ## 1. 이번 연결의 목적과 경계
 
-BE main 변경 → Jenkins polling → Java 11 테스트 → 기존 Dockerfile 빌드 → ECR push/digest 확인 → Infra 배포 PR → 사람의 병합 → Argo CD main 감지 → EKS rollout.
+BE main 변경 → Jenkins polling → Java 21 테스트 → 기존 Dockerfile 빌드 → ECR push/digest 확인 → Infra 배포 PR → 사람의 병합 → Argo CD main 감지 → EKS rollout.
 
 - Jenkins는 이미지를 만들고 Git에 배포 요청을 남긴다. EKS를 수정하는 권한이나 kubeconfig를 받지 않는다.
 - Argo CD는 승인된 Git 상태를 실제 클러스터에 반영한다. Jenkins 빌드 성공과 앱 배포 성공은 별도 상태다.
@@ -25,7 +25,7 @@ BE main 변경 → Jenkins polling → Java 11 테스트 → 기존 Dockerfile �
 | scripts/install-jenkins-host.sh | 공식 LTS WAR checksum 검증, localhost Controller, kubectl 설치 |
 | scripts/configure-jenkins-agent.sh | 별도 Linux 사용자/Java 프로세스의 inbound WebSocket agent |
 | jenkins/Jenkinsfile.backend | 단계 순서·시간 제한·JUnit·artifact·자격증명 범위 |
-| scripts/ci-backend.sh | main SHA 확인, Java 11 테스트, Docker/ECR, 단계별 시각 |
+| scripts/ci-backend.sh | main SHA 확인, Java 21 테스트, Docker/ECR, 단계별 시각 |
 | scripts/gitops-release.mjs | 로컬 실제 설정을 GitOps에 최초 승격, digest 변경 검증 |
 | scripts/create-release-pr.mjs | release 브랜치 push + 한국어 PR 생성 |
 | argocd/values.dev.yaml | 공식 chart 10.14.0 / app v3.6.1의 단기 비HA 설정 |
@@ -39,7 +39,7 @@ Kubernetes Namespace에는 Prune=false,Delete=false를 넣었다. Git 변경으�
 ## 3. EC2 선택과 비용
 
 - 서울 m6i.large 1대(2 vCPU/8GiB), private subnet, 공개 IP 없음, 인바운드 규칙 없음.
-- 이전 t3.medium 후보를 8GiB/CPU credit 없는 사양으로 변경했다. Controller + agent + Java 11 테스트/빌드를 함께 실행할 메모리 여유를 둔다. 실측으로 충분함을 입증한 것은 아니다.
+- 이전 t3.medium 후보를 8GiB/CPU credit 없는 사양으로 변경했다. Controller + agent + Java 21 테스트/빌드를 함께 실행할 메모리 여유를 둔다. 실측으로 충분함을 입증한 것은 아니다.
 - Controller Java heap 최대 1GiB, agent 256MiB. 테스트 컨테이너 3GiB/2 CPU, agent executor 1, Job 동시 실행 금지.
 - gp3 30GiB 암호화, IMDSv2 필수/hop=1. 기존 NAT를 공유하며 별도 NAT/공개 IPv4/관리 ALB를 만들지 않는다.
 - EC2 Role: SSMManagedInstanceCore + 전용 ECR 업로드/조회. EKS/S3/app Secret 권한 없음. 정적 AWS 키 없음.

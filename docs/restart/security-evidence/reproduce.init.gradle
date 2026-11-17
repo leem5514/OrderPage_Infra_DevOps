@@ -1,9 +1,0 @@
-allprojects {
-    afterEvaluate { project ->
-        if (project.plugins.hasPlugin('java')) {
-            def sourcePath = project.findProperty('securityAssessmentSources')
-            if (!sourcePath) throw new GradleException('securityAssessmentSources property is required')
-            project.sourceSets.test.java.srcDir(project.file(sourcePath))
-        }
-    }
-}

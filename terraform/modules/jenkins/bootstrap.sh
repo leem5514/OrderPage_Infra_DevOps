@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-# 앱 빌드 Java 11은 Docker 안에서만 사용한다. Jenkins/agent는 Java 21이다.
+# 앱 빌드 Java 21은 Docker 안에서만 사용한다. Jenkins/agent는 Java 21이다.
 dnf install -y docker git java-21-amazon-corretto-headless nodejs22 nodejs22-npm tar gzip unzip awscli-2
 systemctl enable --now docker amazon-ssm-agent
 id orderpage-jenkins >/dev/null 2>&1 || useradd --system --create-home --home-dir /var/lib/orderpage-jenkins orderpage-jenkins

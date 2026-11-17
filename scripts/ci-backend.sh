@@ -19,10 +19,10 @@ case "$phase" in
     git -C .local/backend rev-parse HEAD > .local/be-commit
     ;;
   test)
-    # Jenkins runtime Java 21과 앱 Java 11을 분리한다. 소스 폴더만 mount하며 AWS/GitHub 값을 전달하지 않는다.
+    # Jenkins와 앱 테스트 모두 Java 21을 사용하되 앱은 Docker에서 실행한다. 소스 폴더만 mount하며 AWS/GitHub 값을 전달하지 않는다.
     docker run --rm --user "$(id -u):$(id -g)" --cpus 2 --memory 3g \
       --mount "type=bind,source=$PWD/.local/backend,target=/app" --workdir /app \
-      --env GRADLE_USER_HOME=/app/.gradle-ci eclipse-temurin:11-jdk \
+      --env GRADLE_USER_HOME=/app/.gradle-ci eclipse-temurin:21-jdk \
       sh -c 'sh gradlew --no-daemon --max-workers=2 test'
     ;;
   publish)

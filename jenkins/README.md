@@ -4,7 +4,7 @@
 
 `Jenkinsfile.backend`는 EC2 전용 Linux agent(orderpage-ci)에서 실행할 새 pipeline이다.
 
-- BE main → Java 11 테스트 → 기존 Dockerfile 빌드 → ECR digest → Infra 배포 PR.
+- BE main → Java 21 테스트 → 기존 Dockerfile 빌드 → ECR digest → Infra 배포 PR.
 - 최초 이미지만 만들 때 CREATE_DEPLOYMENT_PR=false, 실제 GitOps 환경 승격 후 true.
 - BE main만 5분 polling하고 Infra checkout은 poll=false로 재귀 실행을 방지한다.
 - 사람의 PR 병합 후 Argo CD가 EKS를 동기화한다. Jenkins에는 EKS 권한을 주지 않는다.
