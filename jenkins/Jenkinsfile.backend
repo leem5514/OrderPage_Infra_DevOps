@@ -44,7 +44,7 @@ pipeline {
                 script { env.BE_COMMIT = readFile('.local/be-commit').trim() }
             }
         }
-        stage('Java 11 테스트') {
+        stage('Java 21 테스트') {
             steps { sh 'bash scripts/ci-backend.sh test' }
             post { always { junit testResults: '.local/backend/build/test-results/test/*.xml', allowEmptyResults: false } }
         }
