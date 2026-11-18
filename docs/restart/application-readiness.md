@@ -78,7 +78,7 @@ FE에는 Browserslist 노후 데이터와 3개 webpack 용량 경고가 남는�
 | S3 이미지 | getUrl은 presigned URL 아님. private 객체 읽기 방식 결정 | 상품 업로드 후 브라우저 이미지 200 |
 | SSE | 현재 onerror에서 close. 재접속·idle timeout 확인 | Pod 교체 후 재연결 측정, HTTP와 분리 보고 |
 | CI/CD | Jenkins test/build/ECR/Infra Git 갱신, Argo가 sync | Jenkins가 kubectl set image 직접 실행하지 않음 |
-| FE 배포 | Jenkins 빌드 env 주입 후 Vercel CLI, Git 자동배포 중복 방지 | 실제 배포 산출물/환경 식별 |
+| FE 배포 | Jenkins 빌드 env 주입 후 공식 Vercel REST API, Git 자동배포 중복 방지 | 실제 배포 산출물/환경 식별 |
 
 이 표의 항목은 실제 서비스 가동 전/직후 확인할 배포 조건이다. 이번에 전부 구현한 항목이 아니다. 기존 Infra 파일을 그대로 apply하지 않는다.
 

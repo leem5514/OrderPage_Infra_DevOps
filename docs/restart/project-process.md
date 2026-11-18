@@ -13,7 +13,7 @@
 ## 1. 확정한 요구사항
 
 - Terraform으로 AWS를 구성한다. Backend는 Spring Boot/EKS, Frontend는 Vue/Vercel이다.
-- CI는 Jenkins, Backend CD는 Argo CD, FE는 Jenkins 검증 후 Vercel CLI 배포다.
+- CI는 Jenkins, Backend CD는 Argo CD, FE는 Jenkins 검증 후 공식 Vercel REST API 배포다.
 - Docker로 빌드하고 Backend 이미지는 ECR에 저장한다.
 - MariaDB/Redis/RabbitMQ는 RDS/ElastiCache/Amazon MQ 관리형을 사용한다.
 - CloudWatch + Amazon SNS로 운영 장애를 알리고 Prometheus + Grafana로 Kubernetes를 관측한다.
@@ -334,3 +334,20 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 최종 실행 Maven 모듈 174개에 대해 OSV 버전 일치 0건을 확인했다. 취약점 부재 보장이나 성능 향상 수치가 아니다.
 - AWS/Vercel 생성·배포는 하지 않았다. 다음은 새 PR 검토와 Vercel CLI 잔여 권고 정리다.
 - [의사결정·파일 역할·실기동 결과·남은 조건](backend-security-baseline.md)
+
+## 23. 2026-11-17 — Vercel CLI 재검토와 배포 경계 보강
+
+- BE #6 → Infra #16을 순서대로 병합했고 로컬 main도 동기화했다.
+- CLI 65.12.1과 최신 후보 65.17.0을 같은 날 비교했으나 영향 패키지 38개가 그대로였다. 후보와 무리한 overrides는 실제 lockfile에 적용하지 않았다.
+- Jenkins에서 high/critical audit 또는 조회 실패 시 실제 토큰 바인딩 전에 중단하도록 했다. 현재 배포는 계속 비활성이다.
+- 산출물 상위 symlink·외부 오류 원문·다른 서비스 자격증명 상속을 차단하고 회귀 검사를 추가했다.
+- 공식 REST API 대안을 제안했으며 사용자 선택 전에는 배포 방식 변경이나 위험 수용을 진행하지 않는다.
+- [검증 근거·적용 범위·다음 선택](vercel-security-review.md)
+
+## 24. 2026-11-17 — 사용자 선택에 따른 공식 REST API 전환
+
+- 사용자가 REST 전환 검증·구현을 선택했다. 열린 Infra #17에 후속 한국어 커밋으로 반영한다.
+- CLI 전용 package/lockfile과 Jenkins 설치·실행 경로를 제거했다. Node 기본 fetch로 파일 업로드·생성·상태/운영 alias 조회를 수행한다.
+- 앱은 재빌드하지 않고 검증한 정적 바이트를 public/에 전달한다. 실제 운영 도메인이 이번 배포 ID를 가리킨 뒤 HTML/JS·SPA·404를 확인한다.
+- 실패/시간 초과 시 자동 재생성하지 않는다. FE/BE 기능 코드나 AWS 사양·서비스를 추가하지 않았다.
+- 실제 토큰·Vercel 업로드·AWS 생성은 미실행이다. [결정 이유·과정·검증·후속 준비](vercel-rest-deployment.md)를 따른다.
