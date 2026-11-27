@@ -1,0 +1,11 @@
+{
+  "Date": "2026-11-27",
+  "Profile": "orderpage-eks",
+  "ProfileAdded": true,
+  "ExpectedAccountMatches": true,
+  "ExpectedRoleMatches": true,
+  "TerraformRoleInputMatches": true,
+  "ClusterAccessNotTested": true,
+  "ServiceApplyExecuted": false,
+  "DescribeClusterResult": "ResourceNotFoundException"
+}

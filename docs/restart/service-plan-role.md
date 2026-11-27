@@ -13,7 +13,7 @@
 | `orderpage-lab` | IAM 사용자 임시 인증 및 사양 조회 | 사용 중 |
 | `orderpage-bootstrap` | 상태 버킷 자체의 설정 관리 | 생성·검증 완료 |
 | `orderpage-deploy` / `orderpage-terraform-deploy` | 서비스 인프라 plan과 지정 state 접근 | STS 인증·S3 backend 초기화·검토용 plan 완료 |
-| EKS 운영 Role | kubectl/Helm 및 클러스터 운영 | 별도 orderpage-eks-operator 선택, 생성 파일 준비·AWS 연결 전 |
+| EKS 운영 Role | kubectl/Helm 및 클러스터 운영 | 별도 orderpage-eks-operator 생성·STS 확인 완료, 클러스터 접속 전 |
 
 이번 Role을 `eks_admin_principal_arn`에 자동으로 넣지 않았다. Terraform 실행 권한과 Kubernetes 관리자 권한은 각각 검토해야 한다.
 

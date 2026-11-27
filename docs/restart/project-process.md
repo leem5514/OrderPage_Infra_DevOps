@@ -415,3 +415,9 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 세 암호는 Windows CurrentUser DPAPI로 보관하고 plan 프로세스에만 전달했다. 실제 AWS 인증 기반 plan은 생성 74, 수정·삭제·교체 0으로 완료했다. 22개 구성 검사를 통과했고 종료 후 현재 잠금 파일이 남지 않았음을 조회했다.
 - 별도 EKS 운영 Role 생성 파일·생성기·검사·콘솔 안내를 준비했다. IAM 검사 18개가 통과했다. Role 연결, 생성 권한, 비용/시간 검토 및 실제 apply는 후속 작업이다.
 - [plan과 보안·비용 검토 범위](service-plan-2026-11-27.md), [운영 Role 연결 순서](eks-operator-role.md)에 상세 과정을 기록했다.
+## 34. 2026-11-27 — EKS 운영 Role 연결 및 실제 인증
+
+- 사용자가 관리자 콘솔에서 EKS 조회 정책, 별도 운영 Role, 사용자 그룹의 전환 정책 연결을 완료했다.
+- 기존 AWS 프로필을 유지하고 `orderpage-eks`를 추가했다. STS의 계정·Role과 실제 Terraform 운영 Role 입력이 일치했다.
+- 지정 클러스터 조회는 ResourceNotFoundException을 반환했다. 클러스터 생성 전의 예상 결과이며 Kubernetes 접근 검증과 구분한다.
+- [연결 확인 결과](eks-operator-role.md)를 갱신했다. 서비스 생성 권한, 최신 비용·실제 가동 시간 검토 및 서비스 apply는 남아 있다.
