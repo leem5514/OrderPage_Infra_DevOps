@@ -1,6 +1,10 @@
 {
   "name": "orderpage-infra-validation",
   "private": true,
-  "scripts": { "test": "node --test scripts/tests/deployment.test.mjs scripts/tests/gitops.test.mjs scripts/tests/vercel-deploy.test.mjs scripts/tests/cost-report.test.mjs scripts/tests/observability.test.mjs scripts/tests/plan-review.test.mjs scripts/tests/bootstrap-iam.test.mjs scripts/tests/service-plan-iam.test.mjs scripts/tests/eks-operator-iam.test.mjs" },
-  "devDependencies": { "yaml": "2.9.1" }
+  "scripts": {
+    "test": "node --test scripts/tests/deployment.test.mjs scripts/tests/gitops.test.mjs scripts/tests/vercel-deploy.test.mjs scripts/tests/cost-report.test.mjs scripts/tests/observability.test.mjs scripts/tests/plan-review.test.mjs scripts/tests/bootstrap-iam.test.mjs scripts/tests/service-plan-iam.test.mjs scripts/tests/eks-operator-iam.test.mjs scripts/tests/lab-costs.test.mjs scripts/tests/apply-scope.test.mjs scripts/tests/workload-boundaries.test.mjs"
+  },
+  "devDependencies": {
+    "yaml": "2.9.1"
+  }
 }

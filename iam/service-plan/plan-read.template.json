@@ -58,10 +58,17 @@
       "Resource": "arn:aws:iam::{{ACCOUNT_ID}}:instance-profile/orderpage-dev-jenkins"
     },
     {
-      "Sid": "ReadControllerPolicy",
+      "Sid": "ReadProjectPolicies",
       "Effect": "Allow",
       "Action": ["iam:GetPolicy", "iam:GetPolicyVersion", "iam:ListPolicyVersions", "iam:ListPolicyTags"],
-      "Resource": "arn:aws:iam::{{ACCOUNT_ID}}:policy/orderpage-dev-alb-controller-policy"
+      "Resource": [
+        "arn:aws:iam::{{ACCOUNT_ID}}:policy/orderpage-dev-alb-controller-policy",
+        "arn:aws:iam::{{ACCOUNT_ID}}:policy/orderpage-dev-boundary-cluster",
+        "arn:aws:iam::{{ACCOUNT_ID}}:policy/orderpage-dev-boundary-node",
+        "arn:aws:iam::{{ACCOUNT_ID}}:policy/orderpage-dev-boundary-jenkins",
+        "arn:aws:iam::{{ACCOUNT_ID}}:policy/orderpage-dev-boundary-backend-upload",
+        "arn:aws:iam::{{ACCOUNT_ID}}:policy/orderpage-dev-boundary-alb-controller"
+      ]
     },
     {
       "Sid": "ReadSeoulEksOidc",

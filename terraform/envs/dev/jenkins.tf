@@ -13,15 +13,16 @@ variable "jenkins_ami_id" {
   }
 }
 module "jenkins" {
-  count              = var.enable_jenkins ? 1 : 0
-  source             = "../../modules/jenkins"
-  name               = "${var.project_name}-${var.environment}-jenkins"
-  vpc_id             = module.vpc.vpc_id
-  subnet_id          = module.vpc.private_subnet_ids[0]
-  ami_id             = var.jenkins_ami_id
-  ecr_repository_arn = module.backend_ecr.repository_arn
-  tags               = local.common_tags
-  depends_on         = [module.vpc]
+  count                    = var.enable_jenkins ? 1 : 0
+  source                   = "../../modules/jenkins"
+  permissions_boundary_arn = local.workload_boundaries["jenkins"]
+  name                     = "${var.project_name}-${var.environment}-jenkins"
+  vpc_id                   = module.vpc.vpc_id
+  subnet_id                = module.vpc.private_subnet_ids[0]
+  ami_id                   = var.jenkins_ami_id
+  ecr_repository_arn       = module.backend_ecr.repository_arn
+  tags                     = local.common_tags
+  depends_on               = [module.vpc]
 }
 output "jenkins" {
   value = var.enable_jenkins ? {

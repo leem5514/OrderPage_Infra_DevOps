@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-27",
+  "method": "STS identity validation, IAM GetPolicy and GetPolicyVersion; normalized JSON comparison",
+  "identityVerified": true,
+  "policiesChecked": 5,
+  "allFiveMatch": true,
+  "results": [
+    {
+      "name": "orderpage-dev-boundary-cluster",
+      "readable": true,
+      "defaultVersion": "v1",
+      "contentMatches": true,
+      "normalAttachments": 0,
+      "boundaryUses": 0
+    },
+    {
+      "name": "orderpage-dev-boundary-node",
+      "readable": true,
+      "defaultVersion": "v1",
+      "contentMatches": true,
+      "normalAttachments": 0,
+      "boundaryUses": 0
+    },
+    {
+      "name": "orderpage-dev-boundary-jenkins",
+      "readable": true,
+      "defaultVersion": "v1",
+      "contentMatches": true,
+      "normalAttachments": 0,
+      "boundaryUses": 0
+    },
+    {
+      "name": "orderpage-dev-boundary-backend-upload",
+      "readable": true,
+      "defaultVersion": "v1",
+      "contentMatches": true,
+      "normalAttachments": 0,
+      "boundaryUses": 0
+    },
+    {
+      "name": "orderpage-dev-boundary-alb-controller",
+      "readable": true,
+      "defaultVersion": "v1",
+      "contentMatches": true,
+      "normalAttachments": 0,
+      "boundaryUses": 0
+    }
+  ],
+  "verificationChangedAws": false,
+  "serviceApplyExecuted": false,
+  "readyForApply": false,
+  "limitations": [
+    "Policy content comparison is not IAM effective-permission simulation.",
+    "Workload roles do not exist yet; permissions boundaries are not in use.",
+    "Service write permissions, constrained IAM delegation, runtime and Budget remain pending."
+  ]
+}

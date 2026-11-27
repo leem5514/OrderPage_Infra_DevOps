@@ -1,10 +1,11 @@
 # ALB는 Controller가 소유한다. Terraform에서 같은 ALB를 중복 생성하지 않는다.
 module "aws_load_balancer_controller_irsa" {
-  source            = "../../modules/load-balancer-controller-irsa"
-  role_name         = "${var.project_name}-${var.environment}-alb-controller"
-  oidc_provider_arn = module.eks.oidc_provider_arn
-  oidc_provider_url = module.eks.cluster_oidc_issuer_url
-  tags              = local.common_tags
+  source                   = "../../modules/load-balancer-controller-irsa"
+  permissions_boundary_arn = local.workload_boundaries["alb-controller"]
+  role_name                = "${var.project_name}-${var.environment}-alb-controller"
+  oidc_provider_arn        = module.eks.oidc_provider_arn
+  oidc_provider_url        = module.eks.cluster_oidc_issuer_url
+  tags                     = local.common_tags
 }
 resource "aws_acm_certificate" "api" {
   domain_name       = var.api_domain_name

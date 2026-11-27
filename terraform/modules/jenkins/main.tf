@@ -26,7 +26,9 @@ resource "aws_security_group" "this" {
   tags = var.tags
 }
 resource "aws_iam_role" "this" {
-  name = var.name
+  # 관리자가 먼저 만든 권한 상한을 필수로 연결한다. 이 정책 자체는 여기서 수정하지 않는다.
+  permissions_boundary = var.permissions_boundary_arn
+  name                 = var.name
   assume_role_policy = jsonencode({
     Version   = "2012-10-17"
     Statement = [{ Effect = "Allow", Action = "sts:AssumeRole", Principal = { Service = "ec2.amazonaws.com" } }]

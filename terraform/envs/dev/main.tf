@@ -24,6 +24,9 @@ module "backend_ecr" {
 module "eks" {
   source = "../../modules/eks"
 
+  cluster_permissions_boundary_arn = local.workload_boundaries["cluster"]
+  node_permissions_boundary_arn    = local.workload_boundaries["node"]
+
   cluster_name        = "${var.project_name}-${var.environment}"
   kubernetes_version  = var.kubernetes_version
   cluster_subnet_ids  = module.vpc.private_subnet_ids

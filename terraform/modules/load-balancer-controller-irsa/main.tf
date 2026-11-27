@@ -8,7 +8,9 @@ resource "aws_iam_policy" "controller" {
   tags   = var.tags
 }
 resource "aws_iam_role" "this" {
-  name = var.role_name
+  # 관리자가 먼저 만든 권한 상한을 필수로 연결한다. 이 정책 자체는 여기서 수정하지 않는다.
+  permissions_boundary = var.permissions_boundary_arn
+  name                 = var.role_name
   # audience와 정확한 ServiceAccount를 모두 검사한다.
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

@@ -1,0 +1,37 @@
+[
+  {
+    "name": "AmazonEKSClusterPolicy",
+    "url": "https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEKSClusterPolicy.html",
+    "version": "v10",
+    "retrievedDate": "2026-11-27",
+    "sha256": "cfcceaef0ebce2977bb602b073526e3d3c5f1b40a27ddf34a107bf5f05a40f65"
+  },
+  {
+    "name": "AmazonEKSWorkerNodePolicy",
+    "url": "https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEKSWorkerNodePolicy.html",
+    "version": "v3",
+    "retrievedDate": "2026-11-27",
+    "sha256": "0efb97ec1c470d1ac53a1244ab5392c792b0d527d843ade0128537f68b5415e0"
+  },
+  {
+    "name": "AmazonEKS_CNI_Policy",
+    "url": "https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEKS_CNI_Policy.html",
+    "version": "v6",
+    "retrievedDate": "2026-11-27",
+    "sha256": "51c88ad32fe68ce3d43c223195dacefa340e4555b8c51860f2e42ea9ebd52bd7"
+  },
+  {
+    "name": "AmazonEC2ContainerRegistryPullOnly",
+    "url": "https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEC2ContainerRegistryPullOnly.html",
+    "version": "v2",
+    "retrievedDate": "2026-11-27",
+    "sha256": "b2fbbf49a91c05534c6dbcf30c6c61c202c7f8631375bd270722972978c43020"
+  },
+  {
+    "name": "AmazonSSMManagedInstanceCore",
+    "url": "https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonSSMManagedInstanceCore.html",
+    "version": "v2",
+    "retrievedDate": "2026-11-27",
+    "sha256": "cdda7894744469d6226b958532014ac3cd3d0d995e56d748ab5b88a989dadbf6"
+  }
+]

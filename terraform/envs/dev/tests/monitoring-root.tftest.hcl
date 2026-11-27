@@ -7,6 +7,10 @@ mock_provider "aws" {
 run "root_monitoring_enabled_before_alb_creation" {
   command = plan
   variables {
+    # 개인 tfvars의 활성화 값이 mock 시나리오를 바꾸지 않도록 고정한다.
+    enable_jenkins               = false
+    monthly_budget_usd           = null
+    monitoring_alb               = null
     eks_public_access_cidrs      = ["203.0.113.10/32"]
     eks_admin_principal_arn      = "arn:aws:iam::123456789012:role/Operator"
     eks_addon_versions           = { vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1" }

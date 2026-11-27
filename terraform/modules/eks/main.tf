@@ -17,18 +17,22 @@ data "aws_iam_policy_document" "node_assume_role" {
   }
 }
 resource "aws_iam_role" "cluster" {
-  name               = "${var.cluster_name}-cluster-role"
-  assume_role_policy = data.aws_iam_policy_document.cluster_assume_role.json
-  tags               = var.tags
+  # 관리자가 먼저 만든 권한 상한을 필수로 연결한다. 이 정책 자체는 여기서 수정하지 않는다.
+  permissions_boundary = var.cluster_permissions_boundary_arn
+  name                 = "${var.cluster_name}-cluster-role"
+  assume_role_policy   = data.aws_iam_policy_document.cluster_assume_role.json
+  tags                 = var.tags
 }
 resource "aws_iam_role_policy_attachment" "cluster" {
   role       = aws_iam_role.cluster.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 resource "aws_iam_role" "node" {
-  name               = "${var.cluster_name}-node-role"
-  assume_role_policy = data.aws_iam_policy_document.node_assume_role.json
-  tags               = var.tags
+  # 관리자가 먼저 만든 권한 상한을 필수로 연결한다. 이 정책 자체는 여기서 수정하지 않는다.
+  permissions_boundary = var.node_permissions_boundary_arn
+  name                 = "${var.cluster_name}-node-role"
+  assume_role_policy   = data.aws_iam_policy_document.node_assume_role.json
+  tags                 = var.tags
 }
 resource "aws_iam_role_policy_attachment" "node_worker" {
   role       = aws_iam_role.node.name

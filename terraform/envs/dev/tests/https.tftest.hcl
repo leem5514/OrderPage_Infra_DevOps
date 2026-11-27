@@ -10,12 +10,17 @@ mock_provider "aws" {
   }
 }
 run "controller_trust_is_exact" {
+  assert {
+    condition     = aws_iam_role.this.permissions_boundary == var.permissions_boundary_arn
+    error_message = "Role에 지정한 권한 상한이 연결되어야 합니다."
+  }
   command = plan
   module { source = "../../modules/load-balancer-controller-irsa" }
   variables {
-    role_name         = "test-controller"
-    oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/TEST"
-    oidc_provider_url = "https://oidc.eks.ap-northeast-2.amazonaws.com/id/TEST"
+    permissions_boundary_arn = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-alb-controller"
+    role_name                = "test-controller"
+    oidc_provider_arn        = "arn:aws:iam::123456789012:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/TEST"
+    oidc_provider_url        = "https://oidc.eks.ap-northeast-2.amazonaws.com/id/TEST"
   }
   assert {
     condition = (
@@ -30,14 +35,19 @@ run "controller_trust_is_exact" {
   }
 }
 run "public_images_without_public_writes" {
+  assert {
+    condition     = aws_iam_role.backend.permissions_boundary == var.permissions_boundary_arn
+    error_message = "Role에 지정한 권한 상한이 연결되어야 합니다."
+  }
   # mock provider에만 apply한다. 실제 AWS API는 호출하지 않는다.
   command = apply
   module { source = "../../modules/product-images" }
   variables {
-    bucket_name       = "test-product-images"
-    role_name         = "test-backend"
-    oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/TEST"
-    oidc_provider_url = "https://oidc.eks.ap-northeast-2.amazonaws.com/id/TEST"
+    permissions_boundary_arn = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-backend-upload"
+    bucket_name              = "test-product-images"
+    role_name                = "test-backend"
+    oidc_provider_arn        = "arn:aws:iam::123456789012:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/TEST"
+    oidc_provider_url        = "https://oidc.eks.ap-northeast-2.amazonaws.com/id/TEST"
   }
   assert {
     condition = (
@@ -64,13 +74,16 @@ run "public_images_without_public_writes" {
 run "acm_uses_dns_without_replacing_apex" {
   command = plan
   variables {
-    eks_public_access_cidrs = ["203.0.113.10/32"]
-    eks_admin_principal_arn = "arn:aws:iam::123456789012:role/Operator"
-    eks_addon_versions      = { vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1" }
-    rds_engine_version      = "10.11.13"
-    rds_master_password     = "MockOnlyRdsPassword1234567890123456"
-    redis_auth_token        = "MockOnlyRedisToken1234567890123456"
-    rabbitmq_admin_password = "MockOnlyMqPassword1234567890123456"
+    # 개인 tfvars의 활성화 값이 mock 시나리오를 바꾸지 않도록 고정한다.
+    enable_operations_monitoring = false
+    enable_jenkins               = false
+    eks_public_access_cidrs      = ["203.0.113.10/32"]
+    eks_admin_principal_arn      = "arn:aws:iam::123456789012:role/Operator"
+    eks_addon_versions           = { vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1" }
+    rds_engine_version           = "10.11.13"
+    rds_master_password          = "MockOnlyRdsPassword1234567890123456"
+    redis_auth_token             = "MockOnlyRedisToken1234567890123456"
+    rabbitmq_admin_password      = "MockOnlyMqPassword1234567890123456"
   }
   assert {
     condition     = aws_acm_certificate.api.domain_name == "api-devops.auctionbid.shop" && aws_acm_certificate.api.validation_method == "DNS"

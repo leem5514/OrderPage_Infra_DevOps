@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-27",
+  "scope": "Design review only; IAM write policies and boundaries not created or attached",
+  "sourcePlanSha256": "016fd92e13f0917bc97bd9f2307535555c8680235253cc003d47d04491e053c5",
+  "managedResourceCount": 74,
+  "classifiedResourceCount": 74,
+  "groupCounts": {
+    "network": 19,
+    "eks": 5,
+    "eksAccess": 2,
+    "compute": 2,
+    "data": 6,
+    "registry": 2,
+    "images": 5,
+    "certificate": 1,
+    "observability": 16,
+    "iam": 16
+  },
+  "unmappedCount": 0,
+  "destructiveCount": 0,
+  "rolesWithoutBoundary": [
+    "module.aws_load_balancer_controller_irsa.aws_iam_role.this",
+    "module.eks.aws_iam_role.cluster",
+    "module.eks.aws_iam_role.node",
+    "module.jenkins[0].aws_iam_role.this",
+    "module.product_images.aws_iam_role.backend"
+  ],
+  "readyForApply": false
+}
