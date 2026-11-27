@@ -1,6 +1,6 @@
 # 배포 권한 1단계: IAM 위임과 EKS 운영자 등록
 
-2026-11-27 KST. **PR #23을 병합한 뒤 검토용 정책 5개를 작성했다. AWS에 정책을 생성·연결하거나 서비스를 배포하지 않았다.** 다음은 OIDC·서비스 연결 Role 및 서비스별 생성·정리 권한을 완성하는 단계다.
+2026-11-27 KST. **PR #24로 IAM 위임 1단계를 병합했다. 후속 구현은 OIDC·서비스 연결 Role을 포함한 검토용 정책 6개다. AWS에 정책을 생성·연결하거나 서비스를 배포하지 않았다.** 이 문서의 90개 테스트와 44개 요청 검사는 1단계 기록이며, 최신 95개 테스트와 최초 EKS plan은 [2단계 설명](oidc-service-linked-roles.md)에 기록한다.
 
 ## 지금 해결하는 문제
 
@@ -46,10 +46,6 @@ EKS 관리자 정책을 해제하는 요청에는 연결 시의 accessScope 입�
 
 Controller의 정책 본문과 두 inline 정책 본문 역시 현재 내용 전체를 조건으로 고정한 것은 아니다. workload 상한과 최종 plan 검토를 함께 사용한다. 보호된 사용자/그룹의 `iam:*` Deny에는 해당 주체의 읽기도 포함되지만, 현재 Terraform 조회 경로는 이 주체들을 읽지 않는다.
 
-OIDC issuer ID는 클러스터 생성 후 정해진다. 서울 EKS issuer 전체에 관리 권한을 주는 방식은 다른 클러스터의 공급자 수정 가능성을 검토해야 하므로 아직 추가하지 않았다. 서비스 연결 Role 생성도 공유 역할 여부와 API 의존 권한을 먼저 확인한다. 현재 guard의 Role/정책 변경 제한과 충돌할 수 있어 단순히 CreateServiceLinkedRole Allow만 덧붙이면 안 된다.
+OIDC issuer ID는 클러스터 생성 후 정해진다. 후속 구현은 생성 전 OIDC 변경을 거부하고, 생성 후 실제 클러스터를 조회해 정확한 공급자 하나에만 묶는다. 서비스 연결 Role 생성의 AttachRolePolicy/PutRolePolicy 의존 권한은 지정한 공유 Role 7개에 한해 guard 예외로 분리했다. [범위와 한계](oidc-service-linked-roles.md)를 함께 확인한다.
 
 그다음 VPC·EC2·EKS 본체·RDS·Redis·MQ·ECR·S3·관측의 생성/갱신/삭제 요청을 작성하고 전체 묶음을 다시 검사한다. 가동 시간·Budget을 확정하고 최신 plan과 정리 경로까지 검토한 후에 최종 정책을 연결한다. **현재 검토본의 `REVIEW_ONLY_DO_NOT_ATTACH` 상태를 유지한다.**
-
-## 중단 후 이어가기
-
-[재개 지점](deployment-handoff.md)에 브랜치, 검증 결과, 비공개 파일 위치와 다음 순서를 남겼다. 계정 값이나 암호를 다시 채팅에 보낼 필요는 없다.

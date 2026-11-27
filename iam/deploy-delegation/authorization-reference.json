@@ -7,6 +7,13 @@
       "sourceSha256": "39267fc0034910ef6754052b39719e7ffc86c446ba3e9a9834436bcc7d4a4ba6",
       "actions": [
         {
+          "name": "AddClientIDToOpenIDConnectProvider",
+          "conditionKeys": [],
+          "resources": [
+            "oidc-provider"
+          ]
+        },
+        {
           "name": "AddRoleToInstanceProfile",
           "conditionKeys": [],
           "resources": [
@@ -32,6 +39,22 @@
           ],
           "resources": [
             "instance-profile"
+          ]
+        },
+        {
+          "name": "CreateOpenIDConnectProvider",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "iam:EnableIdentityCenterAssociation",
+            "iam:EnableIdentityPropagation",
+            "iam:RequestIdentityCenterInstanceArn",
+            "iam:RequestIdentityProviderIssuers",
+            "iam:ResourceIdentityCenterInstanceArn",
+            "iam:ResourceIdentityProviderIssuers"
+          ],
+          "resources": [
+            "oidc-provider"
           ]
         },
         {
@@ -64,10 +87,26 @@
           ]
         },
         {
+          "name": "CreateServiceLinkedRole",
+          "conditionKeys": [
+            "iam:AWSServiceName"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
           "name": "DeleteInstanceProfile",
           "conditionKeys": [],
           "resources": [
             "instance-profile"
+          ]
+        },
+        {
+          "name": "DeleteOpenIDConnectProvider",
+          "conditionKeys": [],
+          "resources": [
+            "oidc-provider"
           ]
         },
         {
@@ -112,6 +151,13 @@
           ]
         },
         {
+          "name": "DeleteServiceLinkedRole",
+          "conditionKeys": [],
+          "resources": [
+            "role"
+          ]
+        },
+        {
           "name": "DetachRolePolicy",
           "conditionKeys": [
             "iam:PermissionsBoundary",
@@ -119,6 +165,30 @@
           ],
           "resources": [
             "role"
+          ]
+        },
+        {
+          "name": "GetOpenIDConnectProvider",
+          "conditionKeys": [],
+          "resources": [
+            "oidc-provider"
+          ]
+        },
+        {
+          "name": "GetRole",
+          "conditionKeys": [
+            "iam:PermissionsBoundary",
+            "iam:RoleTemplateARN"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "ListOpenIDConnectProviderTags",
+          "conditionKeys": [],
+          "resources": [
+            "oidc-provider"
           ]
         },
         {
@@ -152,6 +222,13 @@
           ]
         },
         {
+          "name": "RemoveClientIDFromOpenIDConnectProvider",
+          "conditionKeys": [],
+          "resources": [
+            "oidc-provider"
+          ]
+        },
+        {
           "name": "RemoveRoleFromInstanceProfile",
           "conditionKeys": [],
           "resources": [
@@ -173,6 +250,16 @@
           ],
           "resources": [
             "instance-profile"
+          ]
+        },
+        {
+          "name": "TagOpenIDConnectProvider",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "oidc-provider"
           ]
         },
         {
@@ -206,6 +293,15 @@
           ]
         },
         {
+          "name": "UntagOpenIDConnectProvider",
+          "conditionKeys": [
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "oidc-provider"
+          ]
+        },
+        {
           "name": "UntagPolicy",
           "conditionKeys": [
             "aws:TagKeys"
@@ -233,6 +329,13 @@
           ]
         },
         {
+          "name": "UpdateOpenIDConnectProviderThumbprint",
+          "conditionKeys": [],
+          "resources": [
+            "oidc-provider"
+          ]
+        },
+        {
           "name": "UpdateRole",
           "conditionKeys": [
             "iam:PermissionsBoundary"
@@ -256,6 +359,15 @@
           "name": "instance-profile",
           "arnFormats": [
             "arn:${Partition}:iam::${Account}:instance-profile/${InstanceProfileNameWithPath}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "oidc-provider",
+          "arnFormats": [
+            "arn:${Partition}:iam::${Account}:oidc-provider/${OidcProviderName}"
           ],
           "conditionKeys": [
             "aws:ResourceTag/${TagKey}"
@@ -301,6 +413,19 @@
           ]
         },
         {
+          "name": "CreateOpenIDConnectProvider",
+          "authorizedActions": [
+            {
+              "Name": "CreateOpenIDConnectProvider",
+              "Service": "iam"
+            },
+            {
+              "Name": "TagOpenIDConnectProvider",
+              "Service": "iam"
+            }
+          ]
+        },
+        {
           "name": "CreateRole",
           "authorizedActions": [
             {
@@ -309,6 +434,19 @@
             },
             {
               "Name": "TagRole",
+              "Service": "iam"
+            }
+          ]
+        },
+        {
+          "name": "CreateServiceLinkedRole",
+          "authorizedActions": [
+            {
+              "Name": "CreateServiceLinkedRole",
+              "Service": "iam"
+            },
+            {
+              "Name": "PutRolePolicy",
               "Service": "iam"
             }
           ]
