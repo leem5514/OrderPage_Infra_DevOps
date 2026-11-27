@@ -1,5 +1,7 @@
 # 실제 AWS plan 전 점검 — 계정·인증·비용
 
+2026-11-27 후속: [IAM 임시 로그인과 Terraform 인증](aws-login-readiness.md)은 성공했다. 아래 인증 실패는 이전 `default` 조사 기록이다. 현재 `orderpage-login` → `orderpage-lab` 연결을 사용하며 서비스 버전 조회는 권한 부족으로 중단됐다. 실제 환경 plan/apply는 아직 미실행이다.
+
 2026-11-16: [보안 잔여 항목 판단](predeploy-security-assessment.md)에서 공개 앱 배포 전 필수 수정이 확인됐다. 이 문서의 계정·plan 준비가 공개 배포 허용을 뜻하지는 않는다.
 
 2026-11-15: 이 문서의 과거 비용 예시 대신 [수정된 가동시간·비용 가정](deployment-review.md)을 적용한다.

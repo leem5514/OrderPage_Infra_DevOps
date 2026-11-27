@@ -351,3 +351,11 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 앱은 재빌드하지 않고 검증한 정적 바이트를 public/에 전달한다. 실제 운영 도메인이 이번 배포 ID를 가리킨 뒤 HTML/JS·SPA·404를 확인한다.
 - 실패/시간 초과 시 자동 재생성하지 않는다. FE/BE 기능 코드나 AWS 사양·서비스를 추가하지 않았다.
 - 실제 토큰·Vercel 업로드·AWS 생성은 미실행이다. [결정 이유·과정·검증·후속 준비](vercel-rest-deployment.md)를 따른다.
+
+## 25. 2026-11-27 — IAM 임시 인증 연결과 사전 조회 권한 준비
+
+- Infra #17은 main에 병합됐다. 사용자가 IAM 콘솔 로그인을 완료한 뒤 브라우저 기반 CLI 인증을 연결했다.
+- orderpage-login과 credential_process 기반 orderpage-lab을 분리했고, 실제 STS에서 루트가 아닌 의도한 IAM 사용자임을 확인했다. 기존 default는 변경하지 않았다.
+- Terraform 1.16.2 / AWS provider 5.100.0의 격리된 데이터 전용 인증 probe가 성공했다. 실제 환경 plan/apply가 아니며 자원은 생성하지 않았다.
+- EKS 버전 조회는 AccessDenied였다. 서울 서비스 버전·사양 조회 11개만 허용하는 정책을 작성했고 아직 AWS에 연결하지 않았다.
+- [상세 과정·권한 범위·콘솔에서 연결할 위치](aws-login-readiness.md)
