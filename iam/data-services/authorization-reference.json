@@ -1,0 +1,962 @@
+{
+  "date": "2026-11-27",
+  "scope": "Selected official action/resource keys and provider source; not live authorization",
+  "services": [
+    {
+      "service": "rds",
+      "source": "https://servicereference.us-east-1.amazonaws.com/v1/rds/rds.json",
+      "sourceSha256": "7f5aa9d17ed83cf1f97ea69e813084d18cdd5373355b705fdc404fd3f4ca806a",
+      "actions": [
+        {
+          "name": "AddTagsToResource",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:TagsFromRequest",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "db",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:DatabaseClass",
+                "rds:DatabaseEngine",
+                "rds:DatabaseName",
+                "rds:MultiAz",
+                "rds:Piops",
+                "rds:StorageEncrypted",
+                "rds:StorageSize",
+                "rds:Vpc",
+                "rds:db-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "pg",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:pg-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "subgrp",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:subgrp-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CreateDBCluster",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:DatabaseClass",
+            "rds:DatabaseEngine",
+            "rds:DatabaseName",
+            "rds:ManageMasterUserPassword",
+            "rds:Piops",
+            "rds:StorageEncrypted",
+            "rds:StorageSize",
+            "rds:VpcNetworkingEnabled",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "CreateDBInstance",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:BackupTarget",
+            "rds:ManageMasterUserPassword",
+            "rds:PubliclyAccessible",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "db",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:DatabaseClass",
+                "rds:DatabaseEngine",
+                "rds:DatabaseName",
+                "rds:MultiAz",
+                "rds:Piops",
+                "rds:StorageEncrypted",
+                "rds:StorageSize",
+                "rds:Vpc",
+                "rds:db-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "og",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:og-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "pg",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:pg-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "subgrp",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:subgrp-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CreateDBInstanceReadReplica",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:PubliclyAccessible",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "CreateDBParameterGroup",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "pg",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:pg-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CreateDBSubnetGroup",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "subgrp",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:subgrp-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DeleteDBInstance",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "db",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:DatabaseClass",
+                "rds:DatabaseEngine",
+                "rds:DatabaseName",
+                "rds:MultiAz",
+                "rds:Piops",
+                "rds:StorageEncrypted",
+                "rds:StorageSize",
+                "rds:Vpc",
+                "rds:db-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DeleteDBParameterGroup",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "pg",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:pg-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DeleteDBSubnetGroup",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "subgrp",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:subgrp-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ModifyDBInstance",
+          "conditionKeys": [
+            "rds:ManageMasterUserPassword"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "db",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:DatabaseClass",
+                "rds:DatabaseEngine",
+                "rds:DatabaseName",
+                "rds:MultiAz",
+                "rds:Piops",
+                "rds:StorageEncrypted",
+                "rds:StorageSize",
+                "rds:Vpc",
+                "rds:db-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "og",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:og-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "pg",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:pg-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "subgrp",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:subgrp-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ModifyDBParameterGroup",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "pg",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:pg-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ModifyDBSubnetGroup",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "subgrp",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:subgrp-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RebootDBInstance",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "db",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:DatabaseClass",
+                "rds:DatabaseEngine",
+                "rds:DatabaseName",
+                "rds:MultiAz",
+                "rds:Piops",
+                "rds:StorageEncrypted",
+                "rds:StorageSize",
+                "rds:Vpc",
+                "rds:db-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RemoveTagsFromResource",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "db",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:DatabaseClass",
+                "rds:DatabaseEngine",
+                "rds:DatabaseName",
+                "rds:MultiAz",
+                "rds:Piops",
+                "rds:StorageEncrypted",
+                "rds:StorageSize",
+                "rds:Vpc",
+                "rds:db-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "pg",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:pg-tag/${TagKey}"
+              ]
+            },
+            {
+              "name": "subgrp",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:subgrp-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ResetDBParameterGroup",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "pg",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}",
+                "rds:pg-tag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RestoreDBInstanceFromDBSnapshot",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:BackupTarget",
+            "rds:ManageMasterUserPassword",
+            "rds:PubliclyAccessible",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "RestoreDBInstanceToPointInTime",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "rds:BackupTarget",
+            "rds:ManageMasterUserPassword",
+            "rds:PubliclyAccessible",
+            "rds:req-tag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        }
+      ]
+    },
+    {
+      "service": "elasticache",
+      "source": "https://servicereference.us-east-1.amazonaws.com/v1/elasticache/elasticache.json",
+      "sourceSha256": "336e0c3091ca0b3a8a908f1571f7df422863ed86296fb624bc72e67727c137e5",
+      "actions": [
+        {
+          "name": "AddTagsToResource",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:ResourceTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "cluster",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:MultiAZEnabled",
+                "elasticache:SnapshotRetentionLimit"
+              ]
+            },
+            {
+              "name": "replicationgroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AtRestEncryptionEnabled",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:AutomaticFailoverEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:ClusterModeEnabled",
+                "elasticache:Durability",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:KmsKeyId",
+                "elasticache:MultiAZEnabled",
+                "elasticache:NumNodeGroups",
+                "elasticache:ReplicasPerNodeGroup",
+                "elasticache:SnapshotRetentionLimit",
+                "elasticache:TransitEncryptionEnabled"
+              ]
+            },
+            {
+              "name": "subnetgroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CreateCacheCluster",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "CreateCacheSubnetGroup",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:ResourceTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "subnetgroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CreateGlobalReplicationGroup",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "CreateReplicationGroup",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "cluster",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:MultiAZEnabled",
+                "elasticache:SnapshotRetentionLimit"
+              ]
+            },
+            {
+              "name": "parametergroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:CacheParameterGroupName"
+              ]
+            },
+            {
+              "name": "replicationgroup",
+              "conditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AtRestEncryptionEnabled",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:AutomaticFailoverEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:ClusterModeEnabled",
+                "elasticache:Durability",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:KmsKeyId",
+                "elasticache:MultiAZEnabled",
+                "elasticache:NumNodeGroups",
+                "elasticache:ReplicasPerNodeGroup",
+                "elasticache:SnapshotRetentionLimit",
+                "elasticache:TransitEncryptionEnabled"
+              ],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AtRestEncryptionEnabled",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:AutomaticFailoverEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:ClusterModeEnabled",
+                "elasticache:Durability",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:KmsKeyId",
+                "elasticache:MultiAZEnabled",
+                "elasticache:NumNodeGroups",
+                "elasticache:ReplicasPerNodeGroup",
+                "elasticache:SnapshotRetentionLimit",
+                "elasticache:TransitEncryptionEnabled"
+              ]
+            },
+            {
+              "name": "subnetgroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CreateServerlessCache",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "DecreaseReplicaCount",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}",
+            "elasticache:ReplicasPerNodeGroup"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "DeleteCacheSubnetGroup",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "subnetgroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DeleteReplicationGroup",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "replicationgroup",
+              "conditionKeys": [
+                "aws:ResourceTag/${TagKey}"
+              ],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AtRestEncryptionEnabled",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:AutomaticFailoverEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:ClusterModeEnabled",
+                "elasticache:Durability",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:KmsKeyId",
+                "elasticache:MultiAZEnabled",
+                "elasticache:NumNodeGroups",
+                "elasticache:ReplicasPerNodeGroup",
+                "elasticache:SnapshotRetentionLimit",
+                "elasticache:TransitEncryptionEnabled"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "IncreaseReplicaCount",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}",
+            "elasticache:ReplicasPerNodeGroup"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "ModifyCacheSubnetGroup",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "subnetgroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ModifyReplicationGroup",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "parametergroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:CacheParameterGroupName"
+              ]
+            },
+            {
+              "name": "replicationgroup",
+              "conditionKeys": [
+                "elasticache:AuthTokenEnabled",
+                "elasticache:AutomaticFailoverEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:ClusterModeEnabled",
+                "elasticache:Durability",
+                "elasticache:EngineVersion",
+                "elasticache:MultiAZEnabled",
+                "elasticache:SnapshotRetentionLimit",
+                "elasticache:TransitEncryptionEnabled"
+              ],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AtRestEncryptionEnabled",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:AutomaticFailoverEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:ClusterModeEnabled",
+                "elasticache:Durability",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:KmsKeyId",
+                "elasticache:MultiAZEnabled",
+                "elasticache:NumNodeGroups",
+                "elasticache:ReplicasPerNodeGroup",
+                "elasticache:SnapshotRetentionLimit",
+                "elasticache:TransitEncryptionEnabled"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ModifyReplicationGroupShardConfiguration",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}",
+            "elasticache:NumNodeGroups"
+          ],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "RemoveTagsFromResource",
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "cluster",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:MultiAZEnabled",
+                "elasticache:SnapshotRetentionLimit"
+              ]
+            },
+            {
+              "name": "replicationgroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys",
+                "elasticache:AtRestEncryptionEnabled",
+                "elasticache:AuthTokenEnabled",
+                "elasticache:AutomaticFailoverEnabled",
+                "elasticache:CacheNodeType",
+                "elasticache:CacheParameterGroupName",
+                "elasticache:ClusterModeEnabled",
+                "elasticache:Durability",
+                "elasticache:EngineType",
+                "elasticache:EngineVersion",
+                "elasticache:KmsKeyId",
+                "elasticache:MultiAZEnabled",
+                "elasticache:NumNodeGroups",
+                "elasticache:ReplicasPerNodeGroup",
+                "elasticache:SnapshotRetentionLimit",
+                "elasticache:TransitEncryptionEnabled"
+              ]
+            },
+            {
+              "name": "subnetgroup",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:RequestTag/${TagKey}",
+                "aws:ResourceTag/${TagKey}",
+                "aws:TagKeys"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "mq",
+      "source": "https://servicereference.us-east-1.amazonaws.com/v1/mq/mq.json",
+      "sourceSha256": "0d0c959b734c4c225ace5316a5e01ce1064d8e355f1909de9e7837a3a69606ba",
+      "actions": [
+        {
+          "name": "CreateBroker",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resourceLevelSupported": false,
+          "resources": []
+        },
+        {
+          "name": "CreateConfiguration",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resourceLevelSupported": false,
+          "resources": []
+        },
+        {
+          "name": "CreateReplicaBroker",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": []
+        },
+        {
+          "name": "CreateTags",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "brokers",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DeleteBroker",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "brokers",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DeleteTags",
+          "conditionKeys": [
+            "aws:TagKeys"
+          ],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "brokers",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RebootBroker",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "brokers",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "UpdateBroker",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": [
+            {
+              "name": "brokers",
+              "conditionKeys": [],
+              "resourceConditionKeys": [
+                "aws:ResourceTag/${TagKey}"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "UpdateBrokerAccessConfiguration",
+          "conditionKeys": [],
+          "resourceLevelSupported": true,
+          "resources": []
+        }
+      ]
+    }
+  ],
+  "provider": [
+    {
+      "source": "https://github.com/hashicorp/terraform-provider-aws/blob/v5.100.0/internal/service/rds/instance.go",
+      "sha256": "23f753e5a297fa540f9994666a21064634a16027653fab437f790d4a1eef7a10"
+    },
+    {
+      "source": "https://github.com/hashicorp/terraform-provider-aws/blob/v5.100.0/internal/service/rds/subnet_group.go",
+      "sha256": "3f8d8fd90132d11c962e7471461f1267d5af3f907354f3779a923a329c0657dc"
+    },
+    {
+      "source": "https://github.com/hashicorp/terraform-provider-aws/blob/v5.100.0/internal/service/rds/parameter_group.go",
+      "sha256": "55423c37fba50486c6ca9b3718e4030db296958823068ccfcdb751991f143b0e"
+    },
+    {
+      "source": "https://github.com/hashicorp/terraform-provider-aws/blob/v5.100.0/internal/service/elasticache/replication_group.go",
+      "sha256": "84680628de15346a1591e91d7c5e10f3329c323e6731bd862767762f03b18404"
+    },
+    {
+      "source": "https://github.com/hashicorp/terraform-provider-aws/blob/v5.100.0/internal/service/elasticache/subnet_group.go",
+      "sha256": "12cd28c796cf436077f79c973c0371a215489ec5007df1eb9b10749627179d54"
+    },
+    {
+      "source": "https://github.com/hashicorp/terraform-provider-aws/blob/v5.100.0/internal/service/mq/broker.go",
+      "sha256": "b0d2871e02544c30dcd610c5cb83b2760546740d281333bcb50f4f3fa509f2fe"
+    }
+  ]
+}
