@@ -351,3 +351,32 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 앱은 재빌드하지 않고 검증한 정적 바이트를 public/에 전달한다. 실제 운영 도메인이 이번 배포 ID를 가리킨 뒤 HTML/JS·SPA·404를 확인한다.
 - 실패/시간 초과 시 자동 재생성하지 않는다. FE/BE 기능 코드나 AWS 사양·서비스를 추가하지 않았다.
 - 실제 토큰·Vercel 업로드·AWS 생성은 미실행이다. [결정 이유·과정·검증·후속 준비](vercel-rest-deployment.md)를 따른다.
+
+## 25. 2026-11-27 — IAM 임시 인증 연결과 사전 조회 권한 준비
+
+- Infra #17은 main에 병합됐다. 사용자가 IAM 콘솔 로그인을 완료한 뒤 브라우저 기반 CLI 인증을 연결했다.
+- orderpage-login과 credential_process 기반 orderpage-lab을 분리했고, 실제 STS에서 루트가 아닌 의도한 IAM 사용자임을 확인했다. 기존 default는 변경하지 않았다.
+- Terraform 1.16.2 / AWS provider 5.100.0의 격리된 데이터 전용 인증 probe가 성공했다. 실제 환경 plan/apply가 아니며 자원은 생성하지 않았다.
+- EKS 버전 조회는 AccessDenied였다. 서울 서비스 버전·사양 조회 11개만 허용하는 정책을 작성했고 아직 AWS에 연결하지 않았다.
+- [상세 과정·권한 범위·콘솔에서 연결할 위치](aws-login-readiness.md)
+
+## 26. 2026-11-27 — 사전 조회 정책 연결과 서울 호환성 확인
+
+- 사용자가 기존 그룹에 OrderPagePreflightReadOnly를 연결했다. 이후 IAM 사용자로 11개 조회 API의 13개 조회 묶음이 성공했다.
+- EKS 1.35 표준 지원, AWS 기본 add-on 후보, RDS 10.11/db.t4g.micro/gp3, Redis 7.1, RabbitMQ 4.2/mq.m7g.medium 단일 모드 및 m6i.large AZ 제공을 확인했다.
+- 실제 환경 변수·AMI를 자동 확정하지 않았으며 생성·배포·가격 재검증은 미실행이다.
+- [조회 근거·후보 값·미확인 범위](seoul-compatibility.md)를 기록했다. 다음은 배포용 Role·예산·실제 변수 준비다.
+
+## 27. 2026-11-27 — 상태 버킷 전용 Role 정책 준비
+
+- Terraform 자원을 조사한 뒤 첫 단계인 S3 state bootstrap과 전체 서비스 배포 권한을 분리했다. 전체 배포용 IAM 권한은 후속 검토 대상으로 남겼다.
+- 단일 서울 버킷 설정에 한정한 정책, 특정 IAM 사용자만 허용하는 신뢰 정책, 해당 Role만 지정한 AssumeRole 정책을 추가했다. 사용자에게 관리자 정책을 붙이지 않는다.
+- 계정별 파일은 `.local/iam-bootstrap`에만 생성하며 템플릿은 플레이스홀더를 유지한다. 실제 STS로 IAM 사용자를 확인하고 로컬 파일을 준비했다.
+- 회귀 검사 6개와 공식 S3 Action 27개 대조를 통과했다. 콘솔 버튼·정책/Role 이름·연결 위치를 [상세 과정](terraform-bootstrap-role.md)에 기록했다.
+- AWS Role 생성/연결, 실제 bootstrap plan/apply는 미실행이다. 다음은 관리자가 위 정책·Role을 연결한 후 AssumeRole과 bootstrap plan을 검증하는 것이다.
+
+## 28. 2026-11-27 — 비밀정보 재검사와 PR #18 병합 검토
+
+- 사용자의 병합 요청에 따라 세 저장소의 원격 브랜치·태그를 fetch하고 현재 코드와 도달 가능한 Git 이력을 Gitleaks 8.30.1로 검사했다. 여섯 검사 모두 탐지 0건이었다.
+- PR 28개 제목/본문의 알려진 키 형식, Git 제외 경로 및 정책의 Action·버킷·조건 조합을 확인했다. 열린 PR은 Infra #18 하나였다.
+- [검사 범위·한계와 IAM 콘솔 안내 해석](secret-audit-2026-11-27.md)을 기록했다. 새 운영 권한 부여나 AWS 자원 생성은 실행하지 않았다.

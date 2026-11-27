@@ -1,0 +1,347 @@
+{
+  "date": "2026-11-27",
+  "region": "ap-northeast-2",
+  "scope": "read-only compatibility metadata; not infrastructure plan/apply or capacity reservation",
+  "readOnlyApiActions": 11,
+  "queryGroups": 13,
+  "eks": [
+    {
+      "clusterVersion": "1.35",
+      "clusterType": "eks",
+      "defaultPlatformVersion": "eks.29",
+      "defaultVersion": false,
+      "releaseDate": "2026-01-27T09:00:00+09:00",
+      "endOfStandardSupportDate": "2027-03-27T09:00:00+09:00",
+      "endOfExtendedSupportDate": "2028-03-27T09:00:00+09:00",
+      "status": "STANDARD_SUPPORT",
+      "versionStatus": "STANDARD_SUPPORT",
+      "kubernetesPatchVersion": "1.35.9"
+    }
+  ],
+  "addons": {
+    "vpc-cni": [
+      {
+        "addonVersion": "v1.22.4-eksbuild.14",
+        "architecture": [
+          "amd64",
+          "arm64"
+        ],
+        "computeTypes": [
+          "ec2",
+          "local-cluster"
+        ],
+        "compatibilities": [
+          {
+            "clusterVersion": "1.35",
+            "platformVersions": [
+              "*"
+            ],
+            "defaultVersion": true
+          }
+        ],
+        "requiresConfiguration": false,
+        "requiresIamPermissions": true
+      }
+    ],
+    "coredns": [
+      {
+        "addonVersion": "v1.13.2-eksbuild.75",
+        "architecture": [
+          "amd64",
+          "arm64"
+        ],
+        "computeTypes": [
+          "ec2",
+          "hybrid",
+          "fargate",
+          "auto",
+          "local-cluster"
+        ],
+        "compatibilities": [
+          {
+            "clusterVersion": "1.35",
+            "platformVersions": [
+              "*"
+            ],
+            "defaultVersion": true
+          }
+        ],
+        "requiresConfiguration": false,
+        "requiresIamPermissions": false
+      }
+    ],
+    "kube-proxy": [
+      {
+        "addonVersion": "v1.35.3-eksbuild.69",
+        "architecture": [
+          "amd64",
+          "arm64"
+        ],
+        "computeTypes": [
+          "ec2",
+          "hybrid",
+          "local-cluster"
+        ],
+        "compatibilities": [
+          {
+            "clusterVersion": "1.35",
+            "platformVersions": [
+              "*"
+            ],
+            "defaultVersion": true
+          }
+        ],
+        "requiresConfiguration": false,
+        "requiresIamPermissions": false
+      }
+    ]
+  },
+  "rds": {
+    "availableEngines": [
+      {
+        "version": "10.11.13",
+        "family": "mariadb10.11",
+        "status": "available"
+      },
+      {
+        "version": "10.11.14",
+        "family": "mariadb10.11",
+        "status": "available"
+      },
+      {
+        "version": "10.11.15",
+        "family": "mariadb10.11",
+        "status": "available"
+      },
+      {
+        "version": "10.11.16",
+        "family": "mariadb10.11",
+        "status": "available"
+      },
+      {
+        "version": "10.11.18",
+        "family": "mariadb10.11",
+        "status": "available"
+      },
+      {
+        "version": "10.11.19",
+        "family": "mariadb10.11",
+        "status": "available"
+      }
+    ],
+    "orderableOptions": [
+      {
+        "version": "10.11.13",
+        "instance": "db.t4g.micro",
+        "storage": "gp3",
+        "minStorage": 20,
+        "maxStorage": 6144,
+        "encryption": true,
+        "vpc": true,
+        "availabilityZones": [
+          "ap-northeast-2a",
+          "ap-northeast-2b",
+          "ap-northeast-2c",
+          "ap-northeast-2d"
+        ]
+      },
+      {
+        "version": "10.11.14",
+        "instance": "db.t4g.micro",
+        "storage": "gp3",
+        "minStorage": 20,
+        "maxStorage": 6144,
+        "encryption": true,
+        "vpc": true,
+        "availabilityZones": [
+          "ap-northeast-2a",
+          "ap-northeast-2b",
+          "ap-northeast-2c",
+          "ap-northeast-2d"
+        ]
+      },
+      {
+        "version": "10.11.15",
+        "instance": "db.t4g.micro",
+        "storage": "gp3",
+        "minStorage": 20,
+        "maxStorage": 6144,
+        "encryption": true,
+        "vpc": true,
+        "availabilityZones": [
+          "ap-northeast-2a",
+          "ap-northeast-2b",
+          "ap-northeast-2c",
+          "ap-northeast-2d"
+        ]
+      },
+      {
+        "version": "10.11.16",
+        "instance": "db.t4g.micro",
+        "storage": "gp3",
+        "minStorage": 20,
+        "maxStorage": 6144,
+        "encryption": true,
+        "vpc": true,
+        "availabilityZones": [
+          "ap-northeast-2a",
+          "ap-northeast-2b",
+          "ap-northeast-2c",
+          "ap-northeast-2d"
+        ]
+      },
+      {
+        "version": "10.11.18",
+        "instance": "db.t4g.micro",
+        "storage": "gp3",
+        "minStorage": 20,
+        "maxStorage": 6144,
+        "encryption": true,
+        "vpc": true,
+        "availabilityZones": [
+          "ap-northeast-2a",
+          "ap-northeast-2b",
+          "ap-northeast-2c",
+          "ap-northeast-2d"
+        ]
+      },
+      {
+        "version": "10.11.19",
+        "instance": "db.t4g.micro",
+        "storage": "gp3",
+        "minStorage": 20,
+        "maxStorage": 6144,
+        "encryption": true,
+        "vpc": true,
+        "availabilityZones": [
+          "ap-northeast-2a",
+          "ap-northeast-2b",
+          "ap-northeast-2c",
+          "ap-northeast-2d"
+        ]
+      }
+    ]
+  },
+  "redis": [
+    {
+      "engine": "redis",
+      "version": "7.1",
+      "family": "redis7"
+    }
+  ],
+  "mq": {
+    "engines": [
+      {
+        "EngineType": "RABBITMQ",
+        "EngineVersions": [
+          {
+            "Name": "4.3"
+          },
+          {
+            "Name": "4.2"
+          },
+          {
+            "Name": "3.13"
+          }
+        ]
+      }
+    ],
+    "options": [
+      {
+        "AvailabilityZones": [
+          {
+            "Name": "ap-northeast-2c"
+          },
+          {
+            "Name": "ap-northeast-2a"
+          },
+          {
+            "Name": "ap-northeast-2d"
+          },
+          {
+            "Name": "ap-northeast-2b"
+          }
+        ],
+        "EngineType": "RABBITMQ",
+        "HostInstanceType": "mq.m7g.medium",
+        "StorageType": "ebs",
+        "SupportedDeploymentModes": [
+          "SINGLE_INSTANCE",
+          "CLUSTER_MULTI_AZ"
+        ],
+        "SupportedEngineVersions": [
+          "4.3",
+          "4.2",
+          "3.13"
+        ]
+      }
+    ]
+  },
+  "ec2": {
+    "availabilityZones": [
+      {
+        "name": "ap-northeast-2a",
+        "state": "available",
+        "type": "availability-zone"
+      },
+      {
+        "name": "ap-northeast-2c",
+        "state": "available",
+        "type": "availability-zone"
+      }
+    ],
+    "offerings": [
+      {
+        "InstanceType": "m6i.large",
+        "LocationType": "availability-zone",
+        "Location": "ap-northeast-2c"
+      },
+      {
+        "InstanceType": "m6i.large",
+        "LocationType": "availability-zone",
+        "Location": "ap-northeast-2a"
+      }
+    ],
+    "types": [
+      {
+        "type": "m6i.large",
+        "architectures": [
+          "x86_64"
+        ],
+        "vcpu": 2,
+        "memoryMiB": 8192
+      }
+    ],
+    "jenkinsAmiCandidates": [
+      {
+        "id": "ami-00f4e1d08499d41c3",
+        "name": "al2023-ami-2023.12.20261120.0-kernel-6.18-x86_64",
+        "created": "2026-11-20T00:35:12.000Z",
+        "architecture": "x86_64",
+        "state": "available"
+      },
+      {
+        "id": "ami-0bdb0c21c5dae003b",
+        "name": "al2023-ami-2023.12.20261120.0-kernel-6.1-x86_64",
+        "created": "2026-11-20T00:35:12.000Z",
+        "architecture": "x86_64",
+        "state": "available"
+      },
+      {
+        "id": "ami-0dbfdc82bc8720b22",
+        "name": "al2023-ami-2023.12.20261120.0-kernel-6.12-x86_64",
+        "created": "2026-11-20T00:35:12.000Z",
+        "architecture": "x86_64",
+        "state": "available"
+      }
+    ]
+  },
+  "limitations": [
+    "API metadata is not capacity reservation, quota approval or successful provisioning",
+    "Redis engine verified; cache.t4g.micro placement not independently verified",
+    "Add-on defaults are compatibility candidates, not a security audit",
+    "AMI candidates not boot-tested; no final AMI selected",
+    "No full Terraform environment plan/apply, state bootstrap or price recheck",
+    "Account IDs, IAM ARNs, credentials and full private results excluded"
+  ]
+}

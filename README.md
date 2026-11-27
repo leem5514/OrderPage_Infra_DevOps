@@ -10,9 +10,11 @@
 
 > **2026-11-17 보안 보강 진행: 공개 배포 보류 유지**
 >
-> BE #6·Infra #16까지 병합했습니다. 후속 Infra PR #17에서는 Vercel CLI 의존성을 제거하고 공식 REST API 배포로 전환했습니다. 로컬 검사와 공식 요청 계약은 확인했고 실제 계정·배포 검증은 남아 있습니다. [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [백엔드 검증](docs/restart/backend-security-baseline.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요. 실제 계정 연결과 배포는 아직 하지 않았습니다.
+> BE #6·Infra #17까지 병합했습니다. 2026-11-27에는 IAM 사용자 임시 로그인과 Terraform provider 인증을 확인했습니다. 사전 조회 정책 연결 후 서울 버전·사양 조회도 성공했습니다. 실제 배포 권한·예산·변수 준비는 남아 있습니다. [인증 결과·조회 정책 연결](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요. 실제 AWS 생성·앱 배포는 아직 하지 않았습니다.
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
+
+다음 배포 준비는 **상태 저장용 S3 → 서비스 인프라** 순서로 나눕니다. 첫 단계의 단일 버킷 전용 IAM Role 정책과 [콘솔 설정 안내](docs/restart/terraform-bootstrap-role.md)를 준비했습니다. Role 생성·권한 연결·실제 bootstrap plan은 아직 수행하지 않았으며, VPC/EKS 배포 권한은 별도 준비 대상입니다.
 
 ## 무엇을 배우고 남기는가
 
@@ -135,15 +137,15 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 |---|---|---|
 | 요구사항·실험 설계 | 준비 완료 | 필수 기술, 최대 72시간, 5개 비교 시나리오와 측정 양식 정리 |
 | 앱·기반·CI/CD·관측 코드 | main 반영 완료 | 코드 및 로컬 검사 완료. 실제 AWS/Jenkins/Vercel 연동과는 구분 |
-| 보안·비용 재검토 | BE 보강 병합, REST 전환 PR 검토 단계 | BE #6·Infra #16 병합 완료. CLI 제거 및 REST 배포는 #17에서 검증. 실제 계정·토큰 권한·이미지/호스트 점검 필요 |
-| 계정 연결·실제 plan | 다음 단계 | 유효한 AWS 인증, 운영자 Role/IP, 호환 버전, 보호된 입력, state 저장소 준비 |
+| 보안·비용 재검토 | BE 보강·REST 전환 병합 완료 | BE #6·Infra #17까지 병합. 실제 권한·이미지/호스트 점검 필요 |
+| 계정 연결·실제 plan | IAM/CLI·Terraform 인증 확인, 실제 plan 미실행 | 조회 권한·지원 버전 확인 완료. 배포용 Role/IP, 예산, 보호된 입력, state 저장소 준비 |
 | AWS 생성·최초 배포 | 미실행 | ACM/DNS, 관리형 서비스 연결, Jenkins·Argo CD, Secret, 실제 ECR digest, FE·API 확인 |
 | 관측 연결·비교 실험 | 미실행 | SNS 수신 확인, Prometheus Targets, 기준값 확보 후 E01~E05 실행 |
 | 결과·비용·종료 확인 | 미실행 | 원본과 비교표 보관, 비용 조회, 잔여 자원 확인 |
 
 2026-11-15 재검토에서는 **BE 테스트 23개, FE 테스트 9개·lint·운영 빌드, Infra Node 테스트 36개와 Terraform mock 테스트 22개·validate**를 통과했습니다. 이는 로컬 검증 결과이며 실제 인프라 기동, 운영 성능 또는 완전한 보안 검증을 의미하지 않습니다. FE 개발·빌드 의존성 권고 18건과 전체 BE 의존성 보안 점검 등 남은 범위는 [배포 전 재검토](docs/restart/deployment-review.md)에 공개했습니다.
 
-**다음은 REST 전환 PR #17 검토·병합과 실제 계정 사전 점검입니다.** [REST 구현·검증 범위](docs/restart/vercel-rest-deployment.md)를 확인한 뒤 [보안 판단서](docs/restart/predeploy-security-assessment.md)의 실제 IAM·토큰·호스트 조건을 확인합니다. [사전 점검](docs/restart/aws-plan-preflight.md)에 따라 보호된 입력과 plan의 생성·삭제·공개 접근·유료 자원을 검토합니다. `deploymentEnabled`, 기본 예시의 `enable_jenkins`, `enable_operations_monitoring`과 Argo CD 자동 동기화는 비활성입니다.
+**다음은 배포용 Role·실습 예산·실제 변수 준비입니다.** [인증 결과와 제한된 조회 정책](docs/restart/aws-login-readiness.md)을 확인한 뒤 [보안 판단서](docs/restart/predeploy-security-assessment.md)의 실제 IAM·토큰·호스트 조건을 확인합니다. [사전 점검](docs/restart/aws-plan-preflight.md)에 따라 보호된 입력과 plan의 생성·삭제·공개 접근·유료 자원을 검토합니다. `deploymentEnabled`, 기본 예시의 `enable_jenkins`, `enable_operations_monitoring`과 Argo CD 자동 동기화는 비활성입니다.
 
 <a id="guide"></a>
 ## 코드를 읽거나 직접 진행하려면
