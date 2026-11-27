@@ -22,6 +22,16 @@ function fixture(){
   return {resource_changes:resources};
 }
 const row=(p,type)=>p.resource_changes.find(r=>r.type===type);
+test('승인한 월 Budget 금액·실제 비용 알림과 다른 금액·목적지를 구분한다',()=>{
+  const p=fixture(),topic='arn:aws:sns:ap-northeast-2:'+input.accountId+':orderpage-dev-operations';
+  const b={name:'orderpage-dev-account-monthly',account_id:input.accountId,budget_type:'COST',time_unit:'MONTHLY',limit_unit:'USD',limit_amount:'45',cost_filter:[],notification:[80,100].map(threshold=>({threshold,threshold_type:'PERCENTAGE',notification_type:'ACTUAL',comparison_operator:'GREATER_THAN',subscriber_email_addresses:[],subscriber_sns_topic_arns:[topic]}))};
+  p.resource_changes.push({mode:'managed',type:'aws_budgets_budget',address:'aws_budgets_budget.account',change:{actions:['create'],after:b,after_unknown:{}}});
+  const options={...input,monthlyBudgetUsd:45};
+  assert.equal(reviewRemainingServicePlan(p,options).knownSettingsPassed,true);
+  b.limit_amount='450';assert.equal(reviewRemainingServicePlan(p,options).knownSettingsPassed,false);b.limit_amount='45';
+  b.notification[0].subscriber_sns_topic_arns=['arn:aws:sns:ap-northeast-2:123456789012:other'];assert.equal(reviewRemainingServicePlan(p,options).knownSettingsPassed,false);
+  assert.throws(()=>reviewRemainingServicePlan(p,{...input,monthlyBudgetUsd:NaN}));
+});
 test('알려진 24개 자원은 검사하되 계산 전 목적지·정책 24개는 보류한다',()=>{
   const report=reviewRemainingServicePlan(fixture(),input);
   assert.equal(report.resourceCount,24);assert.equal(report.knownSettingsPassed,true);

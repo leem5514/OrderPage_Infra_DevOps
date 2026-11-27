@@ -1,0 +1,619 @@
+{
+  "date": "2026-11-27",
+  "scope": "Offline source, saved-plan and policy packing review; not effective AWS authorization",
+  "planSha256": "266f742bc401dc54b9ed3fad122cab5da934a888eb86d6c52e3944d95482f7cc",
+  "managedResources": 75,
+  "classifiedResources": 75,
+  "groupCounts": {
+    "network": 19,
+    "eks": 5,
+    "eksAccess": 2,
+    "compute": 2,
+    "data": 6,
+    "registry": 2,
+    "images": 5,
+    "certificate": 1,
+    "observability": 17,
+    "iam": 16
+  },
+  "sourcePolicies": 22,
+  "bundlePolicies": 13,
+  "sourceStatements": 204,
+  "uniqueStatements": 204,
+  "policyCharacterCounts": [
+    6135,
+    6140,
+    6144,
+    6143,
+    6143,
+    6144,
+    6141,
+    6139,
+    6137,
+    6144,
+    6138,
+    6142,
+    5187
+  ],
+  "actionCount": 311,
+  "missingActions": [],
+  "referenceSources": [
+    {
+      "service": "s3",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/s3/s3.json",
+      "sha256": "42a0406559f357e77fad1e4a77c1d3d9aa62bc90da4dd990c13149ae92147c6d"
+    },
+    {
+      "service": "ec2",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/ec2/ec2.json",
+      "sha256": "18154e8e8044206cc9c169041db5bd0ee87d980a645e15eacf1851659869d678"
+    },
+    {
+      "service": "eks",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/eks/eks.json",
+      "sha256": "aab6e2bd4563e9409b3dd1a2e6e2f5d14406a5117d55f6f148864bc768ccd44d"
+    },
+    {
+      "service": "rds",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/rds/rds.json",
+      "sha256": "7f5aa9d17ed83cf1f97ea69e813084d18cdd5373355b705fdc404fd3f4ca806a"
+    },
+    {
+      "service": "elasticache",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/elasticache/elasticache.json",
+      "sha256": "336e0c3091ca0b3a8a908f1571f7df422863ed86296fb624bc72e67727c137e5"
+    },
+    {
+      "service": "mq",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/mq/mq.json",
+      "sha256": "0d0c959b734c4c225ace5316a5e01ce1064d8e355f1909de9e7837a3a69606ba"
+    },
+    {
+      "service": "ecr",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/ecr/ecr.json",
+      "sha256": "bd92badabf8462ee76fa92f8914d8957a148747e35475e822efaba178651a064"
+    },
+    {
+      "service": "acm",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/acm/acm.json",
+      "sha256": "aec76912a0aaceabcce322bc0fd29b9e9aaa1a8c373c6e7263634893361920c4"
+    },
+    {
+      "service": "sns",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/sns/sns.json",
+      "sha256": "36396847c543959df076d04811fa0fc7895a19ab31d946b3aacd0464c4433ed3"
+    },
+    {
+      "service": "logs",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/logs/logs.json",
+      "sha256": "3c39d1980daecdcd70b6facfcde895c6018266cedd5de3fa7ecc1f2b883cd31a"
+    },
+    {
+      "service": "cloudwatch",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/cloudwatch/cloudwatch.json",
+      "sha256": "85fe6d480342ff565f67480d69d43066910c0731cc34964bf53a82fd2ec3a323"
+    },
+    {
+      "service": "iam",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/iam/iam.json",
+      "sha256": "39267fc0034910ef6754052b39719e7ffc86c446ba3e9a9834436bcc7d4a4ba6"
+    },
+    {
+      "service": "budgets",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/budgets/budgets.json",
+      "sha256": "65ef8491b0963cc51e5d76dde1a7d527cc2134b2b4b28f55847f1715728fd435"
+    },
+    {
+      "service": "sts",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/sts/sts.json",
+      "sha256": "ecfa9428563f5e3591a8badf5781c34a37e9ef01c60fb533369353dd886cdf3b"
+    },
+    {
+      "service": "ce",
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/ce/ce.json",
+      "sha256": "ee0dadcd04906266814f595f57fed2b93ca10ae26731c86eb4cf6f0087801541"
+    }
+  ],
+  "planReviews": {
+    "remaining": {
+      "resourceCount": 25,
+      "checks": [
+        {
+          "name": "reviewed-resource-count",
+          "passed": true
+        },
+        {
+          "name": "no-delete-replacement",
+          "passed": true
+        },
+        {
+          "name": "ecr-immutable-encrypted-scanned",
+          "passed": true
+        },
+        {
+          "name": "ecr-keep-thirty-images",
+          "passed": true
+        },
+        {
+          "name": "dedicated-product-bucket",
+          "passed": true
+        },
+        {
+          "name": "product-public-read-design",
+          "passed": true
+        },
+        {
+          "name": "product-aes256",
+          "passed": true
+        },
+        {
+          "name": "api-domain-dns-validation",
+          "passed": true
+        },
+        {
+          "name": "five-named-three-day-logs",
+          "passed": true
+        },
+        {
+          "name": "named-operations-topic",
+          "passed": true
+        },
+        {
+          "name": "email-requires-owner-confirmation",
+          "passed": true
+        },
+        {
+          "name": "named-initial-alarms",
+          "passed": true
+        },
+        {
+          "name": "alarm-evaluation-windows",
+          "passed": true
+        },
+        {
+          "name": "named-dashboard",
+          "passed": true
+        },
+        {
+          "name": "expected-budget-count",
+          "passed": true
+        },
+        {
+          "name": "account-monthly-usd-budget",
+          "passed": true
+        },
+        {
+          "name": "actual-budget-alert-thresholds",
+          "passed": true
+        }
+      ],
+      "knownSettingsPassed": true,
+      "deferred": [
+        {
+          "address": "module.operations_monitoring[0].aws_budgets_budget.account[0]",
+          "field": "notification.0.subscriber_sns_topic_arns"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_budgets_budget.account[0]",
+          "field": "notification.1.subscriber_sns_topic_arns"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"jenkins-status\"]",
+          "field": "alarm_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"jenkins-status\"]",
+          "field": "ok_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"jenkins-status\"]",
+          "field": "insufficient_data_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"mq-ready\"]",
+          "field": "alarm_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"mq-ready\"]",
+          "field": "ok_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"mq-ready\"]",
+          "field": "insufficient_data_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-cpu\"]",
+          "field": "alarm_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-cpu\"]",
+          "field": "ok_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-cpu\"]",
+          "field": "insufficient_data_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-memory\"]",
+          "field": "alarm_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-memory\"]",
+          "field": "ok_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-memory\"]",
+          "field": "insufficient_data_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-storage\"]",
+          "field": "alarm_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-storage\"]",
+          "field": "ok_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-storage\"]",
+          "field": "insufficient_data_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"redis-cpu\"]",
+          "field": "alarm_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"redis-cpu\"]",
+          "field": "ok_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"redis-cpu\"]",
+          "field": "insufficient_data_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"redis-memory\"]",
+          "field": "alarm_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"redis-memory\"]",
+          "field": "ok_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"redis-memory\"]",
+          "field": "insufficient_data_actions"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_sns_topic_policy.operations",
+          "field": "policy"
+        },
+        {
+          "address": "module.operations_monitoring[0].aws_sns_topic_subscription.email",
+          "field": "topic_arn"
+        },
+        {
+          "address": "module.product_images.aws_s3_bucket_policy.images",
+          "field": "policy"
+        }
+      ],
+      "readyForApply": false,
+      "pending": [
+        "Budget is an account-month alert, not a spending cap or automatic shutdown.",
+        "Runtime start/end and cleanup completion require operational confirmation.",
+        "Review computed policy bodies, alarm destinations and DNS validation after resource IDs resolve.",
+        "Live IAM authorization, SNS email confirmation and alarm delivery remain untested."
+      ]
+    },
+    "network": {
+      "resourceCount": 21,
+      "checks": [
+        {
+          "name": "reviewed-resource-counts",
+          "passed": true
+        },
+        {
+          "name": "no-delete-or-replacement",
+          "passed": true
+        },
+        {
+          "name": "known-project-tags",
+          "passed": true
+        },
+        {
+          "name": "vpc-dns-and-default-tenancy",
+          "passed": true
+        },
+        {
+          "name": "subnets-no-automatic-public-ip",
+          "passed": true
+        },
+        {
+          "name": "two-public-two-private-in-seoul",
+          "passed": true
+        },
+        {
+          "name": "one-public-nat-and-eip",
+          "passed": true
+        },
+        {
+          "name": "s3-gateway-endpoint-only",
+          "passed": true
+        },
+        {
+          "name": "two-default-routes",
+          "passed": true
+        },
+        {
+          "name": "jenkins-no-ingress",
+          "passed": true
+        },
+        {
+          "name": "data-ingress-ports-without-public-cidrs",
+          "passed": true
+        },
+        {
+          "name": "jenkins-size-and-public-ip",
+          "passed": true
+        },
+        {
+          "name": "jenkins-profile",
+          "passed": true
+        },
+        {
+          "name": "jenkins-ami-if-known",
+          "passed": true
+        },
+        {
+          "name": "imds-v2-hop-one",
+          "passed": true
+        },
+        {
+          "name": "jenkins-encrypted-30gb-root",
+          "passed": true
+        },
+        {
+          "name": "node-encrypted-20gb-root",
+          "passed": true
+        },
+        {
+          "name": "node-template-no-extra-compute-settings",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "readyForApply": false,
+      "unresolved": [
+        "Jenkins AMI must resolve and match the approved policy before apply.",
+        "Subnet/SG/routing target identities and connections must be checked in the final resolved plan."
+      ],
+      "limitations": [
+        "Checks known settings only; not an apply gate, AWS policy simulator or spending cap.",
+        "Service-linked roles create EKS workers independently of these deploy-role EC2 permissions.",
+        "Creation review rejects delete/replacement plans; cleanup needs separate review."
+      ]
+    },
+    "eks": {
+      "stage": "full",
+      "checks": [
+        {
+          "name": "expected-resource-counts",
+          "passed": true
+        },
+        {
+          "name": "no-extra-eks-resource-types",
+          "passed": true
+        },
+        {
+          "name": "no-delete-or-replacement",
+          "passed": true
+        },
+        {
+          "name": "known-project-tags",
+          "passed": true
+        },
+        {
+          "name": "cluster-name-and-version",
+          "passed": true
+        },
+        {
+          "name": "api-auth-without-creator-admin",
+          "passed": true
+        },
+        {
+          "name": "standard-support",
+          "passed": true
+        },
+        {
+          "name": "required-control-plane-logs",
+          "passed": true
+        },
+        {
+          "name": "private-endpoint-enabled",
+          "passed": true
+        },
+        {
+          "name": "public-endpoint-only-ipv4-hosts",
+          "passed": true
+        },
+        {
+          "name": "no-explicit-auto-mode",
+          "passed": true
+        },
+        {
+          "name": "default-nodegroup-name-and-version",
+          "passed": true
+        },
+        {
+          "name": "fixed-two-on-demand-m6i-large-nodes",
+          "passed": true
+        },
+        {
+          "name": "three-basic-addons-only",
+          "passed": true
+        },
+        {
+          "name": "explicit-addon-versions",
+          "passed": true
+        },
+        {
+          "name": "addons-in-project-without-extra-roles",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "readyForApply": false,
+      "limitations": [
+        "This review does not prevent direct AWS API calls or invoke apply.",
+        "Unknown subnet/Role/launch-template identities, provider defaults and actual runtime costs require final plan review.",
+        "Addon version format is checked; compatibility and Kubernetes standard support require current AWS verification.",
+        "Delete/replacement plans need a separate cleanup review rather than this creation gate."
+      ]
+    },
+    "data": {
+      "resourceCount": 6,
+      "checks": [
+        {
+          "name": "six-reviewed-data-resources",
+          "passed": true
+        },
+        {
+          "name": "no-delete-or-replacement",
+          "passed": true
+        },
+        {
+          "name": "known-project-tags",
+          "passed": true
+        },
+        {
+          "name": "mariadb-name-engine-version",
+          "passed": true
+        },
+        {
+          "name": "mariadb-small-single-private",
+          "passed": true
+        },
+        {
+          "name": "mariadb-encrypted-fixed-storage",
+          "passed": true
+        },
+        {
+          "name": "mariadb-backup-and-insights",
+          "passed": true
+        },
+        {
+          "name": "mariadb-lab-cleanup",
+          "passed": true
+        },
+        {
+          "name": "mariadb-tls-and-log-parameters",
+          "passed": true
+        },
+        {
+          "name": "mariadb-subnet-and-parameter-names",
+          "passed": true
+        },
+        {
+          "name": "mariadb-logs",
+          "passed": true
+        },
+        {
+          "name": "redis-name-engine-type",
+          "passed": true
+        },
+        {
+          "name": "redis-one-node-no-cluster-mode",
+          "passed": true
+        },
+        {
+          "name": "redis-tls-and-auth-strategy",
+          "passed": true
+        },
+        {
+          "name": "redis-subnet-parameter-and-backup",
+          "passed": true
+        },
+        {
+          "name": "redis-two-cloudwatch-logs",
+          "passed": true
+        },
+        {
+          "name": "rabbitmq-name-engine-size",
+          "passed": true
+        },
+        {
+          "name": "rabbitmq-private-single-instance",
+          "passed": true
+        },
+        {
+          "name": "rabbitmq-owned-key-and-general-logs",
+          "passed": true
+        },
+        {
+          "name": "automatic-minor-upgrades",
+          "passed": true
+        },
+        {
+          "name": "database-and-redis-secrets-marked-sensitive",
+          "passed": true
+        },
+        {
+          "name": "broker-secret-marked-sensitive",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "readyForApply": false,
+      "unresolved": [
+        "Subnet/SG IDs and exact private-network connections require final plan/state review.",
+        "Logging delivery permissions and effective AWS authorization remain unverified.",
+        "Versions, regional availability, prices and runtime budget must be checked before apply."
+      ],
+      "limitations": [
+        "Known settings only; not an apply gate or spending cap.",
+        "Lab cleanup settings intentionally discard test data; production data needs a separate backup decision.",
+        "RabbitMQ users are not fully reconciled by this Terraform provider."
+      ]
+    }
+  },
+  "awsPoliciesAttached": false,
+  "serviceApplyExecuted": false,
+  "readyForApply": false,
+  "changeCounts": {
+    "create": 75,
+    "update": 0,
+    "delete": 0,
+    "replace": 0
+  },
+  "planTimestamp": "2026-11-27T12:48:46Z",
+  "budget": {
+    "monthlyUsd": 45,
+    "actualAlertPercentages": [
+      80,
+      100
+    ],
+    "maximumRuntimeHours": 48,
+    "preferredTotalKrw": 80000,
+    "automaticShutdown": false
+  },
+  "awsPolicyValidation": {
+    "date": "2026-11-27",
+    "profile": "orderpage-lab",
+    "stsMatched": true,
+    "policyQuotaVerified": true,
+    "awsValidation": "COMPLETED",
+    "mutationsExecuted": false,
+    "managedPoliciesPerRole": 20,
+    "findings": []
+  },
+  "deployedPolicyComparison": {
+    "trustMatchesRepository": true,
+    "policies": [
+      {
+        "name": "OrderPageServicePlanRead",
+        "matchesRepository": true
+      },
+      {
+        "name": "OrderPageTerraformStateAccess",
+        "matchesRepository": true
+      }
+    ]
+  }
+}
