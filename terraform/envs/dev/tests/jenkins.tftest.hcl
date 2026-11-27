@@ -2,14 +2,19 @@ mock_provider "aws" {
   mock_data "aws_ami" { defaults = { id = "ami-0123456789abcdef0" } }
 }
 run "jenkins_has_no_inbound_or_eks_credentials" {
+  assert {
+    condition     = aws_iam_role.this.permissions_boundary == var.permissions_boundary_arn
+    error_message = "Role에 지정한 권한 상한이 연결되어야 합니다."
+  }
   command = plan
   module { source = "../../modules/jenkins" }
   variables {
-    name               = "orderpage-dev-jenkins"
-    vpc_id             = "vpc-0123456789abcdef0"
-    subnet_id          = "subnet-0123456789abcdef0"
-    ami_id             = "ami-0123456789abcdef0"
-    ecr_repository_arn = "arn:aws:ecr:ap-northeast-2:123456789012:repository/orderpage-backend"
+    permissions_boundary_arn = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-jenkins"
+    name                     = "orderpage-dev-jenkins"
+    vpc_id                   = "vpc-0123456789abcdef0"
+    subnet_id                = "subnet-0123456789abcdef0"
+    ami_id                   = "ami-0123456789abcdef0"
+    ecr_repository_arn       = "arn:aws:ecr:ap-northeast-2:123456789012:repository/orderpage-backend"
   }
   assert {
     condition = (

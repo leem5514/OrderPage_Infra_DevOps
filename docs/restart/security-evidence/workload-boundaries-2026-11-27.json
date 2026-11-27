@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-27",
+  "kind": "actual AWS-backed review plan, not apply approval",
+  "counts": {
+    "create": 74,
+    "update": 0,
+    "delete": 0,
+    "roles": 5,
+    "rolesWithoutBoundary": 0
+  },
+  "checks": {
+    "managedCountUnchanged": true,
+    "createOnly": true,
+    "fiveExpectedBoundaries": true,
+    "allOtherPlannedValuesUnchanged": true,
+    "noBoundaryPolicyManagedByDeploy": true,
+    "noUnmappedResources": true
+  },
+  "planSha256": "697a1cb2b93b13c315e6e3d6f13769ed00ad18a3723e6455af80fd4e2675fd31",
+  "changedBeyondBoundary": [],
+  "boundaryPoliciesCreatedInAws": false,
+  "remotePolicyContentsVerified": false,
+  "readyForApply": false,
+  "validation": {
+    "nodeTests": 81,
+    "terraformMockTests": 25,
+    "terraformValidate": true
+  },
+  "policySizes": [
+    {
+      "name": "orderpage-dev-boundary-cluster",
+      "characters": 2689
+    },
+    {
+      "name": "orderpage-dev-boundary-node",
+      "characters": 1229
+    },
+    {
+      "name": "orderpage-dev-boundary-jenkins",
+      "characters": 1330
+    },
+    {
+      "name": "orderpage-dev-boundary-backend-upload",
+      "characters": 171
+    },
+    {
+      "name": "orderpage-dev-boundary-alb-controller",
+      "characters": 5491
+    }
+  ]
+}

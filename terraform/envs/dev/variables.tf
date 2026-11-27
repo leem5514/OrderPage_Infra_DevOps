@@ -11,6 +11,10 @@ variable "aws_region" {
 variable "project_name" {
   type    = string
   default = "orderpage"
+  validation {
+    condition     = var.project_name == "orderpage"
+    error_message = "검토된 IAM 정책과 권한 상한은 orderpage 프로젝트 전용입니다."
+  }
 }
 
 variable "environment" {

@@ -3,12 +3,13 @@ output "deployment_account_id" {
   value = data.aws_caller_identity.current.account_id
 }
 module "product_images" {
-  source            = "../../modules/product-images"
-  bucket_name       = "${var.project_name}-${var.environment}-product-images-${data.aws_caller_identity.current.account_id}"
-  role_name         = "${var.project_name}-${var.environment}-backend-upload"
-  oidc_provider_url = module.eks.cluster_oidc_issuer_url
-  oidc_provider_arn = module.eks.oidc_provider_arn
-  tags              = local.common_tags
+  source                   = "../../modules/product-images"
+  permissions_boundary_arn = local.workload_boundaries["backend-upload"]
+  bucket_name              = "${var.project_name}-${var.environment}-product-images-${data.aws_caller_identity.current.account_id}"
+  role_name                = "${var.project_name}-${var.environment}-backend-upload"
+  oidc_provider_url        = module.eks.cluster_oidc_issuer_url
+  oidc_provider_arn        = module.eks.oidc_provider_arn
+  tags                     = local.common_tags
 }
 output "product_images" {
   value = {

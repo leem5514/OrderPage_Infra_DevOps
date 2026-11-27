@@ -2,6 +2,8 @@
 
 2026-11-27 KST. 운영 Role 인증 기록인 Infra #22를 병합했다. 배포 Role의 실제 plan과 EKS 운영 Role 인증은 성공했지만, **서비스 apply 권한은 아직 부여하지 않았다.** 이 문서는 실제 plan의 74개 자원을 대상으로 한 권한 설계이며 콘솔에 붙여 넣는 정책 JSON이 아니다.
 
+> 후속 구현: [권한 상한 파일·Terraform 연결·콘솔 순서](workload-boundaries.md)를 준비했다. 아래 boundary 미설정 5개는 최초 plan 시점의 기록이며, 새 plan은 상한 누락 0개다. AWS 정책 생성과 서비스 쓰기 권한 부여는 아직 하지 않았다.
+
 ## 조회 권한을 곧바로 생성 권한으로 넓히지 않는 이유
 
 현재 Terraform은 애플리케이션용 IAM Role 5개를 만들고 정책을 연결한다. 저장 plan에서 다섯 Role 모두 `permissions_boundary`가 비어 있었다. 현재 배포 Role은 조회 단계이므로 이것이 이미 관리자 권한을 획득했다는 뜻은 아니다. 하지만 여기에 `iam:CreateRole`, `iam:PutRolePolicy`, `iam:AttachRolePolicy`를 넓게 추가하면 Role 이름을 제한하더라도 높은 권한을 가진 새 Role을 만들 여지가 생긴다.
@@ -65,8 +67,8 @@ Access Entry 생성은 대상 cluster와 `eks:principalArn=운영 Role`, `eks:ac
 4. 보호된 역할·경계 자체 변경 금지, 정확한 PassRole, EKS 관리자 등록 제한을 확인한 최종 정책만 배포 Role에 연결한다.
 5. [현재 가격 검토](cost-review-2026-11-27.md)와 가동 목표·Budget을 확정하고 최신 plan을 다시 검토한다.
 
-현재는 1단계의 설계 근거까지 준비했으며 **경계 정책 생성·Terraform 연결·서비스 쓰기 정책 생성 및 부여는 하지 않았다.** 분석 결과를 실제 권한 구현 완료로 표현하지 않는다. 74개 plan 성공 역시 앞으로의 생성 권한, 재고, 서비스 부팅 성공을 보장하지 않는다.
+이 설계의 최초 기록은 1단계까지였다. 후속 작업에서 경계 파일과 Terraform 연결을 구현하고 새 plan까지 검증했다. **AWS 경계 정책 생성·서비스 쓰기 정책 생성 및 부여는 아직 하지 않았다.** 분석 결과를 실제 권한 구현 완료로 표현하지 않는다. 74개 plan 성공 역시 앞으로의 생성 권한, 재고, 서비스 부팅 성공을 보장하지 않는다.
 
 ## 검증
 
-새 비용 검사 4개와 권한 분류 검사 3개를 포함해 전체 npm test 76개가 통과했다. 실제 74개 유형 누락, 새 유형·삭제·boundary 누락 및 민감한 plan 값의 요약 유입을 검사했다. [분류 근거](security-evidence/apply-scope-2026-11-27.json)는 최초 plan 시점의 결과이며 IAM 정책 시뮬레이션 결과가 아니다. Terraform HCL과 앱 코드는 바꾸지 않았다.
+새 비용 검사 4개와 권한 분류 검사 3개를 포함해 전체 npm test 76개가 통과했다. 실제 74개 유형 누락, 새 유형·삭제·boundary 누락 및 민감한 plan 값의 요약 유입을 검사했다. [분류 근거](security-evidence/apply-scope-2026-11-27.json)는 최초 plan 시점의 결과이며 IAM 정책 시뮬레이션 결과가 아니다. 최초 설계 단계에서는 Terraform HCL과 앱 코드를 바꾸지 않았다. 후속 상한 연결의 검증 결과는 위 구현 문서에 기록한다.

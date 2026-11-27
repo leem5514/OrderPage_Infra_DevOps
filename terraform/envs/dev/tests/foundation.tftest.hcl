@@ -1,5 +1,6 @@
 # 모든 run은 mock provider + plan이다. AWS API 호출/실제 리소스 생성이 없다.
 mock_provider "aws" {
+  mock_data "aws_caller_identity" { defaults = { account_id = "123456789012" } }
   mock_data "aws_region" {
     defaults = { name = "ap-northeast-2" }
   }
@@ -33,15 +34,21 @@ run "private_network_and_single_nat" {
 }
 
 run "eks_security_and_cost_controls" {
+  assert {
+    condition     = aws_iam_role.cluster.permissions_boundary == var.cluster_permissions_boundary_arn && aws_iam_role.node.permissions_boundary == var.node_permissions_boundary_arn
+    error_message = "Role에 지정한 권한 상한이 연결되어야 합니다."
+  }
   command = plan
   module { source = "../../modules/eks" }
   variables {
-    cluster_name        = "test"
-    kubernetes_version  = "1.35"
-    cluster_subnet_ids  = ["subnet-00000000000000001", "subnet-00000000000000002"]
-    node_subnet_ids     = ["subnet-00000000000000001", "subnet-00000000000000002"]
-    public_access_cidrs = ["203.0.113.10/32"]
-    admin_principal_arn = "arn:aws:iam::123456789012:role/Operator"
+    cluster_permissions_boundary_arn = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-cluster"
+    node_permissions_boundary_arn    = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-node"
+    cluster_name                     = "test"
+    kubernetes_version               = "1.35"
+    cluster_subnet_ids               = ["subnet-00000000000000001", "subnet-00000000000000002"]
+    node_subnet_ids                  = ["subnet-00000000000000001", "subnet-00000000000000002"]
+    public_access_cidrs              = ["203.0.113.10/32"]
+    admin_principal_arn              = "arn:aws:iam::123456789012:role/Operator"
     # 구문 테스트용 값이다. AWS 호환 버전으로 쓰면 안 된다.
     addon_versions = {
       vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1"
@@ -86,13 +93,15 @@ run "reject_public_api_for_everyone" {
   command = plan
   module { source = "../../modules/eks" }
   variables {
-    cluster_name        = "test"
-    kubernetes_version  = "1.35"
-    cluster_subnet_ids  = ["subnet-00000000000000001", "subnet-00000000000000002"]
-    node_subnet_ids     = ["subnet-00000000000000001", "subnet-00000000000000002"]
-    public_access_cidrs = ["0.0.0.0/0"]
-    admin_principal_arn = "arn:aws:iam::123456789012:role/Operator"
-    addon_versions      = { vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1" }
+    cluster_permissions_boundary_arn = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-cluster"
+    node_permissions_boundary_arn    = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-node"
+    cluster_name                     = "test"
+    kubernetes_version               = "1.35"
+    cluster_subnet_ids               = ["subnet-00000000000000001", "subnet-00000000000000002"]
+    node_subnet_ids                  = ["subnet-00000000000000001", "subnet-00000000000000002"]
+    public_access_cidrs              = ["0.0.0.0/0"]
+    admin_principal_arn              = "arn:aws:iam::123456789012:role/Operator"
+    addon_versions                   = { vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1" }
   }
   expect_failures = [var.public_access_cidrs]
 }
@@ -101,13 +110,15 @@ run "reject_root_and_unpinned_addons" {
   command = plan
   module { source = "../../modules/eks" }
   variables {
-    cluster_name        = "test"
-    kubernetes_version  = "1.35"
-    cluster_subnet_ids  = ["subnet-00000000000000001", "subnet-00000000000000002"]
-    node_subnet_ids     = ["subnet-00000000000000001", "subnet-00000000000000002"]
-    public_access_cidrs = ["203.0.113.10/32"]
-    admin_principal_arn = "arn:aws:iam::123456789012:root"
-    addon_versions      = { vpc-cni = "latest" }
+    cluster_permissions_boundary_arn = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-cluster"
+    node_permissions_boundary_arn    = "arn:aws:iam::123456789012:policy/orderpage-dev-boundary-node"
+    cluster_name                     = "test"
+    kubernetes_version               = "1.35"
+    cluster_subnet_ids               = ["subnet-00000000000000001", "subnet-00000000000000002"]
+    node_subnet_ids                  = ["subnet-00000000000000001", "subnet-00000000000000002"]
+    public_access_cidrs              = ["203.0.113.10/32"]
+    admin_principal_arn              = "arn:aws:iam::123456789012:root"
+    addon_versions                   = { vpc-cni = "latest" }
   }
   expect_failures = [var.admin_principal_arn, var.addon_versions]
 }
@@ -125,9 +136,12 @@ run "protect_experiment_images" {
 run "root_module_wiring" {
   command = plan
   variables {
-    eks_public_access_cidrs = ["203.0.113.10/32"]
-    eks_admin_principal_arn = "arn:aws:iam::123456789012:role/Operator"
-    eks_addon_versions      = { vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1" }
+    # 개인 tfvars의 활성화 값이 mock 시나리오를 바꾸지 않도록 고정한다.
+    enable_operations_monitoring = false
+    enable_jenkins               = false
+    eks_public_access_cidrs      = ["203.0.113.10/32"]
+    eks_admin_principal_arn      = "arn:aws:iam::123456789012:role/Operator"
+    eks_addon_versions           = { vpc-cni = "v1.0.0-eksbuild.1", coredns = "v1.0.0-eksbuild.1", kube-proxy = "v1.0.0-eksbuild.1" }
     # mock 전용 문자열. 실제 AWS 계정에서 사용하는 인증값이 아니다.
     rds_engine_version      = "10.11.13"
     rds_master_password     = "MockOnlyRdsPassword1234567890123456"
