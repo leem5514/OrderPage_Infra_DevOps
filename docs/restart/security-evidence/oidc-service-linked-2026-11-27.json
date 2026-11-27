@@ -1,0 +1,216 @@
+{
+  "date": "2026-11-27",
+  "scope": "Local policy tests and authenticated Terraform target plan; no service apply or live IAM authorization test",
+  "nodeTestsPassed": 95,
+  "delegationTestsPassed": 14,
+  "existingPlanRequestChecks": 44,
+  "existingPlanChecksAllowed": true,
+  "policySizes": {
+    "unbound": [
+      {
+        "name": "OrderPageWorkloadRoleLifecycle",
+        "characters": 5688
+      },
+      {
+        "name": "OrderPageWorkloadRolePermissions",
+        "characters": 2728
+      },
+      {
+        "name": "OrderPageWorkloadIamResources",
+        "characters": 1073
+      },
+      {
+        "name": "OrderPageDeploymentGuardrails",
+        "characters": 4088
+      },
+      {
+        "name": "OrderPageEksAccessManagement",
+        "characters": 3068
+      },
+      {
+        "name": "OrderPageServiceLinkedRoleCreation",
+        "characters": 4207
+      }
+    ],
+    "boundFixture": [
+      {
+        "name": "OrderPageWorkloadRoleLifecycle",
+        "characters": 5688
+      },
+      {
+        "name": "OrderPageWorkloadRolePermissions",
+        "characters": 2728
+      },
+      {
+        "name": "OrderPageWorkloadIamResources",
+        "characters": 1925
+      },
+      {
+        "name": "OrderPageDeploymentGuardrails",
+        "characters": 4209
+      },
+      {
+        "name": "OrderPageEksAccessManagement",
+        "characters": 3068
+      },
+      {
+        "name": "OrderPageServiceLinkedRoleCreation",
+        "characters": 4207
+      }
+    ]
+  },
+  "bootstrapPlan": {
+    "target": "module.eks.aws_eks_cluster.this",
+    "sha256": "d95fce7146c25c358dafca35a10aec50b95d0831dcd68197dd5237875d97517f",
+    "create": 19,
+    "update": 0,
+    "delete": 0,
+    "oidcIncluded": false,
+    "nodegroupIncluded": false,
+    "resources": [
+      {
+        "address": "module.eks.aws_cloudwatch_log_group.cluster",
+        "type": "aws_cloudwatch_log_group",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.eks.aws_eks_cluster.this",
+        "type": "aws_eks_cluster",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.eks.aws_iam_role.cluster",
+        "type": "aws_iam_role",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.eks.aws_iam_role_policy_attachment.cluster",
+        "type": "aws_iam_role_policy_attachment",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_eip.nat",
+        "type": "aws_eip",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_internet_gateway.this",
+        "type": "aws_internet_gateway",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_nat_gateway.this",
+        "type": "aws_nat_gateway",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_route_table.private",
+        "type": "aws_route_table",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_route_table.public",
+        "type": "aws_route_table",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_route_table_association.private[0]",
+        "type": "aws_route_table_association",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_route_table_association.private[1]",
+        "type": "aws_route_table_association",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_route_table_association.public[0]",
+        "type": "aws_route_table_association",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_route_table_association.public[1]",
+        "type": "aws_route_table_association",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_subnet.private[0]",
+        "type": "aws_subnet",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_subnet.private[1]",
+        "type": "aws_subnet",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_subnet.public[0]",
+        "type": "aws_subnet",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_subnet.public[1]",
+        "type": "aws_subnet",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_vpc.this",
+        "type": "aws_vpc",
+        "actions": [
+          "create"
+        ]
+      },
+      {
+        "address": "module.vpc.aws_vpc_endpoint.s3",
+        "type": "aws_vpc_endpoint",
+        "actions": [
+          "create"
+        ]
+      }
+    ]
+  },
+  "actualIssuerBound": false,
+  "liveServiceLinkedRolesExistenceVerified": false,
+  "readyForApply": false,
+  "limitations": [
+    "Bound issuer is tested with a fixture only; actual cluster does not exist yet.",
+    "Offline evaluator is not AWS IAM Policy Simulator and does not evaluate SCP/session/resource policies.",
+    "SLR AttachRolePolicy/PutRolePolicy dependency follows official IAM guidance; real service call contexts are untested.",
+    "Target plan is for initial dependency bootstrap, not routine deployment. A full new plan must follow.",
+    "Service write permissions, budget/runtime approval and live permission validation remain pending."
+  ]
+}
