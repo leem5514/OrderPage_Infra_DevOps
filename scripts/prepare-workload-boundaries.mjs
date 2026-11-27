@@ -38,8 +38,8 @@ export function renderWorkloadBoundaries(accountId) {
     const compact = JSON.stringify(policy);
     if (compact.length > 6144 || compact.includes('{{')) throw Error('정책 크기 또는 치환 검사 실패');
     const name = `orderpage-dev-boundary-${kind}`;
-    // 콘솔에 붙여 넣을 JSON은 불필요한 공백을 제거해 저장한다.
-    files[name + '.json'] = compact + '\n';
+    // 콘솔에서 검토하기 쉽도록 들여쓰기한다. 크기·해시는 서식과 무관한 compact 기준이다.
+    files[name + '.json'] = JSON.stringify(policy, null, 2) + '\n';
     manifest.push({name, arn: `arn:aws:iam::${accountId}:policy/${name}`, characters: compact.length, sha256: createHash('sha256').update(compact).digest('hex')});
   }
   files['plan-read.json'] = readPolicy;

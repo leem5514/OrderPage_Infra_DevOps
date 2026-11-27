@@ -24,7 +24,7 @@ Terraform은 클러스터·Node·Jenkins·백엔드 업로드·ALB Controller용
 
 [생성기](../../scripts/prepare-workload-boundaries.mjs)는 공식 정책 스냅샷의 해시, 계정 ID 형식과 IAM 관리형 정책의 6,144자 제한을 검사한다. 출력은 Git에서 제외한 `.local/iam-workload-boundaries`에만 두며 기존 결과를 덮어쓰지 않는다.
 
-정책 JSON 5개 외에 다음 파일이 있다.
+정책 JSON은 읽고 수정하기 쉽도록 2칸 들여쓰기와 줄바꿈으로 저장한다. 정책 크기와 manifest 해시는 공백을 제거한 JSON 기준이므로 서식 변경으로 달라지지 않는다. 정책 JSON 5개 외에 다음 파일이 있다.
 
 - `manifest.json`: 정책 이름·ARN·문자 수·SHA256. 콘솔에 붙여 넣는 정책은 아니다.
 - `plan-read.json`: 기존 `OrderPageServicePlanRead`의 갱신본. 현재 Controller 정책과 상한 5개에 대한 GetPolicy/GetPolicyVersion/ListPolicyVersions/ListPolicyTags만 허용한다. 쓰기 권한을 추가하지 않는다.
