@@ -1,0 +1,113 @@
+{
+  "date": "2026-11-27",
+  "scope": "Offline authorization cases and saved actual plan settings; not live AWS IAM simulation",
+  "policies": [
+    {
+      "name": "OrderPageNetworkCreate",
+      "characters": 4244
+    },
+    {
+      "name": "OrderPageNetworkManage",
+      "characters": 4876
+    },
+    {
+      "name": "OrderPageComputeLifecycle",
+      "characters": 3724
+    },
+    {
+      "name": "OrderPageNetworkComputeTags",
+      "characters": 5113
+    }
+  ],
+  "planSha256": "697a1cb2b93b13c315e6e3d6f13769ed00ad18a3723e6455af80fd4e2675fd31",
+  "planReview": {
+    "resourceCount": 21,
+    "checks": [
+      {
+        "name": "reviewed-resource-counts",
+        "passed": true
+      },
+      {
+        "name": "no-delete-or-replacement",
+        "passed": true
+      },
+      {
+        "name": "known-project-tags",
+        "passed": true
+      },
+      {
+        "name": "vpc-dns-and-default-tenancy",
+        "passed": true
+      },
+      {
+        "name": "subnets-no-automatic-public-ip",
+        "passed": true
+      },
+      {
+        "name": "two-public-two-private-in-seoul",
+        "passed": true
+      },
+      {
+        "name": "one-public-nat-and-eip",
+        "passed": true
+      },
+      {
+        "name": "s3-gateway-endpoint-only",
+        "passed": true
+      },
+      {
+        "name": "two-default-routes",
+        "passed": true
+      },
+      {
+        "name": "jenkins-no-ingress",
+        "passed": true
+      },
+      {
+        "name": "data-ingress-ports-without-public-cidrs",
+        "passed": true
+      },
+      {
+        "name": "jenkins-size-and-public-ip",
+        "passed": true
+      },
+      {
+        "name": "jenkins-profile",
+        "passed": true
+      },
+      {
+        "name": "jenkins-ami-if-known",
+        "passed": true
+      },
+      {
+        "name": "imds-v2-hop-one",
+        "passed": true
+      },
+      {
+        "name": "jenkins-encrypted-30gb-root",
+        "passed": true
+      },
+      {
+        "name": "node-encrypted-20gb-root",
+        "passed": true
+      },
+      {
+        "name": "node-template-no-extra-compute-settings",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "readyForApply": false,
+    "unresolved": [
+      "Jenkins AMI must resolve and match the approved policy before apply.",
+      "Subnet/SG/routing target identities and connections must be checked in the final resolved plan."
+    ],
+    "limitations": [
+      "Checks known settings only; not an apply gate, AWS policy simulator or spending cap.",
+      "Service-linked roles create EKS workers independently of these deploy-role EC2 permissions.",
+      "Creation review rejects delete/replacement plans; cleanup needs separate review."
+    ]
+  },
+  "awsPoliciesAttached": false,
+  "serviceApplyExecuted": false
+}
