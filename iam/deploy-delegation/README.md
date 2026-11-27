@@ -17,6 +17,6 @@ EKS 생성 후에는 `node scripts/prepare-deploy-delegation.mjs <12자리 계�
 | `OrderPageEksAccessManagement.json` | 지정 운영자 하나의 Access Entry와 관리자 정책 연결·해제 |
 | `OrderPageServiceLinkedRoleCreation.json` | AWS 서비스 연결 Role 7개의 생성·조회·생성 의존 권한, 공유 Role 삭제 거부 |
 
-[구현 설명·한계·남은 작업](../../docs/restart/deploy-iam-delegation.md)을 먼저 읽는다. `authorization-reference.json`은 공식 IAM/EKS/STS 서비스 참조에서 사용한 Action·Resource·Condition·API 의존 조건만 추린 검증 근거다. 원본 URL과 해시를 포함하며 원본 전체나 AWS IAM 시뮬레이터를 대신하지 않는다.
+[구현 설명·한계·남은 작업](../../docs/restart/iam/deploy-iam-delegation.md)을 먼저 읽는다. `authorization-reference.json`은 공식 IAM/EKS/STS 서비스 참조에서 사용한 Action·Resource·Condition·API 의존 조건만 추린 검증 근거다. 원본 URL과 해시를 포함하며 원본 전체나 AWS IAM 시뮬레이터를 대신하지 않는다.
 
-[OIDC 연결과 최초 2단계 배포](../../docs/restart/oidc-service-linked-roles.md)는 새 정책을 연결하기 전에 확인한다. 정책별 최대 크기는 두 단계 모두 5,688자이며 관리형 정책 제한 이하다. 기존 state/read 정책과 이 6개를 함께 고려하고, 후속 서비스 정책까지 더한 실제 Role 연결 개수는 최종 검토에서 다시 확인한다. 일부 Allow만 먼저 연결하지 않는다.
+[OIDC 연결과 최초 2단계 배포](../../docs/restart/iam/oidc-service-linked-roles.md)는 새 정책을 연결하기 전에 확인한다. 정책별 최대 크기는 두 단계 모두 5,688자이며 관리형 정책 제한 이하다. 기존 state/read 정책과 이 6개를 함께 고려하고, 후속 서비스 정책까지 더한 실제 Role 연결 개수는 최종 검토에서 다시 확인한다. 일부 Allow만 먼저 연결하지 않는다.

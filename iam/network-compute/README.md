@@ -20,4 +20,4 @@ node scripts/review-network-compute-plan.mjs terraform/envs/dev/<검토-plan>.tf
 
 `manifest.json`의 `REVIEW_ONLY_DO_NOT_ATTACH`, `readyForApply: false`는 의도된 상태다. plan 검사 통과도 AWS 권한 검증이나 배포 승인이 아니다. 미확정 ID와 AMI는 결과의 `unresolved`에 남는다.
 
-[실행 과정과 제한 이유](../../docs/restart/network-compute-permissions.md), [공식 권한표 대조 자료](authorization-reference.json), [검증 결과](../../docs/restart/security-evidence/network-compute-permissions-2026-11-27.json)를 함께 확인한다.
+[실행 과정과 제한 이유](../../docs/restart/iam/network-compute-permissions.md), [공식 권한표 대조 자료](authorization-reference.json), [검증 결과](../../docs/restart/security-evidence/network-compute-permissions-2026-11-27.json)를 함께 확인한다.

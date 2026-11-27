@@ -30,11 +30,11 @@ FE는 Jenkins에서 검증·정적 빌드한 결과를 Vercel CLI로 배포한�
 
 | 구체적인 설정 | 실행 문서 |
 |---|---|
-| ALB/ACM·Secret·상품 이미지 | [HTTPS와 최초 배포](restart/https-app-deployment.md) |
-| EC2 Jenkins·ECR·Argo CD | [CI/CD 적용 절차](restart/jenkins-argocd.md) |
-| FE 정적 배포 | [Vercel 적용 절차](restart/frontend-vercel.md) |
-| AWS 경보·비용·SNS | [CloudWatch와 비용](restart/cloudwatch-cost-monitoring.md) |
-| Kubernetes 지표·원본 보관 | [Prometheus와 Grafana](restart/prometheus-grafana.md) |
+| ALB/ACM·Secret·상품 이미지 | [HTTPS와 최초 배포](restart/guides/https-app-deployment.md) |
+| EC2 Jenkins·ECR·Argo CD | [CI/CD 적용 절차](restart/guides/jenkins-argocd.md) |
+| FE 정적 배포 | [Vercel 적용 절차](restart/guides/frontend-vercel.md) |
+| AWS 경보·비용·SNS | [CloudWatch와 비용](restart/guides/cloudwatch-cost-monitoring.md) |
+| Kubernetes 지표·원본 보관 | [Prometheus와 Grafana](restart/guides/prometheus-grafana.md) |
 
 ## 그림 관리와 아이콘
 
