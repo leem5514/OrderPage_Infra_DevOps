@@ -408,3 +408,10 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - STS에서 의도한 계정과 Role을 확인했다. 계정별 backend 설정은 Git 제외 경로에 두고 서비스 환경의 S3 backend 초기화를 완료했다.
 - Terraform validate 성공. 원본 로그와 로컬 backend 메타데이터는 공개하지 않았다. 서비스 plan/apply, state 쓰기·잠금·복구 시험은 아직 수행하지 않았다.
 - 다음은 실제 변수와 EKS 운영 Role 확정 및 서비스 plan의 자원·비용 검토다. [연결 결과와 한계](service-plan-role.md)에 상세히 기록했다.
+## 33. 2026-11-27 — PR #20 병합과 첫 서비스 plan 검토
+
+- PR #20의 head를 확인해 병합하고 main을 동기화했다. 사용자가 지정한 SNS 이메일과 별도 EKS 운영 Role 선택을 반영했다.
+- 배포 Role의 서울 조회 13개 묶음을 완료하고 실제 버전·AMI·현재 PC /32를 Git 제외 tfvars에 넣었다. Jenkins와 CloudWatch/SNS를 포함하고 Budget 금액은 미확정으로 유지했다.
+- 세 암호는 Windows CurrentUser DPAPI로 보관하고 plan 프로세스에만 전달했다. 실제 AWS 인증 기반 plan은 생성 74, 수정·삭제·교체 0으로 완료했다. 22개 구성 검사를 통과했고 종료 후 현재 잠금 파일이 남지 않았음을 조회했다.
+- 별도 EKS 운영 Role 생성 파일·생성기·검사·콘솔 안내를 준비했다. IAM 검사 18개가 통과했다. Role 연결, 생성 권한, 비용/시간 검토 및 실제 apply는 후속 작업이다.
+- [plan과 보안·비용 검토 범위](service-plan-2026-11-27.md), [운영 Role 연결 순서](eks-operator-role.md)에 상세 과정을 기록했다.

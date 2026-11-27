@@ -4,13 +4,13 @@
 
 기존 Spring Boot·Vue 주문 서비스를 바탕으로, 인프라를 다시 만들 수 있는지, 서비스 이용 중 버전을 바꿀 수 있는지, 장애를 발견하고 원인을 설명할 수 있는지를 다룹니다. 기술을 설치하는 데서 끝내지 않고 **구성 코드 → 배포 → 관측 → 비교 실험 → 비용 확인과 정리**까지 한 번의 운영 과정으로 남기는 것이 목표입니다.
 
-> **현재: Terraform 상태 저장소 생성 완료 · 2026-11-27 기준**
+> **현재: 상태 저장소 생성 및 첫 서비스 plan 검토 완료 · 2026-11-27 기준**
 >
 > AWS에 상태 저장용 S3 버킷 1개와 설정 6개를 생성하고, 실제 설정 조회와 적용 후 변경 없음까지 확인했습니다. VPC/EKS·관리형 데이터·Jenkins·Vercel 배포와 성능 측정은 아직 수행하지 않았습니다. 아래 그림은 **코드로 준비한 목표 구조**입니다.
 
 > **공개 서비스 배포 전 확인 사항**
 >
-> BE #6·Infra #19까지 병합했습니다. 임시 로그인과 서울 사양 조회, S3 전용 Role 인증을 확인했고 승인한 bootstrap만 적용했습니다. 다음 [서비스 plan용 Role](docs/restart/service-plan-role.md)의 정책과 state 접근 설정은 준비했으며 AWS 연결 전입니다. 실제 서비스 생성 권한·예산·변수 준비는 남아 있습니다. [인증 과정](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요.
+> BE #6·Infra #20까지 병합했습니다. [서비스 plan용 Role](docs/restart/service-plan-role.md)의 실제 인증과 backend 초기화를 마쳤고, Jenkins·CloudWatch/SNS를 포함한 [첫 서비스 plan](docs/restart/service-plan-2026-11-27.md)은 생성 74개·수정/삭제/교체 0개입니다. 아직 서비스 apply는 하지 않았습니다. [EKS 운영 Role](docs/restart/eks-operator-role.md) 연결, 실제 생성 권한과 최신 비용·운영 시간 검토가 남아 있습니다. [인증 과정](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요.
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 
@@ -126,9 +126,11 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 ```text
 요구사항·비교군 확정 → 앱 점검 → 인프라·배포·관측 코드 준비
                                            │
-                                [현재] 로컬 검증·재검토 완료
+                                로컬 검증·재검토 완료
                                            ↓
-계정·예산·실제 입력 → plan 검토 → AWS 생성·최초 배포
+계정·실제 입력 → [현재] 첫 서비스 plan 검토 완료
+                                           ↓
+                 운영 Role·실행 권한·예산 확정 → AWS 생성·최초 배포
                                            ↓
 기준값 측정 → 조건별 비교 → 결과 해석 → 증거 보관·자원 정리
 ```
@@ -139,13 +141,13 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 | 앱·기반·CI/CD·관측 코드 | main 반영 완료 | 코드 및 로컬 검사 완료. 실제 AWS/Jenkins/Vercel 연동과는 구분 |
 | 보안·비용 재검토 | BE 보강·REST 전환 병합 완료 | BE #6·Infra #17까지 병합. 실제 권한·이미지/호스트 점검 필요 |
 | 계정 연결·상태 저장소 | IAM/Role 인증 및 S3 bootstrap 적용 완료 | 버킷 1개와 설정 6개 생성, AWS 조회 검증, 후속 plan 변경 없음 |
-| 서비스 인프라·최초 배포 | 미실행 | 서비스 배포 Role·예산·입력·plan, 이후 ACM/DNS·관리형 서비스·Jenkins·Argo CD·앱 연결 |
+| 서비스 인프라·최초 배포 | 첫 실제 plan 완료, apply 전 | 생성 74·수정/삭제/교체 0. 운영 Role 연결·실행 권한·비용 확정 후 AWS 생성과 앱 연동 |
 | 관측 연결·비교 실험 | 미실행 | SNS 수신 확인, Prometheus Targets, 기준값 확보 후 E01~E05 실행 |
 | 결과·비용·종료 확인 | 미실행 | 원본과 비교표 보관, 비용 조회, 잔여 자원 확인 |
 
 2026-11-15 재검토에서는 **BE 테스트 23개, FE 테스트 9개·lint·운영 빌드, Infra Node 테스트 36개와 Terraform mock 테스트 22개·validate**를 통과했습니다. 이는 로컬 검증 결과이며 실제 인프라 기동, 운영 성능 또는 완전한 보안 검증을 의미하지 않습니다. FE 개발·빌드 의존성 권고 18건과 전체 BE 의존성 보안 점검 등 남은 범위는 [배포 전 재검토](docs/restart/deployment-review.md)에 공개했습니다.
 
-**다음은 배포용 Role·실습 예산·실제 변수 준비입니다.** [인증 결과와 제한된 조회 정책](docs/restart/aws-login-readiness.md)을 확인한 뒤 [보안 판단서](docs/restart/predeploy-security-assessment.md)의 실제 IAM·토큰·호스트 조건을 확인합니다. [사전 점검](docs/restart/aws-plan-preflight.md)에 따라 보호된 입력과 plan의 생성·삭제·공개 접근·유료 자원을 검토합니다. `deploymentEnabled`, 기본 예시의 `enable_jenkins`, `enable_operations_monitoring`과 Argo CD 자동 동기화는 비활성입니다.
+**다음은 EKS 운영 Role 연결·서비스 생성 권한·최신 비용과 가동 시간 확정입니다.** [인증 결과와 제한된 조회 정책](docs/restart/aws-login-readiness.md)을 확인한 뒤 [보안 판단서](docs/restart/predeploy-security-assessment.md)의 실제 IAM·토큰·호스트 조건을 확인합니다. [사전 점검](docs/restart/aws-plan-preflight.md)에 따라 보호된 입력과 plan의 생성·삭제·공개 접근·유료 자원을 검토합니다. `deploymentEnabled`와 Argo CD 자동 동기화는 비활성입니다. 기본 예시의 Jenkins/운영 모니터링은 비활성으로 유지하되, 이번 로컬 plan 입력에서는 둘을 켜서 검토했습니다.
 
 <a id="guide"></a>
 ## 코드를 읽거나 직접 진행하려면
