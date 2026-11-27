@@ -1,0 +1,617 @@
+{
+  "retrievedDate": "2026-11-27",
+  "scope": "Selected official service authorization entries used for local structural checks; not IAM simulation",
+  "services": {
+    "iam": {
+      "source": "https://servicereference.us-east-1.amazonaws.com/v1/iam/iam.json",
+      "sourceSha256": "39267fc0034910ef6754052b39719e7ffc86c446ba3e9a9834436bcc7d4a4ba6",
+      "actions": [
+        {
+          "name": "AddRoleToInstanceProfile",
+          "conditionKeys": [],
+          "resources": [
+            "instance-profile"
+          ]
+        },
+        {
+          "name": "AttachRolePolicy",
+          "conditionKeys": [
+            "iam:PermissionsBoundary",
+            "iam:PolicyARN",
+            "iam:RoleTemplateARN"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "CreateInstanceProfile",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "instance-profile"
+          ]
+        },
+        {
+          "name": "CreatePolicy",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "policy"
+          ]
+        },
+        {
+          "name": "CreatePolicyVersion",
+          "conditionKeys": [],
+          "resources": [
+            "policy"
+          ]
+        },
+        {
+          "name": "CreateRole",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "iam:PermissionsBoundary",
+            "iam:RoleTemplateARN"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "DeleteInstanceProfile",
+          "conditionKeys": [],
+          "resources": [
+            "instance-profile"
+          ]
+        },
+        {
+          "name": "DeletePolicy",
+          "conditionKeys": [],
+          "resources": [
+            "policy"
+          ]
+        },
+        {
+          "name": "DeletePolicyVersion",
+          "conditionKeys": [],
+          "resources": [
+            "policy"
+          ]
+        },
+        {
+          "name": "DeleteRole",
+          "conditionKeys": [
+            "iam:PermissionsBoundary"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "DeleteRolePermissionsBoundary",
+          "conditionKeys": [
+            "iam:PermissionsBoundary"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "DeleteRolePolicy",
+          "conditionKeys": [
+            "iam:PermissionsBoundary"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "DetachRolePolicy",
+          "conditionKeys": [
+            "iam:PermissionsBoundary",
+            "iam:PolicyARN"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "PassRole",
+          "conditionKeys": [
+            "iam:AssociatedResourceArn",
+            "iam:PassedToService"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "PutRolePermissionsBoundary",
+          "conditionKeys": [
+            "iam:PermissionsBoundary",
+            "iam:RoleTemplateARN"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "PutRolePolicy",
+          "conditionKeys": [
+            "iam:PermissionsBoundary",
+            "iam:RoleTemplateARN"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "RemoveRoleFromInstanceProfile",
+          "conditionKeys": [],
+          "resources": [
+            "instance-profile"
+          ]
+        },
+        {
+          "name": "SetDefaultPolicyVersion",
+          "conditionKeys": [],
+          "resources": [
+            "policy"
+          ]
+        },
+        {
+          "name": "TagInstanceProfile",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "instance-profile"
+          ]
+        },
+        {
+          "name": "TagPolicy",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "policy"
+          ]
+        },
+        {
+          "name": "TagRole",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "iam:RoleTemplateARN"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "UntagInstanceProfile",
+          "conditionKeys": [
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "instance-profile"
+          ]
+        },
+        {
+          "name": "UntagPolicy",
+          "conditionKeys": [
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "policy"
+          ]
+        },
+        {
+          "name": "UntagRole",
+          "conditionKeys": [
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "UpdateAssumeRolePolicy",
+          "conditionKeys": [
+            "iam:PermissionsBoundary"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "UpdateRole",
+          "conditionKeys": [
+            "iam:PermissionsBoundary"
+          ],
+          "resources": [
+            "role"
+          ]
+        },
+        {
+          "name": "UpdateRoleDescription",
+          "conditionKeys": [
+            "iam:PermissionsBoundary"
+          ],
+          "resources": [
+            "role"
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "name": "instance-profile",
+          "arnFormats": [
+            "arn:${Partition}:iam::${Account}:instance-profile/${InstanceProfileNameWithPath}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "policy",
+          "arnFormats": [
+            "arn:${Partition}:iam::${Account}:policy/${PolicyNameWithPath}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "role",
+          "arnFormats": [
+            "arn:${Partition}:iam::${Account}:role/${RoleNameWithPath}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}",
+            "iam:ResourceTag/${TagKey}"
+          ]
+        }
+      ],
+      "operations": [
+        {
+          "name": "AddRoleToInstanceProfile",
+          "authorizedActions": [
+            {
+              "Name": "AddRoleToInstanceProfile",
+              "Service": "iam"
+            },
+            {
+              "Name": "PassRole",
+              "Context": {
+                "iam:PassedToService": [
+                  "ec2.amazonaws.com"
+                ]
+              },
+              "Service": "iam"
+            }
+          ]
+        },
+        {
+          "name": "CreateRole",
+          "authorizedActions": [
+            {
+              "Name": "CreateRole",
+              "Service": "iam"
+            },
+            {
+              "Name": "TagRole",
+              "Service": "iam"
+            }
+          ]
+        }
+      ]
+    },
+    "eks": {
+      "source": "https://servicereference.us-east-1.amazonaws.com/v1/eks/eks.json",
+      "sourceSha256": "aab6e2bd4563e9409b3dd1a2e6e2f5d14406a5117d55f6f148864bc768ccd44d",
+      "actions": [
+        {
+          "name": "AssociateAccessPolicy",
+          "conditionKeys": [
+            "eks:accessScope",
+            "eks:namespaces",
+            "eks:policyArn"
+          ],
+          "resources": [
+            "access-entry"
+          ]
+        },
+        {
+          "name": "CreateAccessEntry",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "eks:accessEntryType",
+            "eks:kubernetesGroups",
+            "eks:principalArn",
+            "eks:username"
+          ],
+          "resources": [
+            "cluster"
+          ]
+        },
+        {
+          "name": "DeleteAccessEntry",
+          "conditionKeys": [],
+          "resources": [
+            "access-entry"
+          ]
+        },
+        {
+          "name": "DisassociateAccessPolicy",
+          "conditionKeys": [
+            "eks:accessScope",
+            "eks:namespaces",
+            "eks:policyArn"
+          ],
+          "resources": [
+            "access-entry"
+          ]
+        },
+        {
+          "name": "TagResource",
+          "conditionKeys": [
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "access-entry",
+            "addon",
+            "capability",
+            "cluster",
+            "dashboard",
+            "eks-anywhere-subscription",
+            "fargateprofile",
+            "identityproviderconfig",
+            "nodegroup",
+            "podidentityassociation"
+          ]
+        },
+        {
+          "name": "UntagResource",
+          "conditionKeys": [
+            "aws:TagKeys"
+          ],
+          "resources": [
+            "access-entry",
+            "addon",
+            "capability",
+            "cluster",
+            "dashboard",
+            "eks-anywhere-subscription",
+            "fargateprofile",
+            "identityproviderconfig",
+            "nodegroup",
+            "podidentityassociation"
+          ]
+        },
+        {
+          "name": "UpdateAccessEntry",
+          "conditionKeys": [],
+          "resources": [
+            "access-entry"
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "name": "access-entry",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:access-entry/${ClusterName}/${IamIdentityType}/${IamIdentityAccountID}/${IamIdentityName}/${UUID}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}",
+            "eks:accessEntryType",
+            "eks:clusterName",
+            "eks:kubernetesGroups",
+            "eks:principalArn",
+            "eks:username"
+          ]
+        },
+        {
+          "name": "addon",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:addon/${ClusterName}/${AddonName}/${UUID}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "capability",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:capability/${ClusterName}/${CapabilityType}/${CapabilityName}/${UUID}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "cluster",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:cluster/${ClusterName}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "dashboard",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:dashboard/${DashboardName}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "eks-anywhere-subscription",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:eks-anywhere-subscription/${UUID}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "fargateprofile",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:fargateprofile/${ClusterName}/${FargateProfileName}/${UUID}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "identityproviderconfig",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:identityproviderconfig/${ClusterName}/${IdentityProviderType}/${IdentityProviderConfigName}/${UUID}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "nodegroup",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:nodegroup/${ClusterName}/${NodegroupName}/${UUID}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        },
+        {
+          "name": "podidentityassociation",
+          "arnFormats": [
+            "arn:${Partition}:eks:${Region}:${Account}:podidentityassociation/${ClusterName}/${UUID}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}"
+          ]
+        }
+      ],
+      "operations": [
+        {
+          "name": "CreateCluster",
+          "authorizedActions": [
+            {
+              "Name": "CreateAccessEntry",
+              "Service": "eks"
+            },
+            {
+              "Name": "CreateCluster",
+              "Service": "eks"
+            },
+            {
+              "Name": "PassRole",
+              "Context": {
+                "iam:PassedToService": [
+                  "ec2.amazonaws.com",
+                  "eks.amazonaws.com"
+                ]
+              },
+              "Service": "iam"
+            },
+            {
+              "Name": "TagResource",
+              "Service": "eks"
+            }
+          ]
+        },
+        {
+          "name": "CreateNodegroup",
+          "authorizedActions": [
+            {
+              "Name": "CreateNodegroup",
+              "Service": "eks"
+            },
+            {
+              "Name": "PassRole",
+              "Context": {
+                "iam:PassedToService": [
+                  "eks.amazonaws.com"
+                ]
+              },
+              "Service": "iam"
+            },
+            {
+              "Name": "TagResource",
+              "Service": "eks"
+            }
+          ]
+        },
+        {
+          "name": "DisassociateAccessPolicy",
+          "authorizedActions": [
+            {
+              "Name": "DisassociateAccessPolicy",
+              "Service": "eks"
+            }
+          ]
+        }
+      ]
+    },
+    "sts": {
+      "source": "https://servicereference.us-east-1.amazonaws.com/v1/sts/sts.json",
+      "sourceSha256": "ecfa9428563f5e3591a8badf5781c34a37e9ef01c60fb533369353dd886cdf3b",
+      "actions": [
+        {
+          "name": "AssumeRole",
+          "conditionKeys": [
+            "accounts.google.com:aud",
+            "accounts.google.com:sub",
+            "aws:RequestTag/${TagKey}",
+            "aws:TagKeys",
+            "cognito-identity.amazonaws.com:amr",
+            "cognito-identity.amazonaws.com:aud",
+            "cognito-identity.amazonaws.com:sub",
+            "graph.facebook.com:app_id",
+            "graph.facebook.com:id",
+            "iam:ResourceTag/${TagKey}",
+            "saml:namequalifier",
+            "saml:sub",
+            "saml:sub_type",
+            "sts:ExternalId",
+            "sts:RequestContext/${ContextKey}",
+            "sts:RequestContextProviders",
+            "sts:RoleSessionName",
+            "sts:SourceIdentity",
+            "sts:TransitiveTagKeys",
+            "www.amazon.com:app_id",
+            "www.amazon.com:user_id"
+          ],
+          "resources": [
+            "role"
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "name": "role",
+          "arnFormats": [
+            "arn:${Partition}:iam::${Account}:role/${RoleNameWithPath}"
+          ],
+          "conditionKeys": [
+            "aws:ResourceTag/${TagKey}",
+            "iam:ResourceTag/${TagKey}"
+          ]
+        }
+      ],
+      "operations": []
+    }
+  }
+}
