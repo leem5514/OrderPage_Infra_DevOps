@@ -5,13 +5,14 @@ const matches = (pattern, value, ignoreCase = false) => new RegExp('^' + pattern
 
 function conditionMatches(condition, context) {
   return Object.entries(condition || {}).every(([operator, values]) => Object.entries(values).every(([key, expected]) => {
-    if (!['Null', 'StringEquals', 'StringNotEquals', 'StringEqualsIfExists', 'StringNotEqualsIfExists', 'StringEqualsIgnoreCase', 'StringEqualsIgnoreCaseIfExists', 'Bool', 'BoolIfExists', 'ForAnyValue:StringEqualsIgnoreCase', 'NumericLessThanEquals', 'NumericLessThanEqualsIfExists'].includes(operator)) throw Error('Unsupported condition operator: ' + operator);
+    if (!['Null', 'StringEquals', 'StringNotEquals', 'StringEqualsIfExists', 'StringNotEqualsIfExists', 'StringEqualsIgnoreCase', 'StringEqualsIgnoreCaseIfExists', 'Bool', 'BoolIfExists', 'ForAllValues:StringEquals', 'ForAnyValue:StringEqualsIgnoreCase', 'NumericLessThanEquals', 'NumericLessThanEqualsIfExists'].includes(operator)) throw Error('Unsupported condition operator: ' + operator);
     const actualKey = Object.keys(context).find(k => k.toLowerCase() === key.toLowerCase());
     const actual = actualKey === undefined ? undefined : context[actualKey];
     const absent = actual === undefined || actual === null || (Array.isArray(actual) && actual.length === 0);
     if (operator.endsWith('IfExists') && absent) return true;
     const comparison = operator.replace(/IfExists$/, '');
     if (operator === 'Null') return absent === (String(expected) === 'true');
+    if (operator === 'ForAllValues:StringEquals') return absent || array(actual).every(a => array(expected).includes(a));
     if (operator === 'ForAnyValue:StringEqualsIgnoreCase') return !absent && array(actual).some(a => array(expected).some(e => String(e).toLowerCase() === String(a).toLowerCase()));
     if (comparison === 'NumericLessThanEquals') return !absent && array(actual).some(a => ['number', 'string'].includes(typeof a) && String(a).trim() !== '' && Number.isFinite(Number(a)) && array(expected).some(e => String(e).trim() !== '' && Number.isFinite(Number(e)) && Number(a) <= Number(e)));
     if (comparison === 'StringEqualsIgnoreCase') return !absent && array(actual).some(a => array(expected).some(e => String(e).toLowerCase() === String(a).toLowerCase()));
