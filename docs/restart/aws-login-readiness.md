@@ -1,6 +1,6 @@
 # IAM 로그인 완료와 사전 조회 권한 준비
 
-2026-11-27 KST. **CLI 임시 로그인과 Terraform provider 인증까지 확인했다.** 사용자가 사전 조회 정책을 그룹에 연결한 후 서비스 버전·사양 조회도 성공했다. 실제 인프라 plan/apply는 실행하지 않았다. Infra #17은 main에 병합됐다.
+2026-11-27 KST. **CLI 임시 로그인과 Terraform provider 인증 과정을 기록한다.** 사용자의 사전 조회 정책 연결 후 서비스 버전·사양 조회도 성공했다. 이후 별도 Role을 통한 [S3 bootstrap 적용](bootstrap-apply-2026-11-27.md)까지 완료했다. 서비스 환경의 VPC/EKS plan/apply는 아직 실행하지 않았다. Infra #18은 main에 병합됐다.
 
 ## 무엇이 확인됐나
 
@@ -16,7 +16,7 @@
 
 `default`의 기존 키는 수정하지 않았다. 프로필 분리는 AWS 계정이나 권한을 새로 만드는 작업이 아니다. 새 프로필에서도 연결한 IAM 사용자의 권한만 사용할 수 있다.
 
-Terraform 검사는 Git 제외된 `.local/aws-auth-probe`에서 `aws_caller_identity` 데이터만 조회했다. 생성/변경/삭제할 resource 블록은 없었고, 실제 서비스가 포함된 `terraform/envs/dev`의 plan이나 apply와 구분한다. 원격 state 버킷도 아직 생성하지 않았다. 임시 자격증명·계정 ID·사용자 ARN·로그인 URL은 이 저장소에 기록하지 않는다.
+최초 Terraform 인증 검사는 Git 제외된 `.local/aws-auth-probe`에서 `aws_caller_identity` 데이터만 조회했다. 생성/변경/삭제할 resource 블록은 없었고, 이후 별도로 수행한 S3 bootstrap 및 실제 서비스가 포함된 `terraform/envs/dev`와 구분한다. 임시 자격증명·계정 ID·사용자 ARN·로그인 URL은 이 저장소에 기록하지 않는다.
 
 ## 두 프로필을 연결한 이유
 
@@ -63,6 +63,6 @@ credential_process = aws configure export-credentials --profile orderpage-login 
 
 이제 **실제 변수·예산·운영자 Role 확정 → state bootstrap 계획 검토 → 실제 환경 plan 검토** 순서다. [배포 전 준비 문서](aws-plan-preflight.md)를 함께 따른다.
 
-첫 실행 권한은 [상태 버킷 전용 bootstrap Role](terraform-bootstrap-role.md)로 분리했다. 이후 사용자가 정책·Role 연결을 완료했고, 새 `orderpage-bootstrap` 프로필의 실제 STS Role 전환과 [bootstrap plan](bootstrap-plan-2026-11-27.md)이 성공했다. 서비스 환경을 생성하는 배포 Role과 apply는 여전히 별도 단계다.
+첫 실행 권한은 [상태 버킷 전용 bootstrap Role](terraform-bootstrap-role.md)로 분리했다. 이후 새 `orderpage-bootstrap` 프로필의 STS Role 전환, [plan 검토](bootstrap-plan-2026-11-27.md), 승인된 [S3 적용·검증](bootstrap-apply-2026-11-27.md)을 완료했다. 서비스 환경을 생성하는 배포 Role과 apply는 여전히 별도 단계다.
 
 근거: [AWS CLI 임시 로그인과 credential_process](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html), [EKS 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_eks.html), [RDS 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_rds.html), [ElastiCache 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_elasticache.html), [MQ 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_mq.html), [EC2 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_ec2.html), [RequestedRegion 조건](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-requestedregion).

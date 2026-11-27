@@ -4,17 +4,17 @@
 
 기존 Spring Boot·Vue 주문 서비스를 바탕으로, 인프라를 다시 만들 수 있는지, 서비스 이용 중 버전을 바꿀 수 있는지, 장애를 발견하고 원인을 설명할 수 있는지를 다룹니다. 기술을 설치하는 데서 끝내지 않고 **구성 코드 → 배포 → 관측 → 비교 실험 → 비용 확인과 정리**까지 한 번의 운영 과정으로 남기는 것이 목표입니다.
 
-> **현재: 배포 전 준비 단계 · 2026-11-15 기준**
+> **현재: Terraform 상태 저장소 생성 완료 · 2026-11-27 기준**
 >
-> 기반 코드와 로컬 검증, 보안·비용 재검토는 완료했습니다. 실제 AWS 리소스 생성, 계정에 연결한 Terraform plan, Vercel 배포와 성능 측정은 아직 수행하지 않았습니다. 아래 그림은 **코드로 준비한 목표 구조**입니다.
+> AWS에 상태 저장용 S3 버킷 1개와 설정 6개를 생성하고, 실제 설정 조회와 적용 후 변경 없음까지 확인했습니다. VPC/EKS·관리형 데이터·Jenkins·Vercel 배포와 성능 측정은 아직 수행하지 않았습니다. 아래 그림은 **코드로 준비한 목표 구조**입니다.
 
-> **2026-11-17 보안 보강 진행: 공개 배포 보류 유지**
+> **공개 서비스 배포 전 확인 사항**
 >
-> BE #6·Infra #17까지 병합했습니다. 2026-11-27에는 IAM 사용자 임시 로그인과 Terraform provider 인증을 확인했습니다. 사전 조회 정책 연결 후 서울 버전·사양 조회도 성공했습니다. 실제 배포 권한·예산·변수 준비는 남아 있습니다. [인증 결과·조회 정책 연결](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요. 실제 AWS 생성·앱 배포는 아직 하지 않았습니다.
+> BE #6·Infra #18까지 병합했습니다. 임시 로그인과 서울 사양 조회, S3 전용 Role 인증을 확인했고 승인한 bootstrap만 적용했습니다. 전체 서비스용 배포 권한·예산·변수 준비는 남아 있습니다. [인증 과정](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요.
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 
-다음 배포 준비는 **상태 저장용 S3 → 서비스 인프라** 순서로 나눕니다. Infra #18 병합 후, 사용자의 정책 연결과 실제 STS 조회로 단일 버킷 전용 Role 전환을 확인했습니다. [bootstrap plan 검토](docs/restart/bootstrap-plan-2026-11-27.md)는 **생성 7(버킷 1개와 설정 6개), 수정·삭제 0**으로 완료했습니다. apply는 실행하지 않았으며 VPC/EKS 배포 권한은 별도 준비 대상입니다.
+배포 준비는 **상태 저장용 S3 → 서비스 인프라** 순서로 나눕니다. [bootstrap plan 검토](docs/restart/bootstrap-plan-2026-11-27.md) 후 사용자의 승인으로 **7개 생성, 수정·삭제 0**을 완료했습니다. [실제 적용 결과](docs/restart/bootstrap-apply-2026-11-27.md)에 AWS 조회 9개, 적용 후 plan 변경 없음, 로컬 state 암호화 백업 결과를 기록했습니다.
 
 ## 무엇을 배우고 남기는가
 
@@ -138,8 +138,8 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 | 요구사항·실험 설계 | 준비 완료 | 필수 기술, 최대 72시간, 5개 비교 시나리오와 측정 양식 정리 |
 | 앱·기반·CI/CD·관측 코드 | main 반영 완료 | 코드 및 로컬 검사 완료. 실제 AWS/Jenkins/Vercel 연동과는 구분 |
 | 보안·비용 재검토 | BE 보강·REST 전환 병합 완료 | BE #6·Infra #17까지 병합. 실제 권한·이미지/호스트 점검 필요 |
-| 계정 연결·실제 plan | IAM/CLI·Terraform 인증 확인, 실제 plan 미실행 | 조회 권한·지원 버전 확인 완료. 배포용 Role/IP, 예산, 보호된 입력, state 저장소 준비 |
-| AWS 생성·최초 배포 | 미실행 | ACM/DNS, 관리형 서비스 연결, Jenkins·Argo CD, Secret, 실제 ECR digest, FE·API 확인 |
+| 계정 연결·상태 저장소 | IAM/Role 인증 및 S3 bootstrap 적용 완료 | 버킷 1개와 설정 6개 생성, AWS 조회 검증, 후속 plan 변경 없음 |
+| 서비스 인프라·최초 배포 | 미실행 | 서비스 배포 Role·예산·입력·plan, 이후 ACM/DNS·관리형 서비스·Jenkins·Argo CD·앱 연결 |
 | 관측 연결·비교 실험 | 미실행 | SNS 수신 확인, Prometheus Targets, 기준값 확보 후 E01~E05 실행 |
 | 결과·비용·종료 확인 | 미실행 | 원본과 비교표 보관, 비용 조회, 잔여 자원 확인 |
 

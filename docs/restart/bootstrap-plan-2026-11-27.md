@@ -1,6 +1,6 @@
 # 상태 저장소: Role 전환과 실제 plan 검증
 
-2026-11-27. **IAM Role 전환과 실제 AWS 인증을 사용한 bootstrap plan이 성공했다. apply는 실행하지 않았다.**
+2026-11-27의 **적용 전 검토 기록**이다. IAM Role 전환과 실제 AWS 인증을 사용한 bootstrap plan이 성공했고, 이 검토 시점에는 apply를 실행하지 않았다. 이후 사용자의 승인을 받아 [실제 적용·조회 검증](bootstrap-apply-2026-11-27.md)을 완료했다. 아래 내용과 plan 요약 JSON은 적용 전 증거로 보존한다.
 
 사용자가 `OrderPageAssumeBootstrap` 정책 연결을 완료했다고 알린 뒤 검증했다. 콘솔 스크린샷은 정책 연결 버튼을 누르기 전 화면이지만, 이후 실제 STS 응답에서 지정 계정의 `orderpage-terraform-bootstrap` assumed-role임을 확인했다. 따라서 완료 여부는 화면만으로 추정하지 않았다.
 
