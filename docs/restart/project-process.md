@@ -359,3 +359,10 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - Terraform 1.16.2 / AWS provider 5.100.0의 격리된 데이터 전용 인증 probe가 성공했다. 실제 환경 plan/apply가 아니며 자원은 생성하지 않았다.
 - EKS 버전 조회는 AccessDenied였다. 서울 서비스 버전·사양 조회 11개만 허용하는 정책을 작성했고 아직 AWS에 연결하지 않았다.
 - [상세 과정·권한 범위·콘솔에서 연결할 위치](aws-login-readiness.md)
+
+## 26. 2026-11-27 — 사전 조회 정책 연결과 서울 호환성 확인
+
+- 사용자가 기존 그룹에 OrderPagePreflightReadOnly를 연결했다. 이후 IAM 사용자로 11개 조회 API의 13개 조회 묶음이 성공했다.
+- EKS 1.35 표준 지원, AWS 기본 add-on 후보, RDS 10.11/db.t4g.micro/gp3, Redis 7.1, RabbitMQ 4.2/mq.m7g.medium 단일 모드 및 m6i.large AZ 제공을 확인했다.
+- 실제 환경 변수·AMI를 자동 확정하지 않았으며 생성·배포·가격 재검증은 미실행이다.
+- [조회 근거·후보 값·미확인 범위](seoul-compatibility.md)를 기록했다. 다음은 배포용 Role·예산·실제 변수 준비다.

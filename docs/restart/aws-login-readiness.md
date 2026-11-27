@@ -1,6 +1,6 @@
 # IAM 로그인 완료와 사전 조회 권한 준비
 
-2026-11-27 KST. **CLI 임시 로그인과 Terraform provider 인증까지 확인했다.** 서비스 버전 조회 권한은 아직 없으며, 실제 인프라 plan/apply는 실행하지 않았다. Infra #17은 main에 병합됐다.
+2026-11-27 KST. **CLI 임시 로그인과 Terraform provider 인증까지 확인했다.** 사용자가 사전 조회 정책을 그룹에 연결한 후 서비스 버전·사양 조회도 성공했다. 실제 인프라 plan/apply는 실행하지 않았다. Infra #17은 main에 병합됐다.
 
 ## 무엇이 확인됐나
 
@@ -12,7 +12,7 @@
 | `orderpage-lab` | 위 프로필을 credential_process로 읽는 도구용 프로필 |
 | 리전 | 두 프로필 모두 ap-northeast-2 |
 | Terraform 인증 | 1.16.2 / 고정 AWS provider 5.100.0으로 실제 STS 데이터 조회 성공 |
-| EKS 버전 조회 | AccessDenied, `eks:DescribeClusterVersions` 권한 필요 |
+| EKS 버전 조회 | 최초 AccessDenied → 사전 조회 정책 연결 후 성공 |
 
 `default`의 기존 키는 수정하지 않았다. 프로필 분리는 AWS 계정이나 권한을 새로 만드는 작업이 아니다. 새 프로필에서도 연결한 IAM 사용자의 권한만 사용할 수 있다.
 
@@ -32,9 +32,9 @@ credential_process = aws configure export-credentials --profile orderpage-login 
 
 세션이 만료되면 `aws login --profile orderpage-login --region ap-northeast-2`로 다시 로그인한다. `orderpage-lab`은 연결된 인증을 사용한다. AWS CLI 명령에는 `--profile orderpage-lab`, 실제 Terraform을 실행할 PowerShell에는 `$env:AWS_PROFILE = 'orderpage-lab'`을 사용한다. 다른 AWS 키 환경변수가 인증을 덮어쓰지 않는지도 확인한다.
 
-## 다음에 연결할 권한
+## 연결한 사전 조회 권한
 
-현재 그룹의 `SignInLocalDevelopmentAccess`는 CLI 로그인용이다. EKS/RDS 등 조회·생성 권한을 부여하지 않는다. 다음 사전 조회를 위한 [정책 JSON](../../iam/operator-preflight-readonly.json)을 준비했다.
+최초 그룹의 `SignInLocalDevelopmentAccess` 정책은 CLI 로그인용이다. EKS/RDS 등 조회·생성 권한을 부여하지 않는다. 다음 사전 조회를 위한 [정책 JSON](../../iam/operator-preflight-readonly.json)을 준비했다.
 
 | 범위 | 필요한 이유 |
 |---|---|
@@ -48,7 +48,7 @@ credential_process = aws configure export-credentials --profile orderpage-login 
 
 이 정책은 권한 경계나 명시적 Deny가 아니다. 다른 정책으로 부여된 권한을 제한하지 않는다. SCP/permissions boundary/명시적 Deny가 있으면 추가 후에도 거부될 수 있다. **이 정책만으로 실제 Terraform 기반 인프라 plan/apply를 수행할 수는 없다.** 배포용 Role과 state 접근 권한은 생성 대상·비용을 검토한 뒤 별도로 구성한다.
 
-## 콘솔에서 연결하는 순서
+## 콘솔에서 연결한 순서 (완료 기록)
 
 현재 IAM 사용자에게는 자기 권한을 수정할 권한이 없다. IAM 정책을 관리할 수 있는 관리자 세션에서 수행한다. 현재 계정에 별도 관리자가 없다면 루트는 이 초기 권한 설정에만 사용하고, CLI는 계속 IAM 사용자로 사용한다.
 
@@ -59,8 +59,8 @@ credential_process = aws configure export-credentials --profile orderpage-login 
 5. `OrderPagePreflightReadOnly`를 검색·선택해 연결한다. 기존 로그인 정책은 유지한다.
 6. IAM 사용자로 돌아와 연결 완료를 알린다. 이후 CLI로 조회 허용 여부와 버전·사양을 확인한다.
 
-정책은 아직 AWS에 생성·연결하지 않았다. 정책 JSON 구문과 공식 Action 목록/서울 조건을 확인했으며 실제 IAM Access Analyzer 검증·정책 시뮬레이션·허용 동작 검증은 미실행이다. 로그인 성공은 배포 권한이나 가용성·비용 검증 완료를 뜻하지 않는다.
+사용자가 정책을 생성하고 기존 그룹에 연결한 화면을 확인했다. 이후 CLI에서 11개 조회 API에 대한 13개 조회 묶음이 성공했다. [서울 조회 결과](seoul-compatibility.md)에 기록했다. 정책 JSON 구문과 공식 Action 목록/서울 조건을 확인했으며 실제 IAM Access Analyzer 검증·정책 시뮬레이션·쓰기 권한 거부 검증은 수행하지 않았다. 로그인 성공은 배포 권한이나 가용성·비용 검증 완료를 뜻하지 않는다.
 
-그다음은 **버전/사양 조회 → 실제 변수·예산·운영자 Role 확정 → state bootstrap 계획 검토 → 실제 환경 plan 검토** 순서다. [배포 전 준비 문서](aws-plan-preflight.md)를 함께 따른다.
+이제 **실제 변수·예산·운영자 Role 확정 → state bootstrap 계획 검토 → 실제 환경 plan 검토** 순서다. [배포 전 준비 문서](aws-plan-preflight.md)를 함께 따른다.
 
 근거: [AWS CLI 임시 로그인과 credential_process](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html), [EKS 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_eks.html), [RDS 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_rds.html), [ElastiCache 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_elasticache.html), [MQ 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_mq.html), [EC2 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_ec2.html), [RequestedRegion 조건](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-requestedregion).
