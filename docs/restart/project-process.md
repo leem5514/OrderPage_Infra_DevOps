@@ -500,3 +500,13 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 최대 48시간·8만 원 목표와 large 유지 결정에 따라 비공개 tfvars에 월 Budget $45를 반영했다. 실제 월 누적 $36/$45 초과 알림이며 자동 중지가 아니다.
 - 새 plan은 생성 75개·수정/삭제/교체 0개다. 테스트 142개와 설정 검사 73개가 통과했고 미확정 목적지/정책 26개는 보류했다.
 - [비용 가정과 정리 시한](lab-budget-48h.md)을 기록했다. 서비스 apply는 실행하지 않았다.
+
+## 45. 2026-11-27 — PR #30 병합과 배포 정책 연결
+
+- PR #30을 테스트 142개·공개 파일 300개 민감값 대조 0건·변경 커밋 비밀 탐지 0건 확인 후 병합했다.
+- 사용자에게 임시 생성·연결 권한을 받은 뒤 OrderPageDeployBundle01~13을 생성하고 orderpage-terraform-deploy Role에 연결했다. 로컬 검토본과 현재 생성기 출력이 일치하는지 먼저 검사했다.
+- 기존 OrderPageServicePlanRead와 OrderPageTerraformStateAccess는 접근 단절 방지를 위해 유지했다. 총 15개로 확인했으며 한도 20개 이내다. 기존 2개는 중복 조회/state 정책이므로 후속 전환 검증 후 제거 여부를 확정한다.
+- 원격 기본 버전 13개 모두 로컬 검토본과 일치했고, 배포 Role 신원과 state 버킷 읽기가 정상이다. 아직 서비스 state prefix 객체는 없다.
+- AWS IAM Simulator에서 state 객체 삭제와 배포 Role 자기 정책 연결이 명시적 거부임을 확인했다. 이 두 검사만으로 모든 생성 API나 SCP·resource policy 조합을 검증한 것은 아니다.
+- [민감값 없는 연결 근거](security-evidence/deploy-policy-connection-2026-11-27.json)를 저장했다. 사용자가 그룹의 임시 OrderPageDeployPolicyInstaller를 연결 해제한 뒤 AWS GetPolicy의 AttachmentCount가 0임을 확인했다. 감사 정책은 유지한다.
+- 서비스 apply·VPC/EKS 생성은 아직 하지 않았다. 다음은 임시 권한 정리 확인, 시작/종료 시각 확정, 최신 최초 EKS 단계 plan 확인이다. 실제 issuer는 EKS 생성 후에만 연결한다.
