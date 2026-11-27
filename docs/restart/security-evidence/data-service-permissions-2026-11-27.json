@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-27",
+  "scope": "Offline policy and saved actual plan checks; not live AWS authorization",
+  "policies": [
+    {
+      "name": "OrderPageMariaDbLifecycle",
+      "characters": 4709
+    },
+    {
+      "name": "OrderPageRedisLifecycle",
+      "characters": 4556
+    },
+    {
+      "name": "OrderPageRabbitMqLifecycle",
+      "characters": 1443
+    },
+    {
+      "name": "OrderPageDataGuardrails",
+      "characters": 5490
+    }
+  ],
+  "planSha256": "697a1cb2b93b13c315e6e3d6f13769ed00ad18a3723e6455af80fd4e2675fd31",
+  "planReview": {
+    "resourceCount": 6,
+    "checks": [
+      {
+        "name": "six-reviewed-data-resources",
+        "passed": true
+      },
+      {
+        "name": "no-delete-or-replacement",
+        "passed": true
+      },
+      {
+        "name": "known-project-tags",
+        "passed": true
+      },
+      {
+        "name": "mariadb-name-engine-version",
+        "passed": true
+      },
+      {
+        "name": "mariadb-small-single-private",
+        "passed": true
+      },
+      {
+        "name": "mariadb-encrypted-fixed-storage",
+        "passed": true
+      },
+      {
+        "name": "mariadb-backup-and-insights",
+        "passed": true
+      },
+      {
+        "name": "mariadb-lab-cleanup",
+        "passed": true
+      },
+      {
+        "name": "mariadb-tls-and-log-parameters",
+        "passed": true
+      },
+      {
+        "name": "mariadb-subnet-and-parameter-names",
+        "passed": true
+      },
+      {
+        "name": "mariadb-logs",
+        "passed": true
+      },
+      {
+        "name": "redis-name-engine-type",
+        "passed": true
+      },
+      {
+        "name": "redis-one-node-no-cluster-mode",
+        "passed": true
+      },
+      {
+        "name": "redis-tls-and-auth-strategy",
+        "passed": true
+      },
+      {
+        "name": "redis-subnet-parameter-and-backup",
+        "passed": true
+      },
+      {
+        "name": "redis-two-cloudwatch-logs",
+        "passed": true
+      },
+      {
+        "name": "rabbitmq-name-engine-size",
+        "passed": true
+      },
+      {
+        "name": "rabbitmq-private-single-instance",
+        "passed": true
+      },
+      {
+        "name": "rabbitmq-owned-key-and-general-logs",
+        "passed": true
+      },
+      {
+        "name": "automatic-minor-upgrades",
+        "passed": true
+      },
+      {
+        "name": "database-and-redis-secrets-marked-sensitive",
+        "passed": true
+      },
+      {
+        "name": "broker-secret-marked-sensitive",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "readyForApply": false,
+    "unresolved": [
+      "Subnet/SG IDs and exact private-network connections require final plan/state review.",
+      "Logging delivery permissions and effective AWS authorization remain unverified.",
+      "Versions, regional availability, prices and runtime budget must be checked before apply."
+    ],
+    "limitations": [
+      "Known settings only; not an apply gate or spending cap.",
+      "Lab cleanup settings intentionally discard test data; production data needs a separate backup decision.",
+      "RabbitMQ users are not fully reconciled by this Terraform provider."
+    ]
+  },
+  "awsPoliciesAttached": false,
+  "serviceApplyExecuted": false
+}
