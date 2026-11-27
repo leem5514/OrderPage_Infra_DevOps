@@ -401,3 +401,10 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 정확한 state/잠금 경로, state 삭제와 버킷 보호 설정 변경 거부, 서울 조회 및 프로젝트 IAM/S3/예산 범위를 정의했다. 생성·삭제·PassRole·IAM 변경 권한은 부여하지 않았다.
 - 새 검사 8개와 bootstrap 검사 6개를 통과했고 공식 AWS 참조의 Action·리소스·조건을 대조했다. 실제 계정 파일 6개는 `.local/iam-service-plan`에만 생성했다.
 - [콘솔 연결 순서·정책 범위와 한계](service-plan-role.md)를 작성했다. 새 AWS Role 연결, 서비스 backend init/plan/apply는 미실행이다.
+
+## 32. 2026-11-27 — 서비스 Role 인증과 backend 초기화
+
+- 사용자가 두 권한 정책과 Role 및 그룹 전환 정책을 연결했다. 기존 프로필을 보존하고 `orderpage-deploy`를 추가했다.
+- STS에서 의도한 계정과 Role을 확인했다. 계정별 backend 설정은 Git 제외 경로에 두고 서비스 환경의 S3 backend 초기화를 완료했다.
+- Terraform validate 성공. 원본 로그와 로컬 backend 메타데이터는 공개하지 않았다. 서비스 plan/apply, state 쓰기·잠금·복구 시험은 아직 수행하지 않았다.
+- 다음은 실제 변수와 EKS 운영 Role 확정 및 서비스 plan의 자원·비용 검토다. [연결 결과와 한계](service-plan-role.md)에 상세히 기록했다.
