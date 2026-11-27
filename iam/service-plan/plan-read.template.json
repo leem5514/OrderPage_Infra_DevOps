@@ -1,0 +1,97 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadSeoulInfrastructureMetadata",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeImages", "ec2:DescribeAvailabilityZones", "ec2:DescribeInstanceTypes", "ec2:DescribeInstanceTypeOfferings",
+        "ec2:DescribeVpcs", "ec2:DescribeVpcAttribute", "ec2:DescribeSubnets", "ec2:DescribeInternetGateways",
+        "ec2:DescribeAddresses", "ec2:DescribeNatGateways", "ec2:DescribeRouteTables", "ec2:DescribeVpcEndpoints",
+        "ec2:DescribeVpcEndpointServices", "ec2:DescribeSecurityGroups", "ec2:DescribeSecurityGroupRules",
+        "ec2:DescribeLaunchTemplates", "ec2:DescribeLaunchTemplateVersions", "ec2:DescribeInstances",
+        "ec2:DescribeInstanceStatus", "ec2:DescribeVolumes", "ec2:DescribeTags", "ec2:DescribeNetworkInterfaces",
+        "eks:DescribeCluster", "eks:DescribeNodegroup", "eks:DescribeAddon", "eks:DescribeUpdate",
+        "eks:DescribeAccessEntry", "eks:ListAssociatedAccessPolicies", "eks:ListTagsForResource",
+        "eks:DescribeClusterVersions", "eks:DescribeAddonVersions",
+        "rds:DescribeDBInstances", "rds:DescribeDBSubnetGroups", "rds:DescribeDBParameterGroups", "rds:DescribeDBParameters",
+        "rds:DescribeDBEngineVersions", "rds:DescribeOrderableDBInstanceOptions", "rds:ListTagsForResource",
+        "elasticache:DescribeReplicationGroups", "elasticache:DescribeCacheClusters", "elasticache:DescribeCacheSubnetGroups",
+        "elasticache:DescribeCacheEngineVersions", "elasticache:ListTagsForResource",
+        "mq:DescribeBroker", "mq:ListTags", "mq:DescribeBrokerEngineTypes", "mq:DescribeBrokerInstanceOptions",
+        "ecr:DescribeRepositories", "ecr:GetLifecyclePolicy", "ecr:ListTagsForResource",
+        "acm:DescribeCertificate", "acm:ListTagsForCertificate",
+        "sns:GetTopicAttributes", "sns:GetSubscriptionAttributes", "sns:ListSubscriptionsByTopic", "sns:ListTagsForResource",
+        "logs:DescribeLogGroups", "logs:ListTagsForResource", "logs:ListTagsLogGroup",
+        "cloudwatch:DescribeAlarms", "cloudwatch:ListTagsForResource"
+      ],
+      "Resource": "*",
+      "Condition": {"StringEquals": {"aws:RequestedRegion": "ap-northeast-2"}}
+    },
+    {
+      "Sid": "ReadProjectInstanceAttributes",
+      "Effect": "Allow",
+      "Action": "ec2:DescribeInstanceAttribute",
+      "Resource": "arn:aws:ec2:ap-northeast-2:{{ACCOUNT_ID}}:instance/*",
+      "Condition": {"StringEquals": {
+        "aws:RequestedRegion": "ap-northeast-2",
+        "aws:ResourceTag/Project": "orderpage",
+        "aws:ResourceTag/Environment": "dev"
+      }}
+    },
+    {
+      "Sid": "ReadWorkloadRoles",
+      "Effect": "Allow",
+      "Action": ["iam:GetRole", "iam:ListRolePolicies", "iam:GetRolePolicy", "iam:ListAttachedRolePolicies", "iam:ListInstanceProfilesForRole"],
+      "Resource": [
+        "arn:aws:iam::{{ACCOUNT_ID}}:role/orderpage-dev-cluster-role",
+        "arn:aws:iam::{{ACCOUNT_ID}}:role/orderpage-dev-node-role",
+        "arn:aws:iam::{{ACCOUNT_ID}}:role/orderpage-dev-alb-controller",
+        "arn:aws:iam::{{ACCOUNT_ID}}:role/orderpage-dev-backend-upload",
+        "arn:aws:iam::{{ACCOUNT_ID}}:role/orderpage-dev-jenkins"
+      ]
+    },
+    {
+      "Sid": "ReadJenkinsInstanceProfile",
+      "Effect": "Allow",
+      "Action": "iam:GetInstanceProfile",
+      "Resource": "arn:aws:iam::{{ACCOUNT_ID}}:instance-profile/orderpage-dev-jenkins"
+    },
+    {
+      "Sid": "ReadControllerPolicy",
+      "Effect": "Allow",
+      "Action": ["iam:GetPolicy", "iam:GetPolicyVersion", "iam:ListPolicyVersions", "iam:ListPolicyTags"],
+      "Resource": "arn:aws:iam::{{ACCOUNT_ID}}:policy/orderpage-dev-alb-controller-policy"
+    },
+    {
+      "Sid": "ReadSeoulEksOidc",
+      "Effect": "Allow",
+      "Action": ["iam:GetOpenIDConnectProvider", "iam:ListOpenIDConnectProviderTags"],
+      "Resource": "arn:aws:iam::{{ACCOUNT_ID}}:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/*"
+    },
+    {
+      "Sid": "ReadProductBucketConfiguration",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket", "s3:GetBucketLocation", "s3:GetBucketAcl", "s3:GetBucketCORS", "s3:GetBucketWebsite",
+        "s3:GetBucketVersioning", "s3:GetAccelerateConfiguration", "s3:GetBucketRequestPayment", "s3:GetBucketLogging",
+        "s3:GetReplicationConfiguration", "s3:GetBucketObjectLockConfiguration", "s3:GetBucketOwnershipControls",
+        "s3:GetBucketPolicy", "s3:GetBucketPublicAccessBlock", "s3:GetBucketTagging", "s3:GetEncryptionConfiguration", "s3:GetLifecycleConfiguration"
+      ],
+      "Resource": "arn:aws:s3:::orderpage-dev-product-images-{{ACCOUNT_ID}}",
+      "Condition": {"StringEquals": {"s3:ResourceAccount": "{{ACCOUNT_ID}}"}}
+    },
+    {
+      "Sid": "ReadProjectDashboard",
+      "Effect": "Allow",
+      "Action": "cloudwatch:GetDashboard",
+      "Resource": "arn:aws:cloudwatch::{{ACCOUNT_ID}}:dashboard/orderpage-dev-operations"
+    },
+    {
+      "Sid": "ReadProjectBudget",
+      "Effect": "Allow",
+      "Action": ["budgets:ViewBudget", "budgets:ListTagsForResource"],
+      "Resource": "arn:aws:budgets::{{ACCOUNT_ID}}:budget/orderpage-dev-account-monthly"
+    }
+  ]
+}

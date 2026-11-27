@@ -394,3 +394,17 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - Terraform 관리 자원 7개 생성, 수정·삭제 0개로 완료했다. S3 조회 API 9개로 공개 차단·암호화·버전·소유권·수명 주기·HTTP 정책·태그를 확인했다.
 - 실제 원격 상태를 읽는 후속 plan이 변경 없음으로 통과했다. 로컬 state는 현재 Windows 사용자용 DPAPI 암호화 백업을 만들고 복호화 일치를 검증했다.
 - 원본 state·plan·로그·계정별 파일은 Git에서 제외하고 [비식별 적용 기록](bootstrap-apply-2026-11-27.md)만 반영한다. 다음은 서비스 인프라용 Role·state 객체 권한·예산·실제 입력과 plan 준비다.
+
+## 31. 2026-11-27 — PR #19 병합과 서비스 plan 권한 준비
+
+- PR #19를 검토한 커밋으로 병합하고 로컬 main을 동기화했다. 별도 후속 브랜치에서 서비스 plan용 Role과 state/잠금 접근 정책을 준비했다.
+- 정확한 state/잠금 경로, state 삭제와 버킷 보호 설정 변경 거부, 서울 조회 및 프로젝트 IAM/S3/예산 범위를 정의했다. 생성·삭제·PassRole·IAM 변경 권한은 부여하지 않았다.
+- 새 검사 8개와 bootstrap 검사 6개를 통과했고 공식 AWS 참조의 Action·리소스·조건을 대조했다. 실제 계정 파일 6개는 `.local/iam-service-plan`에만 생성했다.
+- [콘솔 연결 순서·정책 범위와 한계](service-plan-role.md)를 작성했다. 새 AWS Role 연결, 서비스 backend init/plan/apply는 미실행이다.
+
+## 32. 2026-11-27 — 서비스 Role 인증과 backend 초기화
+
+- 사용자가 두 권한 정책과 Role 및 그룹 전환 정책을 연결했다. 기존 프로필을 보존하고 `orderpage-deploy`를 추가했다.
+- STS에서 의도한 계정과 Role을 확인했다. 계정별 backend 설정은 Git 제외 경로에 두고 서비스 환경의 S3 backend 초기화를 완료했다.
+- Terraform validate 성공. 원본 로그와 로컬 backend 메타데이터는 공개하지 않았다. 서비스 plan/apply, state 쓰기·잠금·복구 시험은 아직 수행하지 않았다.
+- 다음은 실제 변수와 EKS 운영 Role 확정 및 서비스 plan의 자원·비용 검토다. [연결 결과와 한계](service-plan-role.md)에 상세히 기록했다.

@@ -10,7 +10,7 @@
 |---|---|---|---|
 | 사전 조사 | IAM 사용자 / `orderpage-lab` | EKS·RDS·Redis·MQ·EC2 버전과 사양 조회 | 실제 조회 성공 |
 | 상태 저장소 준비 | `orderpage-terraform-bootstrap` Role | 지정한 S3 버킷 하나와 설정 | 적용·AWS 조회 완료, 후속 plan 변경 없음 |
-| 서비스 인프라 | 별도 배포 Role | VPC·EKS·ECR·RDS·Redis·MQ·Jenkins·모니터링 등 | 권한 정책 작성·검증 필요 |
+| 서비스 인프라 | 별도 배포 Role | VPC·EKS·ECR·RDS·Redis·MQ·Jenkins·모니터링 등 | [plan 조회·state 권한](service-plan-role.md) 준비, 생성 권한은 후속 검토 |
 | 서비스 운영 | 지정한 EKS 운영 Role과 서비스별 IAM Role | kubectl/Helm, Controller, 앱 이미지 업로드 등 | 배포 Role과의 분리 여부 및 최종 ARN 확정 필요 |
 
 현재 코드의 `terraform/bootstrap/remote-state`는 S3 관련 resource 블록 7개만 만든다. 반면 `terraform/envs/dev`는 EKS/EC2 서비스 Role, IRSA OIDC 공급자, 정책 연결과 `PassRole`까지 필요하다. 이 권한을 처음부터 사용자에게 붙이지 않고, 바로 다음 단계에 필요한 S3 권한을 먼저 검증한다.

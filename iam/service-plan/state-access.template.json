@@ -1,0 +1,52 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DiscoverStateBucket",
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+      "Resource": "arn:aws:s3:::orderpage-devops-tfstate-{{ACCOUNT_ID}}-ap-northeast-2",
+      "Condition": {"StringEquals": {"s3:ResourceAccount": "{{ACCOUNT_ID}}"}}
+    },
+    {
+      "Sid": "ReadWriteOneState",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject"],
+      "Resource": "arn:aws:s3:::orderpage-devops-tfstate-{{ACCOUNT_ID}}-ap-northeast-2/orderpage/dev/terraform.tfstate",
+      "Condition": {"StringEquals": {"s3:ResourceAccount": "{{ACCOUNT_ID}}"}}
+    },
+    {
+      "Sid": "ManageOnlyStateLock",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
+      "Resource": "arn:aws:s3:::orderpage-devops-tfstate-{{ACCOUNT_ID}}-ap-northeast-2/orderpage/dev/terraform.tfstate.tflock",
+      "Condition": {"StringEquals": {"s3:ResourceAccount": "{{ACCOUNT_ID}}"}}
+    },
+    {
+      "Sid": "DenyDeletingStateHistory",
+      "Effect": "Deny",
+      "Action": ["s3:DeleteObject", "s3:DeleteObjectVersion"],
+      "Resource": "arn:aws:s3:::orderpage-devops-tfstate-{{ACCOUNT_ID}}-ap-northeast-2/orderpage/dev/terraform.tfstate"
+    },
+    {
+      "Sid": "DenyChangingStateBucketProtection",
+      "Effect": "Deny",
+      "Action": [
+        "s3:DeleteBucket", "s3:DeleteBucketPolicy", "s3:PutBucketPolicy",
+        "s3:PutBucketPublicAccessBlock", "s3:PutBucketOwnershipControls",
+        "s3:PutBucketVersioning", "s3:PutEncryptionConfiguration", "s3:PutLifecycleConfiguration"
+      ],
+      "Resource": "arn:aws:s3:::orderpage-devops-tfstate-{{ACCOUNT_ID}}-ap-northeast-2"
+    },
+    {
+      "Sid": "DenyInsecureStateRequests",
+      "Effect": "Deny",
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::orderpage-devops-tfstate-{{ACCOUNT_ID}}-ap-northeast-2",
+        "arn:aws:s3:::orderpage-devops-tfstate-{{ACCOUNT_ID}}-ap-northeast-2/*"
+      ],
+      "Condition": {"Bool": {"aws:SecureTransport": "false"}}
+    }
+  ]
+}
