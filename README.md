@@ -147,9 +147,9 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 
 2026-11-15 재검토에서는 **BE 테스트 23개, FE 테스트 9개·lint·운영 빌드, Infra Node 테스트 36개와 Terraform mock 테스트 22개·validate**를 통과했습니다. 이는 로컬 검증 결과이며 실제 인프라 기동, 운영 성능 또는 완전한 보안 검증을 의미하지 않습니다. FE 개발·빌드 의존성 권고 18건과 전체 BE 의존성 보안 점검 등 남은 범위는 [배포 전 재검토](docs/restart/deployment-review.md)에 공개했습니다.
 
-**현재는 AWS 정책 검증과 48시간·8만 원 목표의 비용 설정을 완료한 상태입니다.** 통합 IAM 13개는 감사 권한 연결 후 AWS ValidatePolicy findings 0건, 실제 연결 한도는 20개입니다. [48시간 비용·운영 결정서](docs/restart/lab-budget-48h.md)에 따라 로컬 월 Budget을 $45로 설정하고 새 plan을 생성했습니다. 테스트 142개·설정 검사 73개를 통과했으며, 계산 전 정책/목적지 26개와 실제 권한 연결·가동 시작 시각·SNS 수신 확인은 남아 있습니다. Budget은 자동 중지 기능이 아닙니다.
+**현재는 AWS 정책 검증과 48시간·8만 원 목표의 비용 설정을 완료한 상태입니다.** 통합 IAM 13개는 감사 권한 연결 후 AWS ValidatePolicy findings 0건, 실제 연결 한도는 20개입니다. [48시간 비용·운영 결정서](docs/restart/lab-budget-48h.md)에 따라 로컬 월 Budget을 $45로 설정하고 새 plan을 생성했습니다. 테스트 142개·설정 검사 73개를 통과했으며, 계산 전 정책/목적지 26개와 실제 서비스 생성 API의 권한 검증·가동 시작 시각·SNS 수신 확인은 남아 있습니다. Budget은 자동 중지 기능이 아닙니다.
 
-후보 정책은 아직 AWS에 연결하지 않았습니다. 최초 EKS 생성 후 실제 OIDC issuer를 연결하고 전체 plan을 다시 검토하는 순서입니다. 기존 [workload Role 권한 상한 5개](docs/restart/workload-boundaries.md)는 AWS 정책 본문 일치까지 확인했지만 workload Role과 서비스는 생성 전입니다. `deploymentEnabled`와 Argo CD 자동 동기화는 비활성입니다. API 주소는 `api-devops.auctionbid.shop`으로 확정했으며 DNS·인증서·앱 배포 완료를 뜻하지 않습니다.
+검토한 통합 정책 13개를 배포 Role에 연결하고 원격 본문 일치·state 읽기·주요 거부 규칙을 확인했습니다. 기존 state/read 2개는 전환 중 유지해 총 15개이며 임시 연결 권한은 해제 후 AWS에서 연결 수 0을 확인했습니다. 최초 EKS 생성 후 실제 OIDC issuer를 연결하고 전체 plan을 다시 검토하는 순서입니다. 기존 [workload Role 권한 상한 5개](docs/restart/workload-boundaries.md)는 AWS 정책 본문 일치까지 확인했지만 workload Role과 서비스는 생성 전입니다. `deploymentEnabled`와 Argo CD 자동 동기화는 비활성입니다. API 주소는 `api-devops.auctionbid.shop`으로 확정했으며 DNS·인증서·앱 배포 완료를 뜻하지 않습니다.
 
 <a id="guide"></a>
 ## 코드를 읽거나 직접 진행하려면

@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-27",
+  "attachedPolicyCount": 15,
+  "reviewedPolicies": [
+    {
+      "name": "OrderPageDeployBundle01",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle02",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle03",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle04",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle05",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle06",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle07",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle08",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle09",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle10",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle11",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle12",
+      "matchesReviewedDocument": true
+    },
+    {
+      "name": "OrderPageDeployBundle13",
+      "matchesReviewedDocument": true
+    }
+  ],
+  "retainedReadPolicies": [
+    "OrderPageServicePlanRead",
+    "OrderPageTerraformStateAccess"
+  ],
+  "deployIdentityMatched": true,
+  "stateBucketReadSucceeded": true,
+  "currentStatePrefixObjects": 0,
+  "simulations": [
+    {
+      "action": "s3:DeleteObject",
+      "expected": "explicitDeny",
+      "decision": "explicitDeny"
+    },
+    {
+      "action": "iam:AttachRolePolicy",
+      "expected": "explicitDeny",
+      "decision": "explicitDeny"
+    }
+  ],
+  "serviceApplyExecuted": false,
+  "installerRemovalPending": false
+}
