@@ -20,4 +20,4 @@ node scripts/review-data-service-plan.mjs terraform/envs/dev/<검토-plan>.tfpla
 
 plan 검사기는 알려진 설정을 검사하고 고정된 항목명·참/거짓만 출력한다. 비밀번호·토큰은 결과에 복사하지 않지만, 입력 plan 자체는 민감 파일이므로 Git에 올리면 안 된다. 이 검사기는 직접 AWS 호출이나 지출을 차단하는 장치가 아니다.
 
-[구현 이유와 검증 한계](../../docs/restart/data-service-permissions.md), [선택한 공식 참조](authorization-reference.json), [실제 plan 검사 결과](../../docs/restart/security-evidence/data-service-permissions-2026-11-27.json)를 함께 확인한다.
+[구현 이유와 검증 한계](../../docs/restart/iam/data-service-permissions.md), [선택한 공식 참조](authorization-reference.json), [실제 plan 검사 결과](../../docs/restart/security-evidence/data-service-permissions-2026-11-27.json)를 함께 확인한다.

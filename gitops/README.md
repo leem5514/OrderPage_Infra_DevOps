@@ -11,4 +11,4 @@
 Jenkins는 기존 환경의 image digest와 release.json만 변경하는 PR을 만든다. main에 직접 push하지 않는다.
 release.json은 추적 자료이며 Kustomize의 resources 목록에 넣지 않는다.
 새 배포는 PR 병합을 거치고, Argo CD가 main을 읽어 반영한다.
-상세 초기 구성/실험/복구 절차는 [CI/CD 진행서](../docs/restart/jenkins-argocd.md)에 기록한다.
+상세 초기 구성/실험/복구 절차는 [CI/CD 진행서](../docs/restart/guides/jenkins-argocd.md)에 기록한다.

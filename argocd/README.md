@@ -7,4 +7,4 @@ Application은 main의 gitops/environments/dev를 읽고 최초 자동 동기화
 
 실제 환경 승격과 routing/TGB/Secret/Pod readiness gate 준비를 마친 뒤 수동 sync로 확인하고 자동 동기화를 켠다.
 Secret은 Git에서 관리하지 않는다. UI는 port-forward로만 접속한다.
-설치·최초 적용·복구 및 측정 절차는 [CI/CD 진행서](../docs/restart/jenkins-argocd.md)를 따른다.
+설치·최초 적용·복구 및 측정 절차는 [CI/CD 진행서](../docs/restart/guides/jenkins-argocd.md)를 따른다.

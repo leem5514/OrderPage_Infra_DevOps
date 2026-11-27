@@ -4,17 +4,15 @@
 
 기존 Spring Boot·Vue 주문 서비스를 바탕으로, 인프라를 다시 만들 수 있는지, 서비스 이용 중 버전을 바꿀 수 있는지, 장애를 발견하고 원인을 설명할 수 있는지를 다룹니다. 기술을 설치하는 데서 끝내지 않고 **구성 코드 → 배포 → 관측 → 비교 실험 → 비용 확인과 정리**까지 한 번의 운영 과정으로 남기는 것이 목표입니다.
 
-> **현재: 상태 저장소 생성 및 첫 서비스 plan 검토 완료 · 2026-11-27 기준**
+> **현재: PR #32 병합 · 최초 EKS 단계 plan 검토 완료 · 2026-11-27 기준**
 >
-> AWS에 상태 저장용 S3 버킷 1개와 설정 6개를 생성하고, 실제 설정 조회와 적용 후 변경 없음까지 확인했습니다. VPC/EKS·관리형 데이터·Jenkins·Vercel 배포와 성능 측정은 아직 수행하지 않았습니다. 아래 그림은 **코드로 준비한 목표 구조**입니다.
-
-> **공개 서비스 배포 전 확인 사항**
+> State용 S3와 IAM 정책·Role을 준비했고, 최초 EKS 단계의 19개 생성 계획을 검토했습니다. VPC/EKS·Jenkins·관리형 데이터·앱은 아직 배포하지 않았습니다. 실제 배포 가능 시점은 11월 28일 16시 이후(KST)이며 자동 실행 예약은 없습니다.
 >
-> BE #6·Infra #22까지 병합했습니다. [서비스 plan용 Role](docs/restart/service-plan-role.md)의 실제 인증과 backend 초기화를 마쳤고, Jenkins·CloudWatch/SNS를 포함한 [첫 서비스 plan](docs/restart/service-plan-2026-11-27.md)은 생성 74개·수정/삭제/교체 0개입니다. 아직 서비스 apply는 하지 않았습니다. [EKS 운영 Role](docs/restart/eks-operator-role.md) 연결과 STS 인증도 마쳤습니다. [생성 권한 범위](docs/restart/apply-permission-design.md)와 [최신 비용](docs/restart/cost-review-2026-11-27.md)을 검토했습니다. Role 권한 상한 구현·실행 정책 연결·가동 시간 확정은 남아 있습니다. [인증 과정](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요.
+> **[문서 지도](docs/restart/README.md) · [현재 진행 상태](docs/restart/project-process.md) · [비용 예측](docs/restart/costs.md) · [통합 점검표](docs/restart/checks.md)**
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 
-배포 준비는 **상태 저장용 S3 → 서비스 인프라** 순서로 나눕니다. [bootstrap plan 검토](docs/restart/bootstrap-plan-2026-11-27.md) 후 사용자의 승인으로 **7개 생성, 수정·삭제 0**을 완료했습니다. [실제 적용 결과](docs/restart/bootstrap-apply-2026-11-27.md)에 AWS 조회 9개, 적용 후 plan 변경 없음, 로컬 state 암호화 백업 결과를 기록했습니다.
+배포는 **상태 저장용 S3 → 최초 EKS → 실제 OIDC 연결·나머지 인프라 → 앱·관측** 순서로 진행합니다. 계획과 실제 실행을 구분한 결과는 [통합 점검표](docs/restart/checks.md)에 모았습니다.
 
 ## 무엇을 배우고 남기는가
 
@@ -108,13 +106,13 @@ Jenkins는 PC와 독립적으로 실행하기 위해 **private EC2**로 선택�
 
 **k6는 사용자 관점의 지연·오류**, Prometheus는 서버·Pod 지표, CloudWatch는 ALB와 관리형 자원 상태를 기록합니다. 서로 다른 위치에서 측정한 p95를 같은 값으로 취급하지 않고, 빈 시계열도 정상값 0으로 처리하지 않습니다.
 
-실험 결과는 [비교 실험 절차](docs/restart/experiment-plan-review.md)와 [결과 기록 양식](benchmarks/experiment-report.template.md)에 남깁니다. Jenkins vs GitHub Actions, Vercel vs S3 + CloudFront, CloudWatch vs Prometheus의 제품 간 비교는 현재 실측 범위에 포함하지 않습니다. 구성 이유와 장단점은 설명하되, 실행하지 않은 비교의 개선율은 만들지 않습니다.
+실험 결과는 [비교 실험 절차](docs/restart/guides/experiment-plan-review.md)와 [결과 기록 양식](benchmarks/experiment-report.template.md)에 남깁니다. Jenkins vs GitHub Actions, Vercel vs S3 + CloudFront, CloudWatch vs Prometheus의 제품 간 비교는 현재 실측 범위에 포함하지 않습니다. 구성 이유와 장단점은 설명하되, 실행하지 않은 비교의 개선율은 만들지 않습니다.
 
-## 최대 3일 실습을 위한 비용·보안 경계
+## 최대 48시간 실습을 위한 비용·보안 경계
 
 VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 구성입니다. Worker는 `m6i.large` 2대, Jenkins는 1대로 준비했습니다. Argo CD·Prometheus·Grafana는 EKS 내부에서 운영하며 관리 UI용 외부 Load Balancer나 관측용 영속 볼륨은 추가하지 않았습니다. **짧은 비교 실험을 위한 절충이며, 데이터 계층까지 고가용성을 보장하는 운영 설계는 아닙니다.**
 
-2026-11-27에 조회한 서울 단가와 Jenkins 전체 가동 가정으로, ALB·경보·dashboard를 포함한 **기본 항목은 12시간 약 $9.80, 24시간 약 $19.60, 72시간 약 $58.81**입니다. 총 청구액이나 지출 상한이 아니며 전송·로그·ALB LCU·ECR/S3·SNS·CPU credit·세금·Vercel 등 사용량 비용은 별도입니다. [현재 단가·수량·제외 항목과 재계산 방법](docs/restart/cost-review-2026-11-27.md)을 확인한 뒤 실제 가동 시각과 예산을 정합니다.
+최대 48시간·가능하면 8만 원 이하가 목표입니다. 현재 단가와 가정으로 48시간 기본 항목은 약 $39.20이며, NAT·로그·ALB 사용량을 넣으면 예시 시나리오별 약 67,056~80,438원입니다. 일부 전송·요청·저장 비용 등은 별도이므로 8만 원을 보장하지 않습니다. 단가·환율 가정·제외 항목·Budget $45 입력·정리 시한은 **[비용 예측과 운영 계획](docs/restart/costs.md)** 한곳에서 관리합니다.
 
 실제 인증값·tfvars·state·plan·실험 원본은 Git에서 제외된 경로에 보관합니다. 이미 추적 중인 `.example` 파일을 실제 키로 채우면 그대로 커밋될 수 있고, Terraform의 `sensitive`도 state 저장을 막지는 않습니다. Jenkins는 인스턴스 역할, 백엔드 S3 업로드는 IRSA를 사용해 코드에 AWS 키를 넣지 않습니다. 상품 이미지의 공개 읽기는 전용 버킷에만 허용합니다.
 
@@ -128,9 +126,9 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
                                            │
                                 로컬 검증·재검토 완료
                                            ↓
-계정·실제 입력 → [현재] 첫 서비스 plan 검토 완료
+계정·실제 입력 → [현재] 권한 연결·최초 EKS plan 검토 완료
                                            ↓
-                 실행 권한·예산 확정 → AWS 생성·최초 배포
+                 당일 최종 확인 → AWS 생성·최초 배포
                                            ↓
 기준값 측정 → 조건별 비교 → 결과 해석 → 증거 보관·자원 정리
 ```
@@ -139,19 +137,13 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 |---|---|---|
 | 요구사항·실험 설계 | 준비 완료 | 필수 기술, 최대 48시간·8만 원 목표, 5개 비교 시나리오와 측정 양식 정리 |
 | 앱·기반·CI/CD·관측 코드 | main 반영 완료 | 코드 및 로컬 검사 완료. 실제 AWS/Jenkins/Vercel 연동과는 구분 |
-| 보안·비용 재검토 | BE 보강·REST 전환 병합 완료 | BE #6·Infra #17까지 병합. 실제 권한·이미지/호스트 점검 필요 |
+| 보안·비용 재검토 | 로컬 검사·권한 연결 완료 | 공개 배포 전 실제 계정·이미지·접근 경로 확인 필요 |
 | 계정 연결·상태 저장소 | IAM/Role 인증 및 S3 bootstrap 적용 완료 | 버킷 1개와 설정 6개 생성, AWS 조회 검증, 후속 plan 변경 없음 |
-| 서비스 인프라·최초 배포 | 첫 실제 plan 완료, apply 전 | Budget 포함 생성 75·수정/삭제/교체 0. 운영 Role 인증 완료. 실행 권한·비용 확정 후 AWS 생성과 앱 연동 |
+| 서비스 인프라·최초 배포 | 최신 plan 검토 완료, apply 전 | 전체 75개 / 최초 EKS 단계 19개 생성 예정. 당일 최종 확인과 가동 시각 확정 필요 |
 | 관측 연결·비교 실험 | 미실행 | SNS 수신 확인, Prometheus Targets, 기준값 확보 후 E01~E05 실행 |
 | 결과·비용·종료 확인 | 미실행 | 원본과 비교표 보관, 비용 조회, 잔여 자원 확인 |
 
-2026-11-15 재검토에서는 **BE 테스트 23개, FE 테스트 9개·lint·운영 빌드, Infra Node 테스트 36개와 Terraform mock 테스트 22개·validate**를 통과했습니다. 이는 로컬 검증 결과이며 실제 인프라 기동, 운영 성능 또는 완전한 보안 검증을 의미하지 않습니다. FE 개발·빌드 의존성 권고 18건과 전체 BE 의존성 보안 점검 등 남은 범위는 [배포 전 재검토](docs/restart/deployment-review.md)에 공개했습니다.
-
-**현재는 AWS 정책 검증과 48시간·8만 원 목표의 비용 설정을 완료한 상태입니다.** 통합 IAM 13개는 감사 권한 연결 후 AWS ValidatePolicy findings 0건, 실제 연결 한도는 20개입니다. [48시간 비용·운영 결정서](docs/restart/lab-budget-48h.md)에 따라 로컬 월 Budget을 $45로 설정하고 새 plan을 생성했습니다. 테스트 142개·설정 검사 73개를 통과했으며, 계산 전 정책/목적지 26개와 실제 서비스 생성 API의 권한 검증·가동 시작 시각·SNS 수신 확인은 남아 있습니다. Budget은 자동 중지 기능이 아닙니다.
-
-검토한 통합 정책 13개를 배포 Role에 연결하고 원격 본문 일치·state 읽기·주요 거부 규칙을 확인했습니다. 기존 state/read 2개는 전환 중 유지해 총 15개이며 임시 연결 권한은 해제 후 AWS에서 연결 수 0을 확인했습니다. 최초 EKS 생성 후 실제 OIDC issuer를 연결하고 전체 plan을 다시 검토하는 순서입니다. 기존 [workload Role 권한 상한 5개](docs/restart/workload-boundaries.md)는 AWS 정책 본문 일치까지 확인했지만 workload Role과 서비스는 생성 전입니다. `deploymentEnabled`와 Argo CD 자동 동기화는 비활성입니다. API 주소는 `api-devops.auctionbid.shop`으로 확정했으며 DNS·인증서·앱 배포 완료를 뜻하지 않습니다.
-
-**11월 27일 진행:** PR #31 병합 후 최초 EKS 단계 plan(19개 생성·수정/삭제 0개)을 검토했고 설정 검사 18개와 Terraform validate를 통과했습니다. 오늘은 apply를 실행하지 않았습니다. 배포 가능 시점은 **11월 28일 16:00 이후(KST)**이며 자동 실행 예약은 아닙니다. [검토 결과와 다음 확인 사항](docs/restart/project-process.md)을 기록했습니다.
+전체 Infra 회귀 검사 142개와 전체 plan 설정 검사 73개는 이전 기능 검토 결과입니다. 최초 EKS 단계는 설정 검사 18개·Terraform validate를 통과했습니다. 실제 생성 API, OIDC 연결, SNS 수신과 기준 성능은 아직 검증하지 않았습니다. **[통합 점검표](docs/restart/checks.md)**에서 검사별 범위와 한계를 확인하세요.
 
 <a id="guide"></a>
 ## 코드를 읽거나 직접 진행하려면
@@ -162,14 +154,15 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 | [OrderPage_FE_DevOps](https://github.com/leem5514/OrderPage_FE_DevOps) | Vue 화면, 테스트, Vercel 정적 빌드 대상 |
 | **이 저장소: Infra** | AWS 자원, Kubernetes 선언, Jenkins 파이프라인, GitOps 배포 상태, 관측과 실험 기록 |
 
-처음 읽는다면 아래 순서대로 진행하면 됩니다. `docs/restart`는 요구사항을 다시 확정한 이후의 기록이며, 문서에 남은 과거 비용 가정보다 최신 [배포 전 재검토](docs/restart/deployment-review.md)를 우선합니다.
+처음에는 [문서 지도](docs/restart/README.md)에서 필요한 주제를 선택하세요. 날짜별 작업 보고서를 순서대로 읽지 않아도 됩니다.
 
-| 읽는 순서 | 문서 | 함께 볼 코드 |
-|---|---|---|
-| 1. 요구사항과 지금까지의 결정 | [전체 진행서](docs/restart/project-process.md) | [Terraform 환경 안내](terraform/envs/dev/README.md) |
-| 2. 계정·비용·노출 경계 | [plan 사전 점검](docs/restart/aws-plan-preflight.md), [자격증명 점검](docs/restart/credential-exposure-audit.md) | [remote state](terraform/bootstrap/remote-state), [환경 입력 예시](terraform/envs/dev/terraform.tfvars.example) |
-| 3. AWS와 앱 연결 | [기반 구성](docs/restart/terraform-foundation.md), [관리형 데이터](docs/restart/managed-data-services.md), [HTTPS·앱 배포](docs/restart/https-app-deployment.md) | [Terraform modules](terraform/modules), [Kubernetes 기본 선언](k8s/base) |
-| 4. 배포 자동화 | [Jenkins·Argo CD](docs/restart/jenkins-argocd.md), [Vercel 배포](docs/restart/frontend-vercel.md) | [Jenkins](jenkins), [Argo CD](argocd), [GitOps](gitops) |
-| 5. 관측과 증거 수집 | [CloudWatch·비용](docs/restart/cloudwatch-cost-monitoring.md), [Prometheus·Grafana](docs/restart/prometheus-grafana.md), [비교 실험](docs/restart/experiment-plan-review.md) | [monitoring](monitoring), [benchmarks](benchmarks), [load-test](load-test) |
+| 문서 | 읽는 목적 |
+|---|---|
+| [진행 상태](docs/restart/project-process.md) | 무엇이 끝났고 다음에 무엇을 할지 |
+| [비용 예측·운영 계획](docs/restart/costs.md) | 현재 비용 가정·8만 원 목표·48시간 정리 절차 |
+| [통합 점검표](docs/restart/checks.md) | 검증 결과·민감정보 경계·남은 확인 |
+| [실행 안내](docs/restart/guides/README.md) | Terraform·앱·CI/CD·관측·실험 설정 절차 |
+| [IAM 설계](docs/restart/iam/README.md) | Role과 권한을 왜 나눴는지 |
+| [가격 JSON 설명](docs/restart/pricing-evidence/README.md) / [검증 JSON 설명](docs/restart/security-evidence/README.md) | 원본 근거 파일별 용도와 한계 |
 
-README는 목적과 현재 상태를 안내하고, 각 실행 문서는 적용 순서·입력값·확인 명령을 다룹니다. 실제 실행 결과가 생기면 배포 시각, 소스/이미지 버전, 실험 원본과 비용 기록을 연결해 갱신합니다.
+코드 폴더의 README는 해당 모듈의 입력·실행 방법을 설명합니다. 현재 상태는 진행서, 비용은 비용 문서, 검사 결과는 점검표에 갱신해 같은 설명을 날짜별 파일로 늘리지 않습니다.

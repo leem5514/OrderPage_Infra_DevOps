@@ -15,7 +15,7 @@ Terraform state는 어떤 AWS 리소스가 이미 만들어졌는지 기록하�
 
 ## 사용 순서
 
-먼저 [단일 버킷 전용 IAM Role 준비](../../../docs/restart/terraform-bootstrap-role.md)를 완료한다. 아래 명령은 권한 연결·실제 변수·plan 검토 후 수행하는 실행 절차이며, 문서를 읽는 즉시 apply하는 순서가 아니다. bootstrap 자체의 state는 로컬이므로 보호된 위치에 별도 백업한다.
+먼저 [단일 버킷 전용 IAM Role 준비](../../../docs/restart/iam/terraform-bootstrap-role.md)를 완료한다. 아래 명령은 권한 연결·실제 변수·plan 검토 후 수행하는 실행 절차이며, 문서를 읽는 즉시 apply하는 순서가 아니다. bootstrap 자체의 state는 로컬이므로 보호된 위치에 별도 백업한다.
 
 1. 예시 변수 파일을 복사합니다.
 

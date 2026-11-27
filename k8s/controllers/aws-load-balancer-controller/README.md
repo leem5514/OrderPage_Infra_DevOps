@@ -9,4 +9,4 @@ Ingress/Pod readiness gate만 사용하고 Service mutator, WAF/Shield 및 ALB/N
 CRD는 최초 Helm 설치에서 포함되지만 향후 업그레이드 시 Helm이 기존 CRD를 자동 갱신한다고 가정하면 안 된다.
 
 scripts/install-aws-load-balancer-controller.ps1은 계정/cluster 확인 뒤 별도 kubeconfig와 고정 chart로 설치한다.
-실제 설치는 아직 실행하지 않았다. [준비와 설치 절차](../../../docs/restart/https-app-deployment.md)
+실제 설치는 아직 실행하지 않았다. [준비와 설치 절차](../../../docs/restart/guides/https-app-deployment.md)

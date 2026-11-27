@@ -25,4 +25,4 @@ node scripts/review-eks-service-plan.mjs terraform/envs/dev/<최초-plan>.tfplan
 
 Terraform CLI가 PATH에 없으면 `TERRAFORM` 환경 변수로 실행 파일 경로를 지정한다. 출력은 고정된 항목명과 통과 여부뿐이며 원본 plan이나 계정·IP를 출력하지 않는다. 성공해도 `readyForApply`는 false다.
 
-`authorization-reference.json`은 공식 EKS 권한 참조와 고정 provider v5.100.0 소스에서 추린 근거다. source URL·해시를 보관하며 **실제 AWS 권한 평가 결과는 아니다.** 생성 API에서 제한할 수 없는 범위와 검증 결과는 [상세 설명](../../docs/restart/eks-service-permissions.md)에 기록한다.
+`authorization-reference.json`은 공식 EKS 권한 참조와 고정 provider v5.100.0 소스에서 추린 근거다. source URL·해시를 보관하며 **실제 AWS 권한 평가 결과는 아니다.** 생성 API에서 제한할 수 없는 범위와 검증 결과는 [상세 설명](../../docs/restart/iam/eks-service-permissions.md)에 기록한다.

@@ -2,7 +2,7 @@
 
 DevOps Before/After 실험에서 동일한 부하를 반복하기 위한 k6 스크립트다.
 
-배포·CI/CD·Requests·장애 탐지의 저율 지속 부하는 [실험 계획](../../docs/restart/experiment-plan-review.md)과 `run-availability.ps1`을 사용한다. 아래 HPA manifest는 실제 계정 값이 없는 정적 초안이다. EKS에 바로 적용하지 말고 실제 GitOps 환경 승격 후 이미지 digest/리소스/자동 동기화 설정을 확인한다.
+배포·CI/CD·Requests·장애 탐지의 저율 지속 부하는 [실험 계획](../../docs/restart/guides/experiment-plan-review.md)과 `run-availability.ps1`을 사용한다. 아래 HPA manifest는 실제 계정 값이 없는 정적 초안이다. EKS에 바로 적용하지 말고 실제 GitOps 환경 승격 후 이미지 digest/리소스/자동 동기화 설정을 확인한다.
 
 ## S05 HPA 시나리오
 

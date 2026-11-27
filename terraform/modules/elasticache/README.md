@@ -6,4 +6,4 @@ TLS required + AUTH 필수, EKS SG의 6379만 허용한다. 저장 암호화, sn
 
 auth_token_update_strategy=SET이며 무중단 비밀번호 교체 절차는 아니다.
 앱의 REDIS_SSL_ENABLED=true와 REDIS_PASSWORD를 함께 설정한다.
-[입력·검증·한계](../../../docs/restart/managed-data-services.md)
+[입력·검증·한계](../../../docs/restart/guides/managed-data-services.md)

@@ -9,4 +9,4 @@ Secret은 생성하지 않는다. 미주입 Secret이 있으면 Pod가 정상 �
 HPA와 오래된 JVM/DB pool/consumer 튜닝 변수는 기본 manifest에서 제거했다. 앱 코드의 기존 기본값은 바꾸지 않는다.
 HTTP 요청 histogram은 ConfigMap에서 활성화해 비교 실험의 p95 bucket을 만든다. Prometheus ServiceMonitor는 별도 관측 chart 설치 후 추가한다.
 
-[배포 순서](../../docs/restart/https-app-deployment.md)
+[배포 순서](../../docs/restart/guides/https-app-deployment.md)

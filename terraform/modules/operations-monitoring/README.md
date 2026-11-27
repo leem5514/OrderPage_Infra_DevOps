@@ -11,4 +11,4 @@ Jenkins EC2와 Controller가 생성한 ALB/TG 식별값을 주면 해당 경보�
 - 기본 SNS topic은 별도 고객 관리 KMS 키를 사용하지 않는다. 경보에는 리소스 식별 정보가 포함될 수 있으므로 민감 payload를 넣지 않는다.
 - 이 모듈은 EKS Pod/JVM 지표나 앱 stdout을 수집하지 않는다. 다음 Kubernetes 관측 단계와 구분한다.
 
-[임계값·실제 적용 순서·장애 실험·비용·한계](../../../docs/restart/cloudwatch-cost-monitoring.md)
+[임계값·실제 적용 순서·장애 실험·비용·한계](../../../docs/restart/guides/cloudwatch-cost-monitoring.md)

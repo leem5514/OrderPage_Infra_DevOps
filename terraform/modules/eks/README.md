@@ -13,4 +13,4 @@ Node 수는 고정하지만 Node group 업데이트 때 AWS가 일시적으로 �
 IRSA의 기반인 IAM OIDC provider를 포함한다. 서비스별 IAM Role/ServiceAccount 연결은 아직 후속 단계다.
 HPA/metrics-server/CSI/Argo CD는 이 모듈의 현재 범위에 없다.
 
-[전체 입력/검증/한계](../../../docs/restart/terraform-foundation.md)
+[전체 입력/검증/한계](../../../docs/restart/guides/terraform-foundation.md)

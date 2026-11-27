@@ -9,4 +9,4 @@
 - controllers/aws-load-balancer-controller: 고정 Helm chart의 값 템플릿.
 - backend-secret.env.example: 키 목록만 제공. 실행 manifest에 포함하지 않는다.
 
-[실제 입력 준비·최초 배포 순서·검증 한계](../docs/restart/https-app-deployment.md)
+[실제 입력 준비·최초 배포 순서·검증 한계](../docs/restart/guides/https-app-deployment.md)
