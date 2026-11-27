@@ -10,7 +10,7 @@
 
 > **공개 서비스 배포 전 확인 사항**
 >
-> BE #6·Infra #20까지 병합했습니다. [서비스 plan용 Role](docs/restart/service-plan-role.md)의 실제 인증과 backend 초기화를 마쳤고, Jenkins·CloudWatch/SNS를 포함한 [첫 서비스 plan](docs/restart/service-plan-2026-11-27.md)은 생성 74개·수정/삭제/교체 0개입니다. 아직 서비스 apply는 하지 않았습니다. [EKS 운영 Role](docs/restart/eks-operator-role.md) 연결과 STS 인증도 마쳤습니다. 실제 생성 권한과 최신 비용·운영 시간 검토가 남아 있습니다. [인증 과정](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요.
+> BE #6·Infra #22까지 병합했습니다. [서비스 plan용 Role](docs/restart/service-plan-role.md)의 실제 인증과 backend 초기화를 마쳤고, Jenkins·CloudWatch/SNS를 포함한 [첫 서비스 plan](docs/restart/service-plan-2026-11-27.md)은 생성 74개·수정/삭제/교체 0개입니다. 아직 서비스 apply는 하지 않았습니다. [EKS 운영 Role](docs/restart/eks-operator-role.md) 연결과 STS 인증도 마쳤습니다. [생성 권한 범위](docs/restart/apply-permission-design.md)와 [최신 비용](docs/restart/cost-review-2026-11-27.md)을 검토했습니다. Role 권한 상한 구현·실행 정책 연결·가동 시간 확정은 남아 있습니다. [인증 과정](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요.
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 
@@ -114,7 +114,7 @@ Jenkins는 PC와 독립적으로 실행하기 위해 **private EC2**로 선택�
 
 VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 구성입니다. Worker는 `m6i.large` 2대, Jenkins는 1대로 준비했습니다. Argo CD·Prometheus·Grafana는 EKS 내부에서 운영하며 관리 UI용 외부 Load Balancer나 관측용 영속 볼륨은 추가하지 않았습니다. **짧은 비교 실험을 위한 절충이며, 데이터 계층까지 고가용성을 보장하는 운영 설계는 아닙니다.**
 
-보관된 2026-11-06/08 서울 단가와 Jenkins 전체 가동 가정으로 계산한 **72시간 기본 항목은 약 $58.41**입니다. 현재 가격 견적이나 지출 상한이 아니며, CloudWatch·알림·로그, 데이터 전송, ALB LCU, ECR/S3 사용량, CPU credit, 세금, Vercel 요금 등은 별도입니다. [계산 근거와 제외 항목](docs/restart/deployment-review.md)을 확인한 뒤 실제 가동 시각과 예산을 정합니다.
+2026-11-27에 조회한 서울 단가와 Jenkins 전체 가동 가정으로, ALB·경보·dashboard를 포함한 **기본 항목은 12시간 약 $9.80, 24시간 약 $19.60, 72시간 약 $58.81**입니다. 총 청구액이나 지출 상한이 아니며 전송·로그·ALB LCU·ECR/S3·SNS·CPU credit·세금·Vercel 등 사용량 비용은 별도입니다. [현재 단가·수량·제외 항목과 재계산 방법](docs/restart/cost-review-2026-11-27.md)을 확인한 뒤 실제 가동 시각과 예산을 정합니다.
 
 실제 인증값·tfvars·state·plan·실험 원본은 Git에서 제외된 경로에 보관합니다. 이미 추적 중인 `.example` 파일을 실제 키로 채우면 그대로 커밋될 수 있고, Terraform의 `sensitive`도 state 저장을 막지는 않습니다. Jenkins는 인스턴스 역할, 백엔드 S3 업로드는 IRSA를 사용해 코드에 AWS 키를 넣지 않습니다. 상품 이미지의 공개 읽기는 전용 버킷에만 허용합니다.
 
