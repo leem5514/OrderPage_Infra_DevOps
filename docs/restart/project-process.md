@@ -510,3 +510,22 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - AWS IAM Simulator에서 state 객체 삭제와 배포 Role 자기 정책 연결이 명시적 거부임을 확인했다. 이 두 검사만으로 모든 생성 API나 SCP·resource policy 조합을 검증한 것은 아니다.
 - [민감값 없는 연결 근거](security-evidence/deploy-policy-connection-2026-11-27.json)를 저장했다. 사용자가 그룹의 임시 OrderPageDeployPolicyInstaller를 연결 해제한 뒤 AWS GetPolicy의 AttachmentCount가 0임을 확인했다. 감사 정책은 유지한다.
 - 서비스 apply·VPC/EKS 생성은 아직 하지 않았다. 다음은 임시 권한 정리 확인, 시작/종료 시각 확정, 최신 최초 EKS 단계 plan 확인이다. 실제 issuer는 EKS 생성 후에만 연결한다.
+
+## 46. 2026-11-27 — PR #31 병합과 최초 EKS 단계 plan 검토
+
+오늘의 범위는 **plan 생성·검토까지**다. 사용자 요청에 따라 apply는 실행하지 않았다. 배포 가능 시점은 **2026-11-28 16:00 이후(KST)**이며 자동 실행 예약이 아니다. 실제 시작 시각과 정리 완료 시각은 미확정이다. 실제 apply 시작부터 최대 48시간 안에 삭제까지 끝내야 하며, 예를 들어 11월 28일 16시에 시작하면 11월 30일 16시 이전에 정리를 완료한다.
+
+PR #31을 공개 파일 301개 실제 민감값 대조 0건 확인 후 병합했다. 병합된 main을 기준으로 배포 Role 신원을 확인하고 `module.eks.aws_eks_cluster.this`를 대상으로 새 plan을 생성했다. 이는 최초 OIDC issuer를 얻기 위한 예외적인 부분 계획이며 일반적인 전체 배포 방법은 아니다.
+
+| 확인 항목 | 결과 |
+| --- | --- |
+| 변경 | 생성 19개, 수정·삭제 0개 |
+| 구성 검증 | Terraform validate 및 범위·설정 검사 18개 통과 |
+| 포함 | VPC, 4개 서브넷, 라우팅, NAT 1개·EIP 1개, S3 Gateway endpoint, EKS 제어 영역·Role·로그 그룹 |
+| 보안·비용 설정 | Role 권한 상한, EKS STANDARD 지원, 제한된 공개 API 접근, private endpoint, 로그 3일 보관 |
+| 미포함 | 워커 노드, Jenkins, DB·Redis·MQ, OIDC provider, 운영자 EKS access entry, Budget·SNS |
+| 실제 실행 | apply 미실행, 서비스 생성 없음 |
+
+[민감값 없는 plan 검토 근거](security-evidence/preapply-eks-plan-2026-11-27.json)에 해시와 자원 목록을 기록했다. 원본 plan·tfvars·로그는 Git 제외 로컬 파일이며 게시하지 않는다. 부분 plan이므로 전체 구성이 준비됐거나 모든 생성 API의 권한이 증명됐다는 의미는 아니다.
+
+내일은 로그인 유효성, 현재 운영 PC IP 제한, 원격 state·정책 변경 여부와 최신 plan을 다시 확인한다. 이 단계에는 비용 알림이 없으므로 Budget/SNS를 먼저 준비할 수 있는지 적용 순서를 확인하고 수신 확인을 별도로 진행해야 한다. EKS 생성 후 실제 issuer를 연결하고 전체 plan을 다시 생성한다. 최초 단계에서는 creator admin이 비활성이고 운영자 access entry도 아직 없어 kubectl 운영 준비가 끝난 상태가 아니다.

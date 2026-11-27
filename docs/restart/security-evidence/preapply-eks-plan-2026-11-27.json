@@ -1,0 +1,233 @@
+{
+  "date": "2026-11-27",
+  "sourceCommit": "d7ff258584168257c4ab9b5ea5d57ad1efb05904",
+  "target": "module.eks.aws_eks_cluster.this",
+  "planSha256": "0c9691b93038746818cfa22b008b2fa7c57b8e25a492d63ed3a3aa9f1fd29e0a",
+  "create": 19,
+  "update": 0,
+  "delete": 0,
+  "checks": [
+    {
+      "name": "19-create-only",
+      "passed": true
+    },
+    {
+      "name": "bootstrap-scope-only",
+      "passed": true
+    },
+    {
+      "name": "one-nat-one-eip",
+      "passed": true
+    },
+    {
+      "name": "two-public-two-private-subnets",
+      "passed": true
+    },
+    {
+      "name": "s3-gateway-endpoint",
+      "passed": true
+    },
+    {
+      "name": "cluster-role-boundary",
+      "passed": true
+    },
+    {
+      "name": "cluster-log-retention-3-days",
+      "passed": true
+    },
+    {
+      "name": "expected-resource-counts",
+      "passed": true
+    },
+    {
+      "name": "no-extra-eks-resource-types",
+      "passed": true
+    },
+    {
+      "name": "no-delete-or-replacement",
+      "passed": true
+    },
+    {
+      "name": "known-project-tags",
+      "passed": true
+    },
+    {
+      "name": "cluster-name-and-version",
+      "passed": true
+    },
+    {
+      "name": "api-auth-without-creator-admin",
+      "passed": true
+    },
+    {
+      "name": "standard-support",
+      "passed": true
+    },
+    {
+      "name": "required-control-plane-logs",
+      "passed": true
+    },
+    {
+      "name": "private-endpoint-enabled",
+      "passed": true
+    },
+    {
+      "name": "public-endpoint-only-ipv4-hosts",
+      "passed": true
+    },
+    {
+      "name": "no-explicit-auto-mode",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "terraformValidatePassed": true,
+  "applyExecuted": false,
+  "earliestApplyKst": "2026-11-28T16:00:00+09:00",
+  "actualStartKst": null,
+  "cleanupDeadlineKst": null,
+  "automaticApplyScheduled": false,
+  "resources": [
+    {
+      "address": "module.eks.aws_cloudwatch_log_group.cluster",
+      "type": "aws_cloudwatch_log_group",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.eks.aws_eks_cluster.this",
+      "type": "aws_eks_cluster",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.eks.aws_iam_role.cluster",
+      "type": "aws_iam_role",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.cluster",
+      "type": "aws_iam_role_policy_attachment",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_eip.nat",
+      "type": "aws_eip",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_internet_gateway.this",
+      "type": "aws_internet_gateway",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_nat_gateway.this",
+      "type": "aws_nat_gateway",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_route_table.private",
+      "type": "aws_route_table",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_route_table.public",
+      "type": "aws_route_table",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_route_table_association.private[0]",
+      "type": "aws_route_table_association",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_route_table_association.private[1]",
+      "type": "aws_route_table_association",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_route_table_association.public[0]",
+      "type": "aws_route_table_association",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_route_table_association.public[1]",
+      "type": "aws_route_table_association",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_subnet.private[0]",
+      "type": "aws_subnet",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_subnet.private[1]",
+      "type": "aws_subnet",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_subnet.public[0]",
+      "type": "aws_subnet",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_subnet.public[1]",
+      "type": "aws_subnet",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_vpc.this",
+      "type": "aws_vpc",
+      "actions": [
+        "create"
+      ]
+    },
+    {
+      "address": "module.vpc.aws_vpc_endpoint.s3",
+      "type": "aws_vpc_endpoint",
+      "actions": [
+        "create"
+      ]
+    }
+  ],
+  "limitations": [
+    "Target plan is only the initial EKS dependency stage, not the full deployment.",
+    "No worker nodes, Jenkins, data services, Budget/SNS or operator access entry in this plan.",
+    "Initial cluster has creator admin disabled; operator access is added in the subsequent full stage.",
+    "Live create API permissions and SCP/resource policies are not proven by plan.",
+    "Refresh identity, current IP restriction, remote state, policy and plan before a future apply.",
+    "Actual start and cleanup deadline are not fixed; all cleanup must finish within 48 hours of actual apply start."
+  ]
+}
