@@ -5,12 +5,16 @@ const matches = (pattern, value, ignoreCase = false) => new RegExp('^' + pattern
 
 function conditionMatches(condition, context) {
   return Object.entries(condition || {}).every(([operator, values]) => Object.entries(values).every(([key, expected]) => {
+    if (!['Null', 'StringEquals', 'StringNotEquals', 'StringEqualsIfExists', 'StringNotEqualsIfExists', 'Bool', 'BoolIfExists'].includes(operator)) throw Error('Unsupported condition operator: ' + operator);
     const actualKey = Object.keys(context).find(k => k.toLowerCase() === key.toLowerCase());
     const actual = actualKey === undefined ? undefined : context[actualKey];
     const absent = actual === undefined || actual === null;
+    if (operator.endsWith('IfExists') && absent) return true;
+    const comparison = operator.replace(/IfExists$/, '');
     if (operator === 'Null') return absent === (String(expected) === 'true');
-    if (operator === 'StringEquals') return !absent && array(actual).some(a => array(expected).includes(a));
-    if (operator === 'StringNotEquals') return absent || array(actual).every(a => !array(expected).includes(a));
+    if (comparison === 'StringEquals') return !absent && array(actual).some(a => array(expected).includes(a));
+    if (comparison === 'StringNotEquals') return absent || array(actual).every(a => !array(expected).includes(a));
+    if (comparison === 'Bool') return !absent && array(actual).some(a => ['true', 'false'].includes(String(a)) && array(expected).map(String).includes(String(a)));
     throw Error('Unsupported condition operator: ' + operator);
   }));
 }
