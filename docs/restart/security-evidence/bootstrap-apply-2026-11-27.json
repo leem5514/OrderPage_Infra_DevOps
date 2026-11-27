@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-27",
+  "region": "ap-northeast-2",
+  "profile": "orderpage-bootstrap",
+  "applyExecuted": true,
+  "managedResourcesCreated": 7,
+  "bucketCount": 1,
+  "readApiChecks": 9,
+  "verified": {
+    "expectedBucketOwner": true,
+    "publicAccessBlockAllEnabled": true,
+    "ownership": "BucketOwnerEnforced",
+    "versioning": "Enabled",
+    "encryption": "AES256",
+    "noncurrentVersionExpirationDays": 90,
+    "currentVersionAutoExpiration": false,
+    "httpDenyPolicyMatches": true,
+    "aclOnlyBucketOwner": true,
+    "projectTagsMatch": true
+  },
+  "limitations": [
+    "Delete and recovery operations have not been executed.",
+    "HTTP denial was checked by policy inspection, not by sending credentials over HTTP.",
+    "VPC/EKS and application resources are not created by this bootstrap."
+  ],
+  "postApplyPlanExitCode": 0,
+  "stateBackup": {
+    "encryption": "Windows DPAPI CurrentUser",
+    "roundTripMatches": true,
+    "offsiteBackup": false
+  },
+  "appliedPlanSha256": "fffdceef84d1cabec4b104806e8bb89de687221936251bc75772d2007a120aa5"
+}
