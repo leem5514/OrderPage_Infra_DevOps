@@ -151,6 +151,8 @@ VPC는 2개 AZ를 사용하지만 NAT는 1개이고, RDS·Redis·MQ는 단일 �
 
 검토한 통합 정책 13개를 배포 Role에 연결하고 원격 본문 일치·state 읽기·주요 거부 규칙을 확인했습니다. 기존 state/read 2개는 전환 중 유지해 총 15개이며 임시 연결 권한은 해제 후 AWS에서 연결 수 0을 확인했습니다. 최초 EKS 생성 후 실제 OIDC issuer를 연결하고 전체 plan을 다시 검토하는 순서입니다. 기존 [workload Role 권한 상한 5개](docs/restart/workload-boundaries.md)는 AWS 정책 본문 일치까지 확인했지만 workload Role과 서비스는 생성 전입니다. `deploymentEnabled`와 Argo CD 자동 동기화는 비활성입니다. API 주소는 `api-devops.auctionbid.shop`으로 확정했으며 DNS·인증서·앱 배포 완료를 뜻하지 않습니다.
 
+**11월 27일 진행:** PR #31 병합 후 최초 EKS 단계 plan(19개 생성·수정/삭제 0개)을 검토했고 설정 검사 18개와 Terraform validate를 통과했습니다. 오늘은 apply를 실행하지 않았습니다. 배포 가능 시점은 **11월 28일 16:00 이후(KST)**이며 자동 실행 예약은 아닙니다. [검토 결과와 다음 확인 사항](docs/restart/project-process.md)을 기록했습니다.
+
 <a id="guide"></a>
 ## 코드를 읽거나 직접 진행하려면
 
