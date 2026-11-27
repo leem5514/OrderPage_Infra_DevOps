@@ -1,0 +1,240 @@
+{
+  "date": "2026-11-27",
+  "scope": "Offline IAM/EKS request-contract checks derived from saved actual plan; not AWS IAM simulation",
+  "selectedResources": 18,
+  "coveredResources": 17,
+  "deferredResources": [
+    "module.eks.aws_iam_openid_connect_provider.cluster"
+  ],
+  "requestChecks": 44,
+  "allAllowed": true,
+  "checks": [
+    {
+      "address": "module.aws_load_balancer_controller_irsa.aws_iam_policy.controller",
+      "action": "iam:CreatePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.aws_load_balancer_controller_irsa.aws_iam_policy.controller",
+      "action": "iam:TagPolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.aws_load_balancer_controller_irsa.aws_iam_policy.controller",
+      "action": "iam:DeletePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.aws_load_balancer_controller_irsa.aws_iam_role.this",
+      "action": "iam:CreateRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.aws_load_balancer_controller_irsa.aws_iam_role.this",
+      "action": "iam:TagRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.aws_load_balancer_controller_irsa.aws_iam_role.this",
+      "action": "iam:DeleteRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.aws_load_balancer_controller_irsa.aws_iam_role_policy_attachment.this",
+      "action": "iam:AttachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.aws_load_balancer_controller_irsa.aws_iam_role_policy_attachment.this",
+      "action": "iam:DetachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_eks_access_entry.operator",
+      "action": "eks:CreateAccessEntry",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_eks_access_entry.operator",
+      "action": "eks:TagResource",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_eks_access_entry.operator",
+      "action": "eks:DeleteAccessEntry",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_eks_access_policy_association.operator",
+      "action": "eks:AssociateAccessPolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_eks_access_policy_association.operator",
+      "action": "eks:DisassociateAccessPolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role.cluster",
+      "action": "iam:CreateRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role.cluster",
+      "action": "iam:TagRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role.cluster",
+      "action": "iam:DeleteRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role.node",
+      "action": "iam:CreateRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role.node",
+      "action": "iam:TagRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role.node",
+      "action": "iam:DeleteRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.cluster",
+      "action": "iam:AttachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.cluster",
+      "action": "iam:DetachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.node_cni",
+      "action": "iam:AttachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.node_cni",
+      "action": "iam:DetachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.node_ecr",
+      "action": "iam:AttachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.node_ecr",
+      "action": "iam:DetachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.node_worker",
+      "action": "iam:AttachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.eks.aws_iam_role_policy_attachment.node_worker",
+      "action": "iam:DetachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_instance_profile.this",
+      "action": "iam:CreateInstanceProfile",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_instance_profile.this",
+      "action": "iam:AddRoleToInstanceProfile",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_instance_profile.this",
+      "action": "iam:RemoveRoleFromInstanceProfile",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_instance_profile.this",
+      "action": "iam:DeleteInstanceProfile",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_instance_profile.this",
+      "action": "iam:PassRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_role.this",
+      "action": "iam:CreateRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_role.this",
+      "action": "iam:TagRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_role.this",
+      "action": "iam:DeleteRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_role_policy.ecr",
+      "action": "iam:PutRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_role_policy.ecr",
+      "action": "iam:DeleteRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_role_policy_attachment.ssm",
+      "action": "iam:AttachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.jenkins[0].aws_iam_role_policy_attachment.ssm",
+      "action": "iam:DetachRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.product_images.aws_iam_role.backend",
+      "action": "iam:CreateRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.product_images.aws_iam_role.backend",
+      "action": "iam:TagRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.product_images.aws_iam_role.backend",
+      "action": "iam:DeleteRole",
+      "result": "allowed"
+    },
+    {
+      "address": "module.product_images.aws_iam_role_policy.upload",
+      "action": "iam:PutRolePolicy",
+      "result": "allowed"
+    },
+    {
+      "address": "module.product_images.aws_iam_role_policy.upload",
+      "action": "iam:DeleteRolePolicy",
+      "result": "allowed"
+    }
+  ],
+  "limitations": [
+    "OIDC delegation remains deferred.",
+    "Some computed ARNs and request contexts are derived from known names; actual AWS context not verified.",
+    "Trust-policy body and inline-policy contents are not restricted by this evaluator.",
+    "Full provider API lifecycle and live authorization are not tested."
+  ],
+  "readyForApply": false
+}

@@ -446,3 +446,12 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - 배포 Role의 STS 주체를 확인하고 정책별 기본 버전과 본문을 조회했다. 5개 모두 기본 버전 v1이며 로컬 검토본과 내용이 같았다.
 - 일반 권한 연결 수와 권한 경계 사용 수는 모두 0이다. workload Role 생성 전의 상태이며 이미 운영 Role에 경계가 적용됐다고 표현하지 않는다.
 - [비식별 원격 확인 기록](security-evidence/workload-boundaries-remote-2026-11-27.json)을 남겼다. 이번 검증은 읽기만 수행했으며 서비스 apply·추가 권한 부여는 하지 않았다. 다음은 제한된 서비스 쓰기 정책과 PassRole·EKS 접근 권한 위임 검토다.
+
+## 38. 2026-11-27 — PR #23 병합과 IAM 위임 권한 1단계
+
+- PR #23의 head·병합 가능 상태·CI 상태와 4개 커밋의 비밀 탐지를 확인해 병합했다. main을 동기화하고 codex/deploy-iam-delegation 브랜치에서 후속 작업을 시작했다.
+- [검토용 정책 생성기](../../scripts/prepare-deploy-delegation.mjs)로 Role 생명주기·정책 연결/PassRole·IAM 보조 자원·명시적 Deny·EKS 접근 관리 정책 5개를 작성했다. 실제 계정 결과는 Git 제외 경로에만 생성했다.
+- 공식 IAM/EKS/STS 참조로 Action·조건·리소스를 대조했다. provider v5.100.0 Role 삭제 소스에서 경계 제거가 선행되지 않는 점을 확인했다.
+- 신규 9개를 포함한 Node 테스트 90개가 통과했다. 기존 실제 plan의 IAM/EKS 접근 자원 18개 중 17개에서 추출한 요청 조건 44개가 로컬 검사에 통과했다. OIDC 공급자는 검토 보류 항목으로 남겼다.
+- AWS 정책 연결·서비스 apply는 하지 않았다. 신뢰/inline 본문을 이 정책만으로 고정할 수 없다는 한계, OIDC·서비스 연결 Role·서비스별 실행 권한의 미완료 범위를 [구현 설명](deploy-iam-delegation.md)에 기록했다.
+- 한도 중단에 대비해 [재개 지점](deployment-handoff.md)에 다음 순서와 비공개 파일 위치를 남겼다.
