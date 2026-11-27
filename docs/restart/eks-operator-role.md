@@ -1,6 +1,6 @@
 # EKS 운영 Role 연결
 
-Terraform 실행과 kubectl/Helm 운영을 다른 Role로 구분한다. 사용자가 2026-11-27에 선택한 방식이다. 생성 파일은 준비했으나 **아직 AWS Role 생성과 프로필 인증은 하지 않았다.**
+Terraform 실행과 kubectl/Helm 운영을 다른 Role로 구분한다. 사용자가 2026-11-27에 선택한 방식이다. 사용자가 관리자 콘솔에서 역할과 정책을 연결했고, **별도 프로필의 STS 인증을 완료했다. 클러스터 생성 및 Kubernetes 접속은 아직 수행하지 않았다.**
 
 | 주체 | 맡는 작업 |
 |---|---|
@@ -39,3 +39,11 @@ kubectl --kubeconfig .local/deploy/dev/kubeconfig get nodes
 MFA 장치 등록과 신뢰 정책의 MFA 조건 강제는 별개다. 현재 임시 로그인 경로의 MFA 조건 전달을 검증하지 않았으므로 검증되지 않은 MFA 강제 조건은 추가하지 않았다.
 
 공식 근거: [kubeconfig에 필요한 DescribeCluster와 프로필 인증](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html), [IAM 권한과 별개인 EKS access policy](https://docs.aws.amazon.com/eks/latest/userguide/access-policies.html).
+
+## 연결 확인 결과 — 2026-11-27
+
+기존 프로필을 보존하고 `orderpage-eks`를 추가했다. STS 결과가 예상 계정과 `orderpage-eks-operator` 역할에 일치했으며, 실제 Terraform의 `eks_admin_principal_arn` 입력과도 일치했다. 인증 출력 원문, 계정 번호, ARN 및 토큰은 공개 기록에 넣지 않았다.
+
+지정된 서울 `orderpage-dev`에 `eks:DescribeCluster`를 호출했을 때 `ResourceNotFoundException`이 반환됐다. 아직 클러스터 생성 전이므로 예상한 결과이며 AccessDenied는 발생하지 않았다. 이 결과는 이후 EKS Access Entry의 Kubernetes 관리 권한이나 다른 모든 API 권한을 검증한 것이 아니다.
+
+[비식별 인증 결과](security-evidence/eks-operator-auth-2026-11-27.json)를 남겼다. 다음은 서비스 생성/변경/삭제 및 IAM 위임 권한 설계, 최신 비용과 가동 시간 검토다. 서비스 apply는 수행하지 않았다.
