@@ -1,0 +1,220 @@
+{
+  "date": "2026-11-27",
+  "kind": "actual AWS-backed review plan; NOT approved for apply",
+  "profile": "orderpage-deploy",
+  "terraformVersion": "1.16.2",
+  "planSha256": "016fd92e13f0917bc97bd9f2307535555c8680235253cc003d47d04491e053c5",
+  "unknownAttachmentArns": 1,
+  "counts": {
+    "create": 74,
+    "update": 0,
+    "delete": 0,
+    "replace": 0,
+    "read": 3,
+    "no-op": 0
+  },
+  "managedCreates": 74,
+  "checks": {
+    "onlyCreates": true,
+    "noDeletesOrReplacements": true,
+    "standardEksSupport": true,
+    "operatorCidr32": true,
+    "privateEksEndpoint": true,
+    "creatorAdminDisabled": true,
+    "separateOperatorRole": true,
+    "fixedTwoWorkers": true,
+    "oneNat": true,
+    "privateRds": true,
+    "encryptedRds": true,
+    "redisTls": true,
+    "redisAtRest": true,
+    "privateMq": true,
+    "singleMq": true,
+    "privateJenkins": true,
+    "jenkinsImdsv2": true,
+    "expectedEmail": true,
+    "noBudgetYet": true,
+    "noCostAnomaly": true,
+    "noAlbYet": true,
+    "knownAttachmentsExcludeAdministratorAccess": true
+  },
+  "costDrivers": [
+    {
+      "address": "module.eks.aws_eks_cluster.this",
+      "type": "aws_eks_cluster",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.eks.aws_eks_node_group.default",
+      "type": "aws_eks_node_group",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.jenkins[0].aws_instance.this",
+      "type": "aws_instance",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.mariadb.aws_db_instance.this",
+      "type": "aws_db_instance",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.operations_monitoring[0].aws_cloudwatch_dashboard.operations",
+      "type": "aws_cloudwatch_dashboard",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"jenkins-status\"]",
+      "type": "aws_cloudwatch_metric_alarm",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"mq-ready\"]",
+      "type": "aws_cloudwatch_metric_alarm",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-cpu\"]",
+      "type": "aws_cloudwatch_metric_alarm",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-memory\"]",
+      "type": "aws_cloudwatch_metric_alarm",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"rds-storage\"]",
+      "type": "aws_cloudwatch_metric_alarm",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"redis-cpu\"]",
+      "type": "aws_cloudwatch_metric_alarm",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.operations_monitoring[0].aws_cloudwatch_metric_alarm.operations[\"redis-memory\"]",
+      "type": "aws_cloudwatch_metric_alarm",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.rabbitmq.aws_mq_broker.this",
+      "type": "aws_mq_broker",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.redis.aws_elasticache_replication_group.this",
+      "type": "aws_elasticache_replication_group",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.vpc.aws_eip.nat",
+      "type": "aws_eip",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    },
+    {
+      "address": "module.vpc.aws_nat_gateway.this",
+      "type": "aws_nat_gateway",
+      "mode": "managed",
+      "action": "create",
+      "costDriver": true
+    }
+  ],
+  "resourceTypes": {
+    "aws_acm_certificate": 1,
+    "aws_cloudwatch_dashboard": 1,
+    "aws_cloudwatch_log_group": 5,
+    "aws_cloudwatch_metric_alarm": 7,
+    "aws_db_instance": 1,
+    "aws_db_parameter_group": 1,
+    "aws_db_subnet_group": 1,
+    "aws_ecr_lifecycle_policy": 1,
+    "aws_ecr_repository": 1,
+    "aws_eip": 1,
+    "aws_eks_access_entry": 1,
+    "aws_eks_access_policy_association": 1,
+    "aws_eks_addon": 3,
+    "aws_eks_cluster": 1,
+    "aws_eks_node_group": 1,
+    "aws_elasticache_replication_group": 1,
+    "aws_elasticache_subnet_group": 1,
+    "aws_iam_instance_profile": 1,
+    "aws_iam_openid_connect_provider": 1,
+    "aws_iam_policy": 1,
+    "aws_iam_role": 5,
+    "aws_iam_role_policy": 2,
+    "aws_iam_role_policy_attachment": 6,
+    "aws_instance": 1,
+    "aws_internet_gateway": 1,
+    "aws_launch_template": 1,
+    "aws_mq_broker": 1,
+    "aws_nat_gateway": 1,
+    "aws_route_table": 2,
+    "aws_route_table_association": 4,
+    "aws_s3_bucket": 1,
+    "aws_s3_bucket_ownership_controls": 1,
+    "aws_s3_bucket_policy": 1,
+    "aws_s3_bucket_public_access_block": 1,
+    "aws_s3_bucket_server_side_encryption_configuration": 1,
+    "aws_security_group": 4,
+    "aws_sns_topic": 1,
+    "aws_sns_topic_policy": 1,
+    "aws_sns_topic_subscription": 1,
+    "aws_subnet": 4,
+    "aws_vpc": 1,
+    "aws_vpc_endpoint": 1
+  },
+  "pending": [
+    "EKS operator Role creation and STS verification",
+    "apply permissions and IAM delegation review",
+    "current price and spending budget review",
+    "actual runtime start/end agreement",
+    "backend lock contention and recovery tests",
+    "service apply and workloads",
+    "SNS email confirmation after apply",
+    "ALB metrics after controller deployment"
+  ],
+  "limitations": [
+    "Plan may contain plaintext secrets; ignored local plan only.",
+    "Plan success is not proof of future create permissions, capacity, Role existence or service health.",
+    "Pricing and ALB/Helm/Vercel workloads are outside this plan."
+  ],
+  "postPlanObjects": {
+    "Date": "2026-11-27",
+    "StateObjectPresent": false,
+    "LockObjectPresent": false,
+    "ExpectedBucketOwnerUsed": true
+  }
+}

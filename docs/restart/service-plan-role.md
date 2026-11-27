@@ -12,8 +12,8 @@
 |---|---|---|
 | `orderpage-lab` | IAM 사용자 임시 인증 및 사양 조회 | 사용 중 |
 | `orderpage-bootstrap` | 상태 버킷 자체의 설정 관리 | 생성·검증 완료 |
-| `orderpage-deploy` / `orderpage-terraform-deploy` | 서비스 인프라 plan과 지정 state 접근 | STS 인증·S3 backend 초기화 완료, plan 전 |
-| EKS 운영 Role | kubectl/Helm 및 클러스터 운영 | 별도 범위·ARN 확정 필요 |
+| `orderpage-deploy` / `orderpage-terraform-deploy` | 서비스 인프라 plan과 지정 state 접근 | STS 인증·S3 backend 초기화·검토용 plan 완료 |
+| EKS 운영 Role | kubectl/Helm 및 클러스터 운영 | 별도 orderpage-eks-operator 선택, 생성 파일 준비·AWS 연결 전 |
 
 이번 Role을 `eks_admin_principal_arn`에 자동으로 넣지 않았다. Terraform 실행 권한과 Kubernetes 관리자 권한은 각각 검토해야 한다.
 
@@ -82,7 +82,7 @@ MFA 등록과 신뢰 정책의 MFA 조건 강제는 구분한다. 현재 임시 
 4. 서비스 환경 plan을 저장해 자원 수·공개 접근·비용·삭제 순서를 검토한다.
 5. 그 결과에 맞춰 실제 생성/수정/삭제와 PassRole/IAM 위임 정책을 설계한다. IAM 쓰기 권한을 부여할 때는 역할 이름 제한만으로 권한 상승이 막힌다고 가정하지 않고 permissions boundary 등 추가 제한을 검토한다.
 
-서비스 환경 init과 validate는 완료했다. plan/apply 및 state 쓰기·잠금·복구 시험은 미실행이다. STS와 backend 초기화 성공만으로 모든 조회·쓰기 권한이 검증됐다고 표현하지 않는다. S3 backend 요청도 사용량 과금 대상이므로 테스트를 불필요하게 반복하지 않는다.
+서비스 환경 init과 validate 및 [첫 실제 plan](service-plan-2026-11-27.md)을 완료했다. apply와 state 복구·잠금 충돌 시험은 미실행이다. STS와 backend 초기화 성공만으로 모든 조회·쓰기 권한이 검증됐다고 표현하지 않는다. S3 backend 요청도 사용량 과금 대상이므로 테스트를 불필요하게 반복하지 않는다.
 
 ## 검증 근거
 
@@ -99,4 +99,4 @@ MFA 등록과 신뢰 정책의 MFA 조건 강제는 구분한다. 현재 임시 
 
 Git 제외 대상인 서비스 `backend.hcl`을 생성하고 이 프로필로 `terraform init -input=false -backend-config=backend.hcl`을 완료했다. 기존 서비스 backend 메타데이터와 로컬 state가 없는 상태에서 초기화했으며 bootstrap state는 이동하지 않았다. `terraform validate`도 성공했다. 최초 PowerShell 인자 전달 오류는 인자를 명시적으로 인용해 해결했고, 샌드박스 provider 응답 오류는 일반 실행 환경의 재검증으로 해결했다.
 
-실제 서비스 입력값 준비와 plan 검토는 다음 단계다. 인프라 생성 apply, 잠금 충돌 및 복구 시험은 수행하지 않았다. 초기화 성공은 state 쓰기/삭제 및 모든 서비스 API의 권한 검증을 의미하지 않는다.
+이후 [실제 서비스 입력값과 검토용 plan](service-plan-2026-11-27.md)을 준비했다. 인프라 생성 apply, 잠금 충돌 및 복구 시험은 수행하지 않았다. 초기화 성공은 state 쓰기/삭제 및 모든 서비스 API의 권한 검증을 의미하지 않는다.
