@@ -1,0 +1,163 @@
+{
+  "date": "2026-11-27",
+  "scope": "Offline request evaluation and saved actual plan setting checks; not live AWS IAM simulation",
+  "nodeTestsPassed": 105,
+  "eksTestsPassed": 10,
+  "policies": [
+    {
+      "name": "OrderPageEksServiceLifecycle",
+      "characters": 5318
+    },
+    {
+      "name": "OrderPageEksServiceGuardrails",
+      "characters": 3309
+    }
+  ],
+  "combinedPolicyChecks": {
+    "resources": 22,
+    "requests": 86,
+    "allAllowed": true,
+    "unboundOidcExcluded": true
+  },
+  "planReviews": [
+    {
+      "planSha256": "697a1cb2b93b13c315e6e3d6f13769ed00ad18a3723e6455af80fd4e2675fd31",
+      "stage": "full",
+      "checks": [
+        {
+          "name": "expected-resource-counts",
+          "passed": true
+        },
+        {
+          "name": "no-extra-eks-resource-types",
+          "passed": true
+        },
+        {
+          "name": "no-delete-or-replacement",
+          "passed": true
+        },
+        {
+          "name": "known-project-tags",
+          "passed": true
+        },
+        {
+          "name": "cluster-name-and-version",
+          "passed": true
+        },
+        {
+          "name": "api-auth-without-creator-admin",
+          "passed": true
+        },
+        {
+          "name": "standard-support",
+          "passed": true
+        },
+        {
+          "name": "required-control-plane-logs",
+          "passed": true
+        },
+        {
+          "name": "private-endpoint-enabled",
+          "passed": true
+        },
+        {
+          "name": "public-endpoint-only-ipv4-hosts",
+          "passed": true
+        },
+        {
+          "name": "no-explicit-auto-mode",
+          "passed": true
+        },
+        {
+          "name": "default-nodegroup-name-and-version",
+          "passed": true
+        },
+        {
+          "name": "fixed-two-on-demand-m6i-large-nodes",
+          "passed": true
+        },
+        {
+          "name": "three-basic-addons-only",
+          "passed": true
+        },
+        {
+          "name": "explicit-addon-versions",
+          "passed": true
+        },
+        {
+          "name": "addons-in-project-without-extra-roles",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "readyForApply": false,
+      "limitations": [
+        "This review does not prevent direct AWS API calls or invoke apply.",
+        "Unknown subnet/Role/launch-template identities, provider defaults and actual runtime costs require final plan review.",
+        "Addon version format is checked; compatibility and Kubernetes standard support require current AWS verification.",
+        "Delete/replacement plans need a separate cleanup review rather than this creation gate."
+      ]
+    },
+    {
+      "planSha256": "d95fce7146c25c358dafca35a10aec50b95d0831dcd68197dd5237875d97517f",
+      "stage": "bootstrap",
+      "checks": [
+        {
+          "name": "expected-resource-counts",
+          "passed": true
+        },
+        {
+          "name": "no-extra-eks-resource-types",
+          "passed": true
+        },
+        {
+          "name": "no-delete-or-replacement",
+          "passed": true
+        },
+        {
+          "name": "known-project-tags",
+          "passed": true
+        },
+        {
+          "name": "cluster-name-and-version",
+          "passed": true
+        },
+        {
+          "name": "api-auth-without-creator-admin",
+          "passed": true
+        },
+        {
+          "name": "standard-support",
+          "passed": true
+        },
+        {
+          "name": "required-control-plane-logs",
+          "passed": true
+        },
+        {
+          "name": "private-endpoint-enabled",
+          "passed": true
+        },
+        {
+          "name": "public-endpoint-only-ipv4-hosts",
+          "passed": true
+        },
+        {
+          "name": "no-explicit-auto-mode",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "readyForApply": false,
+      "limitations": [
+        "This review does not prevent direct AWS API calls or invoke apply.",
+        "Unknown subnet/Role/launch-template identities, provider defaults and actual runtime costs require final plan review.",
+        "Addon version format is checked; compatibility and Kubernetes standard support require current AWS verification.",
+        "Delete/replacement plans need a separate cleanup review rather than this creation gate."
+      ]
+    }
+  ],
+  "awsPoliciesAttached": false,
+  "serviceApplyExecuted": false,
+  "readyForApply": false
+}

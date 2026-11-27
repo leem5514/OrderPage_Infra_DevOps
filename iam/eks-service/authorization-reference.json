@@ -1,0 +1,743 @@
+{
+  "retrievedDate": "2026-11-27",
+  "scope": "Selected official EKS authorization metadata and pinned provider source; not live AWS authorization",
+  "source": "https://servicereference.us-east-1.amazonaws.com/v1/eks/eks.json",
+  "sourceSha256": "aab6e2bd4563e9409b3dd1a2e6e2f5d14406a5117d55f6f148864bc768ccd44d",
+  "actions": [
+    {
+      "name": "AssociateIdentityProviderConfig",
+      "conditionKeys": [
+        "aws:RequestTag/${TagKey}",
+        "aws:TagKeys",
+        "eks:clientId",
+        "eks:issuerUrl"
+      ],
+      "resources": [
+        "cluster"
+      ]
+    },
+    {
+      "name": "CreateAddon",
+      "conditionKeys": [
+        "aws:RequestTag/${TagKey}",
+        "aws:TagKeys"
+      ],
+      "resources": [
+        "cluster",
+        "podidentityassociation"
+      ]
+    },
+    {
+      "name": "CreateCluster",
+      "conditionKeys": [
+        "aws:RequestTag/${TagKey}",
+        "aws:TagKeys",
+        "eks:authenticationMode",
+        "eks:blockStorageEnabled",
+        "eks:bootstrapClusterCreatorAdminPermissions",
+        "eks:bootstrapSelfManagedAddons",
+        "eks:computeConfigEnabled",
+        "eks:controlPlaneEgressMode",
+        "eks:controlPlaneScalingTier",
+        "eks:deletionProtection",
+        "eks:elasticLoadBalancingEnabled",
+        "eks:encryptionConfigProviderKeyArns",
+        "eks:endpointPrivateAccess",
+        "eks:endpointPublicAccess",
+        "eks:kubeApiServerConfig",
+        "eks:kubeControllerManagerConfig",
+        "eks:kubeSchedulerConfig",
+        "eks:kubernetesVersion",
+        "eks:loggingType/${type}",
+        "eks:supportType",
+        "eks:zonalShiftEnabled"
+      ],
+      "resources": []
+    },
+    {
+      "name": "CreateFargateProfile",
+      "conditionKeys": [
+        "aws:RequestTag/${TagKey}",
+        "aws:TagKeys"
+      ],
+      "resources": [
+        "cluster"
+      ]
+    },
+    {
+      "name": "CreateNodegroup",
+      "conditionKeys": [
+        "aws:RequestTag/${TagKey}",
+        "aws:TagKeys"
+      ],
+      "resources": [
+        "cluster"
+      ]
+    },
+    {
+      "name": "CreatePodIdentityAssociation",
+      "conditionKeys": [
+        "aws:RequestTag/${TagKey}",
+        "aws:TagKeys"
+      ],
+      "resources": [
+        "cluster"
+      ]
+    },
+    {
+      "name": "DeleteAddon",
+      "conditionKeys": [],
+      "resources": [
+        "addon",
+        "podidentityassociation"
+      ]
+    },
+    {
+      "name": "DeleteCluster",
+      "conditionKeys": [],
+      "resources": [
+        "cluster"
+      ]
+    },
+    {
+      "name": "DeleteNodegroup",
+      "conditionKeys": [],
+      "resources": [
+        "nodegroup"
+      ]
+    },
+    {
+      "name": "DeletePodIdentityAssociation",
+      "conditionKeys": [],
+      "resources": [
+        "podidentityassociation"
+      ]
+    },
+    {
+      "name": "DescribeAddon",
+      "conditionKeys": [],
+      "resources": [
+        "addon"
+      ]
+    },
+    {
+      "name": "DescribeCluster",
+      "conditionKeys": [],
+      "resources": [
+        "cluster"
+      ]
+    },
+    {
+      "name": "DescribeNodegroup",
+      "conditionKeys": [],
+      "resources": [
+        "nodegroup"
+      ]
+    },
+    {
+      "name": "DescribeUpdate",
+      "conditionKeys": [],
+      "resources": [
+        "addon",
+        "capability",
+        "cluster",
+        "nodegroup"
+      ]
+    },
+    {
+      "name": "ListTagsForResource",
+      "conditionKeys": [],
+      "resources": [
+        "addon",
+        "capability",
+        "cluster",
+        "dashboard",
+        "eks-anywhere-subscription",
+        "fargateprofile",
+        "identityproviderconfig",
+        "nodegroup"
+      ]
+    },
+    {
+      "name": "RegisterCluster",
+      "conditionKeys": [
+        "aws:RequestTag/${TagKey}",
+        "aws:TagKeys"
+      ],
+      "resources": []
+    },
+    {
+      "name": "TagResource",
+      "conditionKeys": [
+        "aws:RequestTag/${TagKey}",
+        "aws:TagKeys"
+      ],
+      "resources": [
+        "access-entry",
+        "addon",
+        "capability",
+        "cluster",
+        "dashboard",
+        "eks-anywhere-subscription",
+        "fargateprofile",
+        "identityproviderconfig",
+        "nodegroup",
+        "podidentityassociation"
+      ]
+    },
+    {
+      "name": "UntagResource",
+      "conditionKeys": [
+        "aws:TagKeys"
+      ],
+      "resources": [
+        "access-entry",
+        "addon",
+        "capability",
+        "cluster",
+        "dashboard",
+        "eks-anywhere-subscription",
+        "fargateprofile",
+        "identityproviderconfig",
+        "nodegroup",
+        "podidentityassociation"
+      ]
+    },
+    {
+      "name": "UpdateAddon",
+      "conditionKeys": [],
+      "resources": [
+        "addon",
+        "podidentityassociation"
+      ]
+    },
+    {
+      "name": "UpdateClusterConfig",
+      "conditionKeys": [
+        "eks:authenticationMode",
+        "eks:blockStorageEnabled",
+        "eks:computeConfigEnabled",
+        "eks:controlPlaneEgressMode",
+        "eks:controlPlaneScalingTier",
+        "eks:deletionProtection",
+        "eks:elasticLoadBalancingEnabled",
+        "eks:endpointPrivateAccess",
+        "eks:endpointPublicAccess",
+        "eks:kubeApiServerConfig",
+        "eks:kubeControllerManagerConfig",
+        "eks:kubeSchedulerConfig",
+        "eks:loggingType/${type}",
+        "eks:supportType",
+        "eks:zonalShiftEnabled"
+      ],
+      "resources": [
+        "cluster"
+      ]
+    },
+    {
+      "name": "UpdateClusterVersion",
+      "conditionKeys": [
+        "eks:kubernetesVersion"
+      ],
+      "resources": [
+        "cluster"
+      ]
+    },
+    {
+      "name": "UpdateNodegroupConfig",
+      "conditionKeys": [],
+      "resources": [
+        "nodegroup"
+      ]
+    },
+    {
+      "name": "UpdateNodegroupVersion",
+      "conditionKeys": [],
+      "resources": [
+        "nodegroup"
+      ]
+    },
+    {
+      "name": "UpdatePodIdentityAssociation",
+      "conditionKeys": [],
+      "resources": [
+        "podidentityassociation"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "access-entry",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:access-entry/${ClusterName}/${IamIdentityType}/${IamIdentityAccountID}/${IamIdentityName}/${UUID}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}",
+        "eks:accessEntryType",
+        "eks:clusterName",
+        "eks:kubernetesGroups",
+        "eks:principalArn",
+        "eks:username"
+      ]
+    },
+    {
+      "name": "addon",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:addon/${ClusterName}/${AddonName}/${UUID}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    },
+    {
+      "name": "capability",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:capability/${ClusterName}/${CapabilityType}/${CapabilityName}/${UUID}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    },
+    {
+      "name": "cluster",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:cluster/${ClusterName}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    },
+    {
+      "name": "dashboard",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:dashboard/${DashboardName}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    },
+    {
+      "name": "eks-anywhere-subscription",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:eks-anywhere-subscription/${UUID}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    },
+    {
+      "name": "fargateprofile",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:fargateprofile/${ClusterName}/${FargateProfileName}/${UUID}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    },
+    {
+      "name": "identityproviderconfig",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:identityproviderconfig/${ClusterName}/${IdentityProviderType}/${IdentityProviderConfigName}/${UUID}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    },
+    {
+      "name": "nodegroup",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:nodegroup/${ClusterName}/${NodegroupName}/${UUID}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    },
+    {
+      "name": "podidentityassociation",
+      "arnFormats": [
+        "arn:${Partition}:eks:${Region}:${Account}:podidentityassociation/${ClusterName}/${UUID}"
+      ],
+      "conditionKeys": [
+        "aws:ResourceTag/${TagKey}"
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "name": "AssociateIdentityProviderConfig",
+      "authorizedActions": [
+        {
+          "Name": "AssociateIdentityProviderConfig",
+          "Service": "eks"
+        },
+        {
+          "Name": "TagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "CreateAddon",
+      "authorizedActions": [
+        {
+          "Name": "CreateAddon",
+          "Service": "eks"
+        },
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "TagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "CreateCluster",
+      "authorizedActions": [
+        {
+          "Name": "CreateAccessEntry",
+          "Service": "eks"
+        },
+        {
+          "Name": "CreateCluster",
+          "Service": "eks"
+        },
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "ec2.amazonaws.com",
+              "eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "TagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "CreateFargateProfile",
+      "authorizedActions": [
+        {
+          "Name": "CreateFargateProfile",
+          "Service": "eks"
+        },
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "TagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "CreateNodegroup",
+      "authorizedActions": [
+        {
+          "Name": "CreateNodegroup",
+          "Service": "eks"
+        },
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "TagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "CreatePodIdentityAssociation",
+      "authorizedActions": [
+        {
+          "Name": "CreatePodIdentityAssociation",
+          "Service": "eks"
+        },
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "pods.eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "TagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "DeleteAddon",
+      "authorizedActions": [
+        {
+          "Name": "DeleteAddon",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "DeleteCluster",
+      "authorizedActions": [
+        {
+          "Name": "DeleteCluster",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "DeleteNodegroup",
+      "authorizedActions": [
+        {
+          "Name": "DeleteNodegroup",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "DeletePodIdentityAssociation",
+      "authorizedActions": [
+        {
+          "Name": "DeletePodIdentityAssociation",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "DescribeAddon",
+      "authorizedActions": [
+        {
+          "Name": "DescribeAddon",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "DescribeCluster",
+      "authorizedActions": [
+        {
+          "Name": "DescribeCluster",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "DescribeNodegroup",
+      "authorizedActions": [
+        {
+          "Name": "DescribeNodegroup",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "DescribeUpdate",
+      "authorizedActions": [
+        {
+          "Name": "DescribeUpdate",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "ListTagsForResource",
+      "authorizedActions": [
+        {
+          "Name": "ListTagsForResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "RegisterCluster",
+      "authorizedActions": [
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "RegisterCluster",
+          "Service": "eks"
+        },
+        {
+          "Name": "TagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "TagResource",
+      "authorizedActions": [
+        {
+          "Name": "TagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "UntagResource",
+      "authorizedActions": [
+        {
+          "Name": "UntagResource",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "UpdateAddon",
+      "authorizedActions": [
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "UpdateAddon",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "UpdateClusterConfig",
+      "authorizedActions": [
+        {
+          "Name": "CreateAccessEntry",
+          "Service": "eks"
+        },
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "ec2.amazonaws.com",
+              "eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "UpdateClusterConfig",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "UpdateClusterVersion",
+      "authorizedActions": [
+        {
+          "Name": "UpdateClusterVersion",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "UpdateNodegroupConfig",
+      "authorizedActions": [
+        {
+          "Name": "UpdateNodegroupConfig",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "UpdateNodegroupVersion",
+      "authorizedActions": [
+        {
+          "Name": "UpdateNodegroupVersion",
+          "Service": "eks"
+        }
+      ]
+    },
+    {
+      "name": "UpdatePodIdentityAssociation",
+      "authorizedActions": [
+        {
+          "Name": "PassRole",
+          "Context": {
+            "iam:PassedToService": [
+              "pods.eks.amazonaws.com"
+            ]
+          },
+          "Service": "iam"
+        },
+        {
+          "Name": "UpdatePodIdentityAssociation",
+          "Service": "eks"
+        }
+      ]
+    }
+  ],
+  "providerSources": [
+    {
+      "resource": "cluster",
+      "source": "https://raw.githubusercontent.com/hashicorp/terraform-provider-aws/v5.100.0/internal/service/eks/cluster.go",
+      "sha256": "a415444cf0c3a48d9c552794c57bc97bba41504fd247861e5db154e556fce042",
+      "directApiCalls": [
+        "AssociateEncryptionConfig",
+        "CreateCluster",
+        "DeleteCluster",
+        "DescribeCluster",
+        "DescribeUpdate",
+        "UpdateClusterConfig",
+        "UpdateClusterVersion"
+      ]
+    },
+    {
+      "resource": "node_group",
+      "source": "https://raw.githubusercontent.com/hashicorp/terraform-provider-aws/v5.100.0/internal/service/eks/node_group.go",
+      "sha256": "8f7e434712d2dd9b2da823aeb19eb68bce2eb657ed7f2bce862aee073e45408d",
+      "directApiCalls": [
+        "CreateNodegroup",
+        "DeleteNodegroup",
+        "DescribeNodegroup",
+        "DescribeUpdate",
+        "UpdateNodegroupConfig",
+        "UpdateNodegroupVersion"
+      ]
+    },
+    {
+      "resource": "addon",
+      "source": "https://raw.githubusercontent.com/hashicorp/terraform-provider-aws/v5.100.0/internal/service/eks/addon.go",
+      "sha256": "072ec76a81345679ee600e74f5db78b03e58bb7bcf96fa06b420ca1ae3d3a067",
+      "directApiCalls": [
+        "CreateAddon",
+        "DeleteAddon",
+        "DescribeAddon",
+        "DescribeUpdate",
+        "UpdateAddon"
+      ]
+    }
+  ]
+}
