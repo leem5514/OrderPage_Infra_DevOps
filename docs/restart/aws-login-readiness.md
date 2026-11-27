@@ -63,4 +63,6 @@ credential_process = aws configure export-credentials --profile orderpage-login 
 
 이제 **실제 변수·예산·운영자 Role 확정 → state bootstrap 계획 검토 → 실제 환경 plan 검토** 순서다. [배포 전 준비 문서](aws-plan-preflight.md)를 함께 따른다.
 
+첫 실행 권한은 [상태 버킷 전용 bootstrap Role](terraform-bootstrap-role.md)부터 준비했다. 서비스 환경을 생성하는 배포 Role과 분리하며, 아직 AWS에 생성·연결하지 않았다.
+
 근거: [AWS CLI 임시 로그인과 credential_process](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html), [EKS 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_eks.html), [RDS 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_rds.html), [ElastiCache 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_elasticache.html), [MQ 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_mq.html), [EC2 권한](https://docs.aws.amazon.com/service-authorization/latest/reference/list_ec2.html), [RequestedRegion 조건](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-requestedregion).

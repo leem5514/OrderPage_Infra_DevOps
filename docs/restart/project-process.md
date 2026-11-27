@@ -366,3 +366,11 @@ RDS/Redis가 병목이면 먼저 그 사실을 결과로 기록하고, 사양 �
 - EKS 1.35 표준 지원, AWS 기본 add-on 후보, RDS 10.11/db.t4g.micro/gp3, Redis 7.1, RabbitMQ 4.2/mq.m7g.medium 단일 모드 및 m6i.large AZ 제공을 확인했다.
 - 실제 환경 변수·AMI를 자동 확정하지 않았으며 생성·배포·가격 재검증은 미실행이다.
 - [조회 근거·후보 값·미확인 범위](seoul-compatibility.md)를 기록했다. 다음은 배포용 Role·예산·실제 변수 준비다.
+
+## 27. 2026-11-27 — 상태 버킷 전용 Role 정책 준비
+
+- Terraform 자원을 조사한 뒤 첫 단계인 S3 state bootstrap과 전체 서비스 배포 권한을 분리했다. 전체 배포용 IAM 권한은 후속 검토 대상으로 남겼다.
+- 단일 서울 버킷 설정에 한정한 정책, 특정 IAM 사용자만 허용하는 신뢰 정책, 해당 Role만 지정한 AssumeRole 정책을 추가했다. 사용자에게 관리자 정책을 붙이지 않는다.
+- 계정별 파일은 `.local/iam-bootstrap`에만 생성하며 템플릿은 플레이스홀더를 유지한다. 실제 STS로 IAM 사용자를 확인하고 로컬 파일을 준비했다.
+- 회귀 검사 6개와 공식 S3 Action 27개 대조를 통과했다. 콘솔 버튼·정책/Role 이름·연결 위치를 [상세 과정](terraform-bootstrap-role.md)에 기록했다.
+- AWS Role 생성/연결, 실제 bootstrap plan/apply는 미실행이다. 다음은 관리자가 위 정책·Role을 연결한 후 AssumeRole과 bootstrap plan을 검증하는 것이다.
