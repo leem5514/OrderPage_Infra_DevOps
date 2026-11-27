@@ -10,7 +10,7 @@
 
 > **공개 서비스 배포 전 확인 사항**
 >
-> BE #6·Infra #18까지 병합했습니다. 임시 로그인과 서울 사양 조회, S3 전용 Role 인증을 확인했고 승인한 bootstrap만 적용했습니다. 전체 서비스용 배포 권한·예산·변수 준비는 남아 있습니다. [인증 과정](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요.
+> BE #6·Infra #19까지 병합했습니다. 임시 로그인과 서울 사양 조회, S3 전용 Role 인증을 확인했고 승인한 bootstrap만 적용했습니다. 다음 [서비스 plan용 Role](docs/restart/service-plan-role.md)의 정책과 state 접근 설정은 준비했으며 AWS 연결 전입니다. 실제 서비스 생성 권한·예산·변수 준비는 남아 있습니다. [인증 과정](docs/restart/aws-login-readiness.md), [REST 배포 과정](docs/restart/vercel-rest-deployment.md), [남은 배포 조건](docs/restart/predeploy-security-assessment.md)을 확인하세요.
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 

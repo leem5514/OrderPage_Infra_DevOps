@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-27",
+  "scope": "AWS public catalog action names, ARN types, service condition keys and read-only action annotations; not IAM simulation",
+  "checkedActionOccurrences": 112,
+  "uniqueActions": 107,
+  "planReadActionOccurrences": 94,
+  "policyCompactCharacters": {
+    "trust.json": 183,
+    "operator-assume.json": 189,
+    "state-access.json": 1689,
+    "plan-read.json": 4326
+  },
+  "references": {
+    "s3": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/s3/s3.json",
+      "sha256": "42a0406559f357e77fad1e4a77c1d3d9aa62bc90da4dd990c13149ae92147c6d"
+    },
+    "ec2": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/ec2/ec2.json",
+      "sha256": "18154e8e8044206cc9c169041db5bd0ee87d980a645e15eacf1851659869d678"
+    },
+    "eks": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/eks/eks.json",
+      "sha256": "aab6e2bd4563e9409b3dd1a2e6e2f5d14406a5117d55f6f148864bc768ccd44d"
+    },
+    "rds": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/rds/rds.json",
+      "sha256": "7f5aa9d17ed83cf1f97ea69e813084d18cdd5373355b705fdc404fd3f4ca806a"
+    },
+    "elasticache": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/elasticache/elasticache.json",
+      "sha256": "336e0c3091ca0b3a8a908f1571f7df422863ed86296fb624bc72e67727c137e5"
+    },
+    "mq": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/mq/mq.json",
+      "sha256": "0d0c959b734c4c225ace5316a5e01ce1064d8e355f1909de9e7837a3a69606ba"
+    },
+    "ecr": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/ecr/ecr.json",
+      "sha256": "bd92badabf8462ee76fa92f8914d8957a148747e35475e822efaba178651a064"
+    },
+    "acm": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/acm/acm.json",
+      "sha256": "aec76912a0aaceabcce322bc0fd29b9e9aaa1a8c373c6e7263634893361920c4"
+    },
+    "sns": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/sns/sns.json",
+      "sha256": "36396847c543959df076d04811fa0fc7895a19ab31d946b3aacd0464c4433ed3"
+    },
+    "logs": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/logs/logs.json",
+      "sha256": "3c39d1980daecdcd70b6facfcde895c6018266cedd5de3fa7ecc1f2b883cd31a"
+    },
+    "cloudwatch": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/cloudwatch/cloudwatch.json",
+      "sha256": "85fe6d480342ff565f67480d69d43066910c0731cc34964bf53a82fd2ec3a323"
+    },
+    "iam": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/iam/iam.json",
+      "sha256": "39267fc0034910ef6754052b39719e7ffc86c446ba3e9a9834436bcc7d4a4ba6"
+    },
+    "budgets": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/budgets/budgets.json",
+      "sha256": "65ef8491b0963cc51e5d76dde1a7d527cc2134b2b4b28f55847f1715728fd435"
+    },
+    "sts": {
+      "url": "https://servicereference.us-east-1.amazonaws.com/v1/sts/sts.json",
+      "sha256": "ecfa9428563f5e3591a8badf5781c34a37e9ef01c60fb533369353dd886cdf3b"
+    }
+  },
+  "awsPolicyValidationExecuted": false,
+  "roleCreated": false
+}
