@@ -14,7 +14,7 @@
 
 [구조](#architecture) · [선택 이유](#decisions) · [비교 실험](#experiments) · [진행 상태와 다음 단계](#progress) · [실행 문서](#guide)
 
-다음 배포 준비는 **상태 저장용 S3 → 서비스 인프라** 순서로 나눕니다. 첫 단계의 단일 버킷 전용 IAM Role 정책과 [콘솔 설정 안내](docs/restart/terraform-bootstrap-role.md)를 준비했습니다. Role 생성·권한 연결·실제 bootstrap plan은 아직 수행하지 않았으며, VPC/EKS 배포 권한은 별도 준비 대상입니다.
+다음 배포 준비는 **상태 저장용 S3 → 서비스 인프라** 순서로 나눕니다. Infra #18 병합 후, 사용자의 정책 연결과 실제 STS 조회로 단일 버킷 전용 Role 전환을 확인했습니다. [bootstrap plan 검토](docs/restart/bootstrap-plan-2026-11-27.md)는 **생성 7(버킷 1개와 설정 6개), 수정·삭제 0**으로 완료했습니다. apply는 실행하지 않았으며 VPC/EKS 배포 권한은 별도 준비 대상입니다.
 
 ## 무엇을 배우고 남기는가
 

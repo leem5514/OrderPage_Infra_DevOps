@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-27",
+  "terraformVersion": "1.16.2",
+  "profile": "orderpage-bootstrap",
+  "region": "ap-northeast-2",
+  "planSha256": "fffdceef84d1cabec4b104806e8bb89de687221936251bc75772d2007a120aa5",
+  "changes": {
+    "create": 7,
+    "update": 0,
+    "delete": 0,
+    "replace": 0
+  },
+  "resources": [
+    {
+      "type": "aws_s3_bucket",
+      "address": "aws_s3_bucket.terraform_state"
+    },
+    {
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "address": "aws_s3_bucket_lifecycle_configuration.terraform_state"
+    },
+    {
+      "type": "aws_s3_bucket_ownership_controls",
+      "address": "aws_s3_bucket_ownership_controls.terraform_state"
+    },
+    {
+      "type": "aws_s3_bucket_policy",
+      "address": "aws_s3_bucket_policy.terraform_state"
+    },
+    {
+      "type": "aws_s3_bucket_public_access_block",
+      "address": "aws_s3_bucket_public_access_block.terraform_state"
+    },
+    {
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "address": "aws_s3_bucket_server_side_encryption_configuration.terraform_state"
+    },
+    {
+      "type": "aws_s3_bucket_versioning",
+      "address": "aws_s3_bucket_versioning.terraform_state"
+    }
+  ],
+  "checks": {
+    "bucketMatchesRolePolicy": true,
+    "publicAccessBlockAllEnabled": true,
+    "ownership": "BucketOwnerEnforced",
+    "versioning": "Enabled",
+    "encryption": "AES256",
+    "forceDestroy": false,
+    "oldVersionRetentionDays": 90
+  },
+  "deferredPolicyRendering": true,
+  "applyExecuted": false,
+  "limitations": [
+    "Plan success does not test Create/Put/Delete API authorization or bucket-name availability.",
+    "Bootstrap state remains local; dev remote backend is not initialized.",
+    "No VPC, EKS, database or application deployment is included."
+  ]
+}

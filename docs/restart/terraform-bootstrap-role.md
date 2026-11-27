@@ -1,6 +1,6 @@
 # 첫 배포 권한: Terraform 상태 버킷부터 분리하기
 
-2026-11-27. **정책·로컬 생성 도구 준비 완료, AWS Role 생성과 정책 연결은 아직 하지 않았다.**
+2026-11-27. **사용자의 정책·Role 연결 후 실제 AssumeRole 및 bootstrap plan 검증 완료. apply는 미실행이다.** [검증 결과와 다음 실행 범위](bootstrap-plan-2026-11-27.md)를 확인한다. 아래 콘솔 순서는 설정을 재현하기 위한 기록이다.
 
 현재 `orderpage-operator`는 임시 로그인과 서울 서비스 사양 조회가 가능하다. 다음 작업은 전체 서비스를 한꺼번에 만드는 것이 아니라, Terraform 장부를 보관할 S3 버킷을 먼저 준비하는 것이다. 따라서 이번 권한도 그 버킷 하나에 맞춘다.
 
@@ -9,7 +9,7 @@
 | 단계 | 실행 주체 | 대상 | 현재 상태 |
 |---|---|---|---|
 | 사전 조사 | IAM 사용자 / `orderpage-lab` | EKS·RDS·Redis·MQ·EC2 버전과 사양 조회 | 실제 조회 성공 |
-| 상태 저장소 준비 | `orderpage-terraform-bootstrap` Role | 지정한 S3 버킷 하나와 설정 | 이번에 정책·설정 절차 준비 |
+| 상태 저장소 준비 | `orderpage-terraform-bootstrap` Role | 지정한 S3 버킷 하나와 설정 | Role 전환·plan 성공, apply 미실행 |
 | 서비스 인프라 | 별도 배포 Role | VPC·EKS·ECR·RDS·Redis·MQ·Jenkins·모니터링 등 | 권한 정책 작성·검증 필요 |
 | 서비스 운영 | 지정한 EKS 운영 Role과 서비스별 IAM Role | kubectl/Helm, Controller, 앱 이미지 업로드 등 | 배포 Role과의 분리 여부 및 최종 ARN 확정 필요 |
 
@@ -102,6 +102,6 @@ CLI의 `sts get-caller-identity --profile orderpage-bootstrap`로 새 assumed-ro
 - 생성기/정책 회귀 검사 6개 통과: 사용자·Role 제한, 단일 버킷/서울 생성 조건, HTTP 거부, 잘못된 입력 거부, 임시 인증 연결, 출력 파일 덮어쓰기 방지.
 - 허용한 S3 Action 27개를 AWS 공식 서비스 참조 JSON과 대조했다. 관리형 정책 크기 제한 6,144자 이내인지 검사했다.
 - 고정 provider 5.100.0의 S3 버킷 소스와 현재 bootstrap의 7개 resource 블록을 읽고 조회·설정 작업 범위를 확인했다.
-- **미실행:** IAM Access Analyzer 서버 검증, 실제 AssumeRole, 정책 시뮬레이터, 실제 bootstrap plan/apply/destroy. 로컬 검사는 IAM 평가 엔진을 재현하지 않으며, AWS에서 모든 권한이 충분하다는 보장이 아니다.
+- 이후 실제 AssumeRole·bootstrap validate/plan도 성공했다. **미실행:** IAM Access Analyzer 서버 검증, 정책 시뮬레이터, bootstrap apply/destroy. plan 성공은 생성/수정/삭제 API 권한이 모두 충분하다는 보장이 아니다.
 
 근거: [AWS 서비스 권한 JSON](https://docs.aws.amazon.com/service-authorization/latest/reference/service-reference.html), [S3 Action·조건](https://docs.aws.amazon.com/service-authorization/latest/reference/list_s3.html), [AWS provider 5.100.0 S3 구현](https://github.com/hashicorp/terraform-provider-aws/blob/v5.100.0/internal/service/s3/bucket.go), [Terraform S3 backend의 상태·잠금 권한](https://developer.hashicorp.com/terraform/language/backend/s3), [IAM 권한 경계](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html), [PassRole 제한](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html).
